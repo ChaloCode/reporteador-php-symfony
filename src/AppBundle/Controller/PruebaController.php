@@ -21,9 +21,9 @@ use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 class PruebaController extends Controller
 {
     /**
-     * @Route("/prueba/", name="Prueba")
+     * @Route("/tabla/", name="TablaGenrico")
      */
-    public function indexAction(Request $request)
+    public function tablaAction(Request $request)
     {   
         $em = $this->getDoctrine()->getEntityManager();
         $connection = $em->getConnection();
@@ -43,8 +43,19 @@ class PruebaController extends Controller
                         'Sexo',
                         'Cargo',
                         'Edad',
-                        'Salario' );     
-       return $this->render('default/prueba2.html.twig',array('columnas'=>$columnas,'filas' =>$constantes,'numfila'=>count($constantes)-1,'numcolumna'=>count($columnas)-1));
+                        'Salario' ); 
+       $info = array('paginaTitulo' => 'Tabla generica', 
+                      'tablaTitulo' =>'Tabla generica',
+                      'tablaSubTitulo' => 'Data por SQL',
+                      'tablaInfo' =>'Esta tabla puede ser cargada dinamicamente por cual sentecia SQL on un array asociativo siempre cuando los nombres del SELECT este numerodado de cero en adelante (0,1,2,3..)' 
+                     );    
+       return $this->render('generico/tabla.html.twig',array(
+                                                               'columnas'=>$columnas,
+                                                               'filas' =>$constantes,
+                                                               'numfila'=>count($constantes)-1,
+                                                               'numcolumna'=>count($columnas)-1,
+                                                               'info'=>$info,
+                                                               ));
     }
             
       /**
