@@ -84,6 +84,9 @@
               0 !== $("#datatable-buttons").length && $("#datatable-buttons").DataTable({
                 keys: true,
                 "language": {
+				"buttons": {	
+						copyTitle: 'Copiado al portapapeles'						
+					},
                 "url": '{{ asset("js/datatables/json/spanish.json")}}'
                 },
                 dom: "Bfrtip",
