@@ -47,7 +47,7 @@ class PruebaController extends Controller
        $info = array('paginaTitulo' => 'Tabla generica', 
                       'tablaTitulo' =>'Tabla generica',
                       'tablaSubTitulo' => 'Data por SQL',
-                      'tablaInfo' =>'Esta tabla puede ser cargada dinamicamente por cual sentecia SQL on un array asociativo siempre cuando los nombres del SELECT este numerodado de cero en adelante (0,1,2,3..)' 
+                      'tablaInfo' =>'Esta tabla puede ser cargada dinamicamente por cualquier sentecia SQL (o un array asociativo) siempre cuando los nombres del SELECT SQL esten enumerodados de cero en adelante (0,1,2,3..)' 
                      );    
        return $this->render('generico/tabla.html.twig',array(
                                                                'columnas'=>$columnas,
@@ -84,40 +84,38 @@ class PruebaController extends Controller
     }
     
     /**
-     * @Route("/constantes/add/", name="Crear_Constante")
+     * @Route("/formulario/add/", name="Crear_Formulario")
      */
     public function addAction(Request $request)
     {   
-        $constante=new Constantes();  
-        $form = $this->createFormBuilder($constante)
-            ->add('nombre', TextType::class)  
-            ->add('utilidad', IntegerType::class)
-            ->add('plazo', IntegerType::class)
-            ->add('diasClavo', IntegerType::class)                   
-            ->add('idOficina', EntityType::class, array( 
-                    'label'=>'Oficina',                  
-                    'class' => 'AppBundle:Oficina',
-                    'choice_label' => 'nombreOficina',                   
-                ))
-            ->add('save', SubmitType::class, array('label' => 'Crear Constante','attr' => array('class' => 'ui-widget-header ui-corner-all editar')))
+ 
+        $form = $this->createFormBuilder()
+        
+            ->add('Texto', TextType::class,array('label_attr' => array('class' => 'control-label col-md-3 col-sm-3 col-xs-12'),
+                                                                           'attr' => array('class' => 'form-control col-md-7 col-xs-12')))
+            ->add('utilidad', IntegerType::class,array('label_attr' => array('class' => 'control-label col-md-3 col-sm-3 col-xs-12'),
+                                                                           'attr' => array('class' => 'form-control col-md-7 col-xs-12')))
+            ->add('plazo', IntegerType::class,array('label_attr' => array('class' => 'control-label col-md-3 col-sm-3 col-xs-12'),
+                                                                           'attr' => array('class' => 'form-control col-md-7 col-xs-12')))
+            ->add('Fecha', TextType::class,array('label_attr' => array('class' => 'control-label col-md-3 col-sm-3 col-xs-12'),
+                                                                           'attr' => array('class' => 'date-picker date-picker-control form-control col-md-7 col-xs-12')))
+            //->add('save', SubmitType::class, array('label' => 'Guardar','attr' => array('class' => 'btn btn-success')))
+            
             ->getForm();  
          $form->handleRequest($request);         
          if ($form->isSubmitted() && $form->isValid()) 
          {    
-             $constante->setIdOficina((int)$_POST['form']['idOficina']);                       
-             $em=$this->getDoctrine()->getManager();
-             $em->persist($constante);
-             $em->flush();  
+            
              
              $this->addFlash(
                'notice',
                'Guardado.'  
              );                     
-            return $this->redirectToRoute('Constantes');
+          
         }              
-        return $this->render('constantes/add.html.twig', array(
-            'form' => $form->createView(),
-        ));
+        return $this->render('generico/formulario.html.twig', array(
+            'form' => $form->createView()
+                 ));
     }
     
     
