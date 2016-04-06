@@ -105,9 +105,7 @@ class PruebaController extends Controller
                                                          'label_attr' => array('class' => 'control-label col-md-3 col-sm-3 col-xs-12'),
                                                          'attr' => array('class' => 'col-md-7 col-xs-12')))
             
-            ->add('Fecha', TextType::class,array('label' => 'Fecha *',
-                                                 'label_attr' => array('class' => 'control-label col-md-3 col-sm-3 col-xs-12'),
-                                                 'attr' => array('class' => 'date-picker-control col-md-7 col-xs-12')))
+       
             ->add('isAttending', ChoiceType::class, array(
                                                     'choices'  => array(
                                                                         'Maybe' => null,
@@ -153,7 +151,10 @@ class PruebaController extends Controller
                                                 ))                 
                              
                                                               
-                
+            ->add('Fecha', TextType::class,array('label' => 'Fecha *',
+                                            'label_attr' => array('class' => 'control-label col-md-3 col-sm-3 col-xs-12'),
+                                            'attr' => array('class' => 'date-picker-control col-md-7 col-xs-12')
+                                            ))   
                                                  
                     // ->add('cancelar', ResetType::class, array('label' => 'Cancelar','attr' => array('class' => 'btn btn-success')))
             
