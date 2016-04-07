@@ -1,1 +1,47 @@
-{% include 'generico/formulario.html.twig' %}
+{% extends "base.html.twig" %}
+
+{% use "generico/formulario.html.twig" %}
+{% use "generico/tabla.html.twig" %}
+
+{% block stylesheets %}  
+    {{ parent() }} 
+    {% block stylesheets2 %}  
+        {{ parent() }} 
+    {% endblock %}   
+    {% block stylesheetstabla %} 
+        {{ parent() }} 
+    {% endblock %} 
+{% endblock %}
+
+{% block body %}     
+    {% block body2aa %}  
+        {{ parent() }}  
+    {% endblock %}
+{% endblock %}
+
+{% block body2 %}     
+    {% block bodytabla %}
+        {{ parent() }}  
+    {% endblock %}
+{% endblock %}
+
+   
+
+
+{% block javascripts %}  
+    {{ parent() }} 
+    {% block javascripts2 %}   
+        {{ parent() }} 
+    {% endblock %}
+    {% block javascriptstabla %}     
+        {{ parent() }} 
+    {% endblock %}
+{% endblock %}
+
+
+
+
+
+
+
+

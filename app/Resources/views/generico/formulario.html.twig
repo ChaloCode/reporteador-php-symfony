@@ -1,16 +1,12 @@
-{% extends 'base.html.twig' %}
 
-
-{% block title %}{{formularioTitulo}}{% endblock %}
-{% block stylesheets %}
-  {{ parent() }}   
+{% block stylesheets2 %}   
   <link href='{{ asset("css2/icheck/flat/green.css")}}'  rel="stylesheet">
    <!-- select2 -->
   <link href='{{ asset("css2/select/select2.min.css")}}' rel="stylesheet">
   <!-- datetable -->
   <link href="http://netdna.bootstrapcdn.com/font-awesome/3.0.2/css/font-awesome.css" rel="stylesheet">
 {% endblock %}
-{% block body %}     
+{% block body2aa %}     
         {% embed "generico/ventana.html.twig" %}
                 {% block tituloVentana %}Ventana formulario{% endblock %} 
                 {% block subTituloVentana %}Sutitulo{% endblock %}
@@ -38,8 +34,7 @@
             {% endblock %}
         {% endembed %}
 {% endblock %}
-{% block javascripts %}   
-    {{ parent() }} 
+{% block javascripts2 %}  
      <!-- select2 -->
     <script src='{{ asset("js/select/select2.full.js")}}'></script>
     <!-- daterangepicker -->

@@ -1,7 +1,4 @@
-{% extends 'base.html.twig' %}
-{% block title %}{{info['paginaTitulo']}}{% endblock %}
-{% block stylesheets %}
-  {{ parent() }}
+{% block stylesheetstabla %} 
   <!-- Custom styling plus plugins --> 
   <link href='{{ asset("js/datatables/jquery.dataTables.min.css")}}'  rel="stylesheet" type="text/css" />
   <link href='{{ asset("js/datatables/buttons.bootstrap.min.css")}}'  rel="stylesheet" type="text/css" />
@@ -9,7 +6,7 @@
   <link href='{{ asset("js/datatables/responsive.bootstrap.min.css")}}'  rel="stylesheet" type="text/css" />
   <link href='{{ asset("js/datatables/scroller.bootstrap.min.css")}}'  rel="stylesheet" type="text/css" />
 {% endblock %}
-{% block body %}
+{% block bodytabla %}
         {% embed "generico/ventana.html.twig" %}
             {% block tituloVentana %}Tabla formulario{% endblock %} 
             {% block subTituloVentana %}Sutitulo{% endblock %}
@@ -38,8 +35,7 @@
             {% endblock %}
         {% endembed %}
 {% endblock %}
-{% block javascripts %} 
-    {{ parent() }}
+{% block javascriptstabla %}     
     <!-- Datatables-->
         <script src='{{ asset("js/datatables/jquery.dataTables.min.js")}}'></script>
         <script src='{{ asset("js/datatables/dataTables.bootstrap.js")}}'></script>

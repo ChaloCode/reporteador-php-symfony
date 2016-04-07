@@ -90,9 +90,39 @@ class DefaultController extends Controller
             
             ->getForm(); 
         // replace this example code with whatever you need
-       return $this->render('generico/formulario.html.twig', array(
+         $em = $this->getDoctrine()->getEntityManager();
+        $connection = $em->getConnection();
+        $statement = $connection->prepare("
+                        SELECT                        
+                        prueba.Nombre AS '0',
+                        prueba.Sexo AS '1',
+                        prueba.Cargo AS '2',
+                        prueba.Edad AS '3',
+                        prueba.Salario AS '4'
+                        FROM
+                        prueba
+                        ");  
+        $statement->execute();
+        $constantes = $statement->fetchAll();  
+        $columnas = array('Nombre',
+                        'Sexo',
+                        'Cargo',
+                        'Edad',
+                        'Salario' ); 
+       $info = array('paginaTitulo' => 'Tabla generica', 
+                      'tablaTitulo' =>'Tabla generica',
+                      'tablaSubTitulo' => 'Data por SQL',
+                      'tablaInfo' =>'Esta tabla puede ser cargada dinamicamente por cualquier sentecia SQL (o un array asociativo) siempre cuando los nombres del SELECT SQL esten enumerodados de cero en adelante (0,1,2,3..)' 
+                     );    
+
+       return $this->render('default/index.html.twig', array(
             'form' => $form->createView(),
-             'formularioTitulo' => 'Hola index'
+             'formularioTitulo' => 'Hola index',
+             'columnas'=>$columnas,
+                                                               'filas' =>$constantes,
+                                                               'numfila'=>count($constantes)-1,
+                                                               'numcolumna'=>count($columnas)-1,
+                                                               'info'=>$info
                  ));
     }
 }
