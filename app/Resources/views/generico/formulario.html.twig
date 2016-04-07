@@ -1,4 +1,6 @@
 {% extends 'base.html.twig' %}
+
+
 {% block title %}Formulario{% endblock %}
 {% block stylesheets %}
   {{ parent() }}   
@@ -8,31 +10,9 @@
   
   <link href="http://netdna.bootstrapcdn.com/font-awesome/3.0.2/css/font-awesome.css" rel="stylesheet">
 {% endblock %}
-{% block body %}
-     <div class="col-md-12 col-sm-12 col-xs-12">
-              <div class="x_panel">
-                <div class="x_title">
-                  <h2>Form Design <small>different form elements</small></h2>
-                  <ul class="nav navbar-right panel_toolbox">
-                    <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
-                    </li>
-                    <li class="dropdown">
-                      <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><i class="fa fa-wrench"></i></a>
-                      <ul class="dropdown-menu" role="menu">
-                        <li><a href="#">Settings 1</a>
-                        </li>
-                        <li><a href="#">Settings 2</a>
-                        </li>
-                      </ul>
-                    </li>
-                    <li><a class="close-link"><i class="fa fa-close"></i></a>
-                    </li>
-                  </ul>
-                  <div class="clearfix"></div>
-                </div>
-                <div class="x_content">
-                  <br />
-               
+{% block body %}     
+               {% embed "generico/ventana.html.twig" %}
+                     {% block bodyventana %}  
                         {{ form_start(form, {'attr': {'class': 'form-horizontal form-label-left '}}) }}
                        
                         {% for child in form.children|keys %}
@@ -53,13 +33,8 @@
                             </div>
                          </div>                     
                         {{ form_end(form) }}
-                        
-                        
-                        
-                </div>
-              </div>
-            </div>
-         
+                   {% endblock %}
+                {% endembed %}
 {% endblock %}
 {% block javascripts %}   
     {{ parent() }} 
