@@ -7,34 +7,36 @@
   <link href='{{ asset("css2/icheck/flat/green.css")}}'  rel="stylesheet">
    <!-- select2 -->
   <link href='{{ asset("css2/select/select2.min.css")}}' rel="stylesheet">
-  
+  <!-- datetable -->
   <link href="http://netdna.bootstrapcdn.com/font-awesome/3.0.2/css/font-awesome.css" rel="stylesheet">
 {% endblock %}
 {% block body %}     
-               {% embed "generico/ventana.html.twig" %}
-                     {% block bodyventana %}  
-                        {{ form_start(form, {'attr': {'class': 'form-horizontal form-label-left '}}) }}
-                       
-                        {% for child in form.children|keys %}
-                            <div class="form-group">
-                                {% if 'token' not in form_label(attribute(form.children,child)) %}
-                                    {{form_label(attribute(form.children,child)) }}
-                                {% endif %}
-                                <div class="col-md-6 col-sm-6 col-xs-12">
-                                    {{form_widget(attribute(form.children,child)) }}
-                                </div>
-                            </div>                           
-                        {% endfor %} 
-                         <div class="ln_solid"></div>
-                            <div class="form-group">
-                            <div class="col-md-6 col-sm-6 col-xs-12 col-md-offset-3">
-                               <button type="reset" id="form_cancelar" name="form[cancelar]" class="btn btn-primary">Cancelar</button>
-                                <button type="submit" class="btn btn-success">Guardar</button>
-                            </div>
-                         </div>                     
-                        {{ form_end(form) }}
-                   {% endblock %}
-                {% endembed %}
+        {% embed "generico/ventana.html.twig" %}
+                {% block tituloVentana %}Ventana formulario{% endblock %} 
+                {% block subTituloVentana %}Sutitulo{% endblock %}
+                {% block bodyventana %}  
+                {{ form_start(form, {'attr': {'class': 'form-horizontal form-label-left '}}) }}
+                
+                {% for child in form.children|keys %}
+                    <div class="form-group">
+                        {% if 'token' not in form_label(attribute(form.children,child)) %}
+                            {{form_label(attribute(form.children,child)) }}
+                        {% endif %}
+                        <div class="col-md-6 col-sm-6 col-xs-12">
+                            {{form_widget(attribute(form.children,child)) }}
+                        </div>
+                    </div>                           
+                {% endfor %} 
+                    <div class="ln_solid"></div>
+                    <div class="form-group">
+                    <div class="col-md-6 col-sm-6 col-xs-12 col-md-offset-3">
+                        <button type="reset" id="form_cancelar" name="form[cancelar]" class="btn btn-primary">Cancelar</button>
+                        <button type="submit" class="btn btn-success">Guardar</button>
+                    </div>
+                    </div>                     
+                {{ form_end(form) }}
+            {% endblock %}
+        {% endembed %}
 {% endblock %}
 {% block javascripts %}   
     {{ parent() }} 

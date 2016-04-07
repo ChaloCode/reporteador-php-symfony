@@ -10,35 +10,33 @@
   <link href='{{ asset("js/datatables/scroller.bootstrap.min.css")}}'  rel="stylesheet" type="text/css" />
 {% endblock %}
 {% block body %}
-               {% embed "generico/ventana.html.twig" %}
-                  {% block bodyventana %}  
-                  <p class="text-muted font-13 m-b-30">
-                  {{info['tablaInfo']}}
-                  </p>
-                  <table id="datatable-buttons" class="table table-striped table-bordered">
+        {% embed "generico/ventana.html.twig" %}
+            {% block tituloVentana %}Tabla formulario{% endblock %} 
+            {% block subTituloVentana %}Sutitulo{% endblock %}
+            {% block bodyventana %}  
+                <p class="text-muted font-13 m-b-30">
+                     {{info['tablaInfo']}}
+                </p>
+                <table id="datatable-buttons" class="table table-striped table-bordered">
                     <thead>
-                      <tr>                       
+                    <tr>                       
                         {% for columna in columnas %}
                             <th>{{columna}}</th>                        
                         {% endfor %}
-                      </tr>
+                    </tr>
                     </thead>
-
-
                     <tbody>
                     {% for i in 0..numfila  %}
                         <tr> 
                             {% for j in 0..numcolumna  %}              
                                 <td>{{filas[i][j]}}</td>
                             {% endfor %}
-                        </tr>   
-                     
-                    
-                      {% endfor %}     
+                        </tr> 
+                    {% endfor %}     
                     </tbody>
-                  </table>  
-                {% endblock %}
-             {% endembed %}
+                </table>  
+            {% endblock %}
+        {% endembed %}
 {% endblock %}
 {% block javascripts %} 
     {{ parent() }}
