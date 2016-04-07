@@ -57,7 +57,8 @@ class PruebaController extends Controller
                                                                'filas' =>$constantes,
                                                                'numfila'=>count($constantes)-1,
                                                                'numcolumna'=>count($columnas)-1,
-                                                               'info'=>$info,
+                                                               'info'=>$info
+                                                              
                                                                ));
     }
             
@@ -171,7 +172,8 @@ class PruebaController extends Controller
           
         }              
         return $this->render('generico/formulario.html.twig', array(
-            'form' => $form->createView()
+            'form' => $form->createView(),
+             'formularioTitulo' => 'Formulario'
                  ));
     }
     
