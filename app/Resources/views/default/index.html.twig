@@ -2,6 +2,7 @@
 
 {% use "generico/formulario.html.twig" %}
 {% use "generico/tabla.html.twig" %}
+{% use "generico/grafica.html.twig" %}
 
 {% block stylesheets %}  
     {{ parent() }} 
@@ -29,6 +30,12 @@
     {% endblock %}
 {% endblock %}
 
+{% block body3 %}     
+    {% block bodyGrafica %}
+        {{ parent() }}  
+    {% endblock %}
+{% endblock %}
+
    
 
 
@@ -38,6 +45,9 @@
         {{ parent() }} 
     {% endblock %}
     {% block javascriptsTabla %}     
+        {{ parent() }} 
+    {% endblock %}
+     {% block javascriptsGrafica %}     
         {{ parent() }} 
     {% endblock %}
 {% endblock %}
