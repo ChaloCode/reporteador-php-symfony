@@ -5,22 +5,24 @@
 
 {% block stylesheets %}  
     {{ parent() }} 
-    {% block stylesheets2 %}  
+    {% block stylesheetsFormulario %}  
         {{ parent() }} 
     {% endblock %}   
-    {% block stylesheetstabla %} 
+    {% block stylesheetsTabla %} 
         {{ parent() }} 
     {% endblock %} 
 {% endblock %}
 
+
+
 {% block body %}     
-    {% block body2aa %}  
+    {% block bodyFormulario %}  
         {{ parent() }}  
     {% endblock %}
 {% endblock %}
 
 {% block body2 %}     
-    {% block bodytabla %}
+    {% block bodyTabla %}
         {{ parent() }}  
     {% endblock %}
 {% endblock %}
@@ -30,10 +32,10 @@
 
 {% block javascripts %}  
     {{ parent() }} 
-    {% block javascripts2 %}   
+    {% block javascriptsFormulario %}   
         {{ parent() }} 
     {% endblock %}
-    {% block javascriptstabla %}     
+    {% block javascriptsTabla %}     
         {{ parent() }} 
     {% endblock %}
 {% endblock %}
