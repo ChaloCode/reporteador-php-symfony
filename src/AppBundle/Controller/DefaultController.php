@@ -114,7 +114,56 @@ class DefaultController extends Controller
                       'tablaSubTitulo' => 'Data por SQL',
                       'tablaInfo' =>'Esta tabla puede ser cargada dinamicamente por cualquier sentecia SQL (o un array asociativo) siempre cuando los nombres del SELECT SQL esten enumerodados de cero en adelante (0,1,2,3..)' 
                      );    
+                     
+       $grafica= array('year' => array(2001,
+                                        2002,
+                                        2003,
+                                        2004,
+                                        2005,
+                                        2006,
+                                        2007,
+                                        2008,
+                                        2009,
+                                        2010,
+                                        2011,
+                                        2012,
+                                        2013,
+                                        2014,
+                                        2015,
+                                        2016,
+                                        2017,
+                                        2018,
+                                        2019,
+                                        2020,
+                                        2021,
+                                        2022
+                                        ) ,
+                      'value' => array(20,
+                                        21,
+                                        22,
+                                        23,
+                                        24,
+                                        25,
+                                        26,
+                                        27,
+                                        28,
+                                        29,
+                                        30,
+                                        31,
+                                        32,
+                                        33,
+                                        34,
+                                        35,
+                                        36,
+                                        37,
+                                        38,
+                                        39,
+                                        40,
+                                        41
 
+                                        ) ,
+                                        
+                                        );
        return $this->render('default/index.html.twig', array(
             'form' => $form->createView(),
              'formularioTitulo' => 'Hola index',
@@ -122,7 +171,8 @@ class DefaultController extends Controller
                                                                'filas' =>$constantes,
                                                                'numfila'=>count($constantes)-1,
                                                                'numcolumna'=>count($columnas)-1,
-                                                               'info'=>$info
+                                                               'info'=>$info,
+                                                               'grafica'=>$grafica
                  ));
     }
 }

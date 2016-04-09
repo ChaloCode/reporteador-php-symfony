@@ -1,14 +1,15 @@
 
 {% block stylesheetsGrafica %}    
 {% endblock %}
-{% block bodyGrafica %}     
-     {% embed "generico/ventana.html.twig" %}
+{% block bodyGrafica %} 
+     {% embed "generico/ventana.html.twig" %}                
                 {% block tituloVentana %}Ventana formulario{% endblock %} 
                 {% block subTituloVentana %}Sutitulo{% endblock %}
                 {% block bodyVentana %}  
+                
                   <div id="myfirstchart" style="width:100%; height:280px;"></div>
                {% endblock %}
-        {% endembed %}     
+        {% endembed %}          
 {% endblock %}
 {% block javascriptsGrafica %}  
    <!-- moris js -->  
@@ -16,6 +17,7 @@
   <script src='{{ asset("js/moris/morris.min.js")}}'></script>
   
   <script type="text/javascript">
+  
         $(document).ready(function() {
           new Morris.Line({
             // ID of the element in which to draw the chart.
@@ -23,11 +25,13 @@
             // Chart data records -- each entry in this array corresponds to a point on
             // the chart.
             data: [
-                { year: '2008', value: 20 },
-                { year: '2009', value: 10 },
-                { year: '2010', value: 5 },
-                { year: '2011', value: 5 },
-                { year: '2012', value: 20 }
+                
+                {% for i in 0..20 %}
+                     { 
+                         year: '{{grafica['year'][i]}}'
+                        ,value: {{grafica['value'][i]}} 
+                     },
+                {% endfor %} 
             ],
             // The name of the data record attribute that contains x-values.
             xkey: 'year',
