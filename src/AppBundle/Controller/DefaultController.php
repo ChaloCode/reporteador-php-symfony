@@ -115,7 +115,8 @@ class DefaultController extends Controller
                       'tablaInfo' =>'Esta tabla puede ser cargada dinamicamente por cualquier sentecia SQL (o un array asociativo) siempre cuando los nombres del SELECT SQL esten enumerodados de cero en adelante (0,1,2,3..)' 
                      );    
                      
-       $grafica= array('year' => array(2001,
+       $grafica= array('x' => array(
+                                        2001,
                                         2002,
                                         2003,
                                         2004,
@@ -138,26 +139,27 @@ class DefaultController extends Controller
                                         2021,
                                         2022
                                         ) ,
-                      'value' => array(20,
-                                        21,
+                      'y' => array(
+                                        10,
+                                        31,
                                         22,
                                         23,
-                                        24,
+                                        44,
                                         25,
-                                        26,
-                                        27,
-                                        28,
+                                        56,
+                                        77,
+                                        58,
                                         29,
                                         30,
-                                        31,
+                                        41,
                                         32,
-                                        33,
+                                        53,
                                         34,
-                                        35,
-                                        36,
-                                        37,
-                                        38,
-                                        39,
+                                        65,
+                                        76,
+                                        57,
+                                        18,
+                                        69,
                                         40,
                                         41
 
