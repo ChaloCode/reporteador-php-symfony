@@ -24,11 +24,15 @@
   <script src='{{ asset("js/nprogress.js")}}'></script>
   
   <style>
-    img.logo-colibri {
-        width: 27px;
-        height: 27px;
-        margin-top: -5px;
-        margin-left: 5px;
+    img.logo-colibri {       
+        height: 27px;      
+    }
+    
+    .site_title i {
+        border: 1px solid transparent;
+        padding: 5px 6px;
+        border-radius: 50%;
+        background: #FFF;
     }
   </style>
 
@@ -55,7 +59,7 @@
         <div class="left_col scroll-view">
 
           <div class="navbar nav_title" style="border: 0;">
-            <a href='{{ asset("/")}}' class="site_title"><i ><img class="logo-colibri" src="{{ asset('favicon.ico') }}" /></i> <span>Proyecto Colibrí</span></a>
+            <a href='{{ asset("/")}}' class="site_title"><i ><img class="logo-colibri" src="{{ asset('images2/img.png') }}" /></i> <span>Proyecto Colibrí</span></a>
           </div>
           <div class="clearfix"></div>
 

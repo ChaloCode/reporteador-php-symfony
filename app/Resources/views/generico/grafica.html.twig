@@ -1,20 +1,28 @@
 
 {% block stylesheetsGrafica %}    
 {% endblock %}
+ <style>
+    .zoomx {
+       
+       width:100% !important;
+        height:280px !important;
+    }
+  </style>
 {% block bodyGrafica %} 
      {% embed "generico/ventana.html.twig" %}                
                 {% block tituloVentana %}Ventana formulario{% endblock %} 
                 {% block subTituloVentana %}Sutitulo{% endblock %}
                  {% block bodyLink %}
-                    <li><a class="fa fa-line-chart" id="LineaLink" onclick="Linea()"> Grafica, Linea</a></li>                    
-                    <li><a class="fa fa-area-chart" id="AreaLink" onclick="Area()"> Grafica, Area</a></li>                    
-                    <li><a class="fa fa-pie-chart" id="DonutLink" onclick="Donut()"> Grafica, Donut</a></li>
+                    <li><a  class="fa fa-bar-chart" id="BarraLink" onclick="Barra()"> Grafica, Barra</a></li>  
+                    <li><a  class="fa fa-line-chart" id="LineaLink" onclick="Linea()"> Grafica, Linea</a></li>                    
+                    <li><a  class="fa fa-area-chart" id="AreaLink" onclick="Area()"> Grafica, Area</a></li>                    
+                    <li><a  class="fa fa-pie-chart" id="DonutLink" onclick="Donut()"> Grafica, Donut</a></li>
                  {% endblock %}                           
                 {% block bodyVentana %}  
-                  <div id="Barra" ></div>                
-                  <div id="Linea" ></div>
-                  <div id="Area" ></div>                 
-                  <div id="Donut" ></div>
+                 <!-- Tab panes -->
+                  <div id="tap-grafica" >                              
+                    <div id="Graficar" ></div>
+                  </div>
                {% endblock %}
         {% endembed %}          
 {% endblock %}
@@ -34,13 +42,18 @@
             },
         {% endfor %} 
   ];
- 
-  function Linea()
+
+  function ResetTapGrafica()
   {
-     $('#LineaLink').removeAttr('onclick');
-      Morris.Line({
+       $('#Graficar').remove();
+      $('#tap-grafica').append( '<div id="Graficar" ></div>' );
+  }
+  function Linea()
+  {     
+       ResetTapGrafica()
+       Morris.Line({
             // ID of the element in which to draw the chart.
-            element: 'Linea',
+            element: 'Graficar',
             // Chart data records -- each entry in this array corresponds to a point on
             // the chart.
             data: datax,
@@ -58,10 +71,11 @@
   
   function Area()
   {
-      $('#AreaLink').removeAttr('onclick');
+      ResetTapGrafica()
+     //$('#AreaLink').removeAttr('onclick');
       Morris.Area({
             // ID of the element in which to draw the chart.
-            element: 'Area',
+            element: 'Graficar',
             // Chart data records -- each entry in this array corresponds to a point on
             // the chart.
             data: datax,
@@ -77,9 +91,10 @@
   
   function Barra()
   {
-      Morris.Bar({
+       ResetTapGrafica()
+       Morris.Bar({
             // ID of the element in which to draw the chart.
-            element: 'Barra',
+            element: 'Graficar',
             // Chart data records -- each entry in this array corresponds to a point on
             // the chart.
             data: datax,
@@ -95,17 +110,17 @@
   
   function Donut()
   {
-      $('#DonutLink').removeAttr('onclick');
-      Morris.Donut({
+         ResetTapGrafica()
+         Morris.Donut({
             // ID of the element in which to draw the chart.
-            element: 'Donut',
+            element: 'Graficar',
             data: datax,                    
             formatter: function (y) {
                 return y + "%"
             }
       });
   }
-      // Linea();
+      //Linea();
         //Area();
         Barra();
        // Donut();
