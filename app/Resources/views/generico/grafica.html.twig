@@ -1,13 +1,6 @@
 
 {% block stylesheetsGrafica %}    
 {% endblock %}
- <style>
-    .zoomx {
-       
-       width:100% !important;
-        height:280px !important;
-    }
-  </style>
 {% block bodyGrafica %} 
      {% embed "generico/ventana.html.twig" %}                
                 {% block tituloVentana %}Ventana formulario{% endblock %} 
@@ -18,8 +11,7 @@
                     <li><a  class="fa fa-area-chart" id="AreaLink" onclick="Area()"> Grafica, Area</a></li>                    
                     <li><a  class="fa fa-pie-chart" id="DonutLink" onclick="Donut()"> Grafica, Donut</a></li>
                  {% endblock %}                           
-                {% block bodyVentana %}  
-                 <!-- Tab panes -->
+                {% block bodyVentana %}                  
                   <div id="tap-grafica" >                              
                     <div id="Graficar" ></div>
                   </div>
@@ -45,7 +37,7 @@
 
   function ResetTapGrafica()
   {
-       $('#Graficar').remove();
+      $('#Graficar').remove();
       $('#tap-grafica').append( '<div id="Graficar" ></div>' );
   }
   function Linea()
