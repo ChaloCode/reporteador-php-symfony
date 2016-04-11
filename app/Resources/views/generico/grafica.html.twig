@@ -6,14 +6,14 @@
                 {% block tituloVentana %}Ventana formulario{% endblock %} 
                 {% block subTituloVentana %}Sutitulo{% endblock %}
                  {% block bodyLink %}
-                    <li><a id="LineaLink" onclick="Linea()">Grafica, Linea</a></li>                    
-                    <li><a id="AreaLink" onclick="Area()">Grafica, Area</a></li>                    
-                    <li><a id="DonutLink" onclick="Donut()">Grafica, Donut</a></li>
+                    <li><a class="fa fa-line-chart" id="LineaLink" onclick="Linea()"> Grafica, Linea</a></li>                    
+                    <li><a class="fa fa-area-chart" id="AreaLink" onclick="Area()"> Grafica, Area</a></li>                    
+                    <li><a class="fa fa-pie-chart" id="DonutLink" onclick="Donut()"> Grafica, Donut</a></li>
                  {% endblock %}                           
-                {% block bodyVentana %}                  
+                {% block bodyVentana %}  
+                  <div id="Barra" ></div>                
                   <div id="Linea" ></div>
-                  <div id="Area" ></div>
-                  <div id="Barra" ></div>
+                  <div id="Area" ></div>                 
                   <div id="Donut" ></div>
                {% endblock %}
         {% endembed %}          
