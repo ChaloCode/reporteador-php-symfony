@@ -45,21 +45,19 @@ class ReporteController extends Controller
         $statement->execute();
         $filasx = $statement->fetchAll();  
         $filas=array();
-        $columnas=array();
-        $k=-1;
+        $columnas=array();      
         //Renombra las filas y columnas
         for($i=0;$i<count($filasx);$i++)
         {
             $j=0;
             foreach ($filasx[$i] as $clave => $valor) {                     
-                    $filas[$i][$j]=$valor;
-                    $j++;
+                    $filas[$i][$j]=$valor;                    
                      //Renombra las columnas
-                    if($i==0 && $k>=0)
+                    if($i==0)
                     {
-                        $columnas[$k]=$clave;                       
+                        $columnas[$j]=$clave;                       
                     }
-                     $k++;
+                     $j++;
                
             } 
         }
