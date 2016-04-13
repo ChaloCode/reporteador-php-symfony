@@ -45,42 +45,25 @@ class ReporteController extends Controller
         $statement->execute();
         $filasx = $statement->fetchAll();  
         $filas=array();
-        //Renombra las filas
+        $columnas=array();
+        $k=-1;
+        //Renombra las filas y columnas
         for($i=0;$i<count($filasx);$i++)
         {
             $j=0;
-            foreach ($filasx[$i] as $clave => $valor) {
-                //echo "Clave: $clave; Valor: $valor<br />\n";
-             
+            foreach ($filasx[$i] as $clave => $valor) {                     
                     $filas[$i][$j]=$valor;
                     $j++;
+                     //Renombra las columnas
+                    if($i==0 && $k>=0)
+                    {
+                        $columnas[$k]=$clave;                       
+                    }
+                     $k++;
                
             } 
         }
-        
-        //Renombra las columnas
-        $em = $this->getDoctrine()->getEntityManager();
-        $connection = $em->getConnection();
-        $statement = $connection->prepare("
-                                            SELECT *
-                                            FROM
-                                            prueba
-                                            LIMIT 1
-                                        ");  
-        $statement->execute();
-        $filas2 = $statement->fetchAll(); 
-        $columnas=array();
-        $i=-1;
-        foreach ($filas2['0'] as $clave => $valor) {
-            //echo "Clave: $clave; Valor: $valor<br />\n";
-            if($i>=0)
-            {
-                 $columnas[$i]=$clave;
-            }
-           
-            $i++;
-        } 
-       
+      
         //informacion de la data de la tabla
         $infoTabla=array('filas'=>$filas,
                          'columnas'=>$columnas,
