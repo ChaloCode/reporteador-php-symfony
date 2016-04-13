@@ -34,22 +34,53 @@ class ReporteController extends Controller
         $connection = $em->getConnection();
         $statement = $connection->prepare("
                         SELECT                        
-                        prueba.Nombre AS '0',
-                        prueba.Sexo AS '1',
-                        prueba.Cargo AS '2',
-                        prueba.Edad AS '3',
-                        prueba.Salario AS '4'
+                        prueba.Nombre,
+                        prueba.Sexo,
+                        prueba.Cargo,
+                        prueba.Edad,
+                        prueba.Salario
                         FROM
                         prueba
                         ");  
         $statement->execute();
-        $filas = $statement->fetchAll();  
-        //Renombracion de las columnas
-        $columnas = array('Nombre',
-                        'Sexo',
-                        'Cargo',
-                        'Edad',
-                        'Salario' ); 
+        $filasx = $statement->fetchAll();  
+        $filas=array();
+        //Renombra las filas
+        for($i=0;$i<count($filasx);$i++)
+        {
+            $j=0;
+            foreach ($filasx[$i] as $clave => $valor) {
+                //echo "Clave: $clave; Valor: $valor<br />\n";
+             
+                    $filas[$i][$j]=$valor;
+                    $j++;
+               
+            } 
+        }
+        
+        //Renombra las columnas
+        $em = $this->getDoctrine()->getEntityManager();
+        $connection = $em->getConnection();
+        $statement = $connection->prepare("
+                                            SELECT *
+                                            FROM
+                                            prueba
+                                            LIMIT 1
+                                        ");  
+        $statement->execute();
+        $filas2 = $statement->fetchAll(); 
+        $columnas=array();
+        $i=-1;
+        foreach ($filas2['0'] as $clave => $valor) {
+            //echo "Clave: $clave; Valor: $valor<br />\n";
+            if($i>=0)
+            {
+                 $columnas[$i]=$clave;
+            }
+           
+            $i++;
+        } 
+       
         //informacion de la data de la tabla
         $infoTabla=array('filas'=>$filas,
                          'columnas'=>$columnas,
