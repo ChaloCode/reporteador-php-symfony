@@ -27,12 +27,63 @@ class ReporteController extends Controller
             ->add('TextAreaSQL', TextareaType::class,array('label' => 'Consulta SQL *', 
                                                          'label_attr' => array('class' => 'control-label col-md-3 col-sm-3 col-xs-12'),
                                                          'attr' => array('class' => 'col-md-7 col-xs-12'))) 
+            ->getForm();       
+        
+       //Informacion de las paginas            
+       $fecha=strftime("El día, %d del mes %m del %Y %H:%M");		
+       $info = array('pagina'=>array(
+                        'titulo' => 'Reporte SQL',
+                        ),                    
+                     'formulario'=>array(
+                        'titulo' => 'Diseñador de Informes', 
+                        'subtitulo' =>'Consulta SQL'
+                        ),
+                      'tabla'=>array(
+                        'titulo' => 'Detalle', 
+                        'subtitulo' =>'Reporte',
+                        'descripcion'=>'Generado: '.$fecha
+                        ),
+                      'grafica'=>array(
+                        'titulo' => 'Grafica', 
+                        'subtitulo' =>'Genereda: '.$fecha
+                        )
+                     );    
+       
+       $form->handleRequest($request);
+         
+         if ($form->isSubmitted() && $form->isValid()) 
+         {      
+            
+             $this->addFlash(
+               'notice',
+               'Actualizado.'  
+             );   
+             $sql=$request->get('form')['TextAreaSQL'];             
+             return $this->reporte($info, $sql );
+           
+        } 
+          
+       return $this->render('reporte/index.html.twig', array(
+                                                            'form' => $form->createView(),
+                                                            'info'=>$info                                                 
+                                                        ));
+    }
+    
+    
+   
+    private function reporte($info, $sql )
+    {   
+        //Se crea el formulario
+         $form = $this->createFormBuilder()
+            ->add('TextAreaSQL', TextareaType::class,array('label' => 'Consulta SQL *', 
+                                                         'label_attr' => array('class' => 'control-label col-md-3 col-sm-3 col-xs-12'),
+                                                         'attr' => array('class' => 'col-md-7 col-xs-12'))) 
             ->getForm(); 
        //Data de la consulta
        //Select filas
         $em = $this->getDoctrine()->getEntityManager();
         $connection = $em->getConnection();
-        $statement = $connection->prepare("
+       /* $statement = $connection->prepare("
                         SELECT                        
                         prueba.Nombre,
                         prueba.Sexo,
@@ -42,6 +93,8 @@ class ReporteController extends Controller
                         FROM
                         prueba
                         ");  
+                        */
+        $statement = $connection->prepare($sql);  
         $statement->execute();
         $filasx = $statement->fetchAll();  
         $filas=array();
@@ -140,7 +193,7 @@ class ReporteController extends Controller
                                         );
        
           
-       return $this->render('reporte/index.html.twig', array(
+       return $this->render('reporte/reporte.html.twig', array(
                                                             'form' => $form->createView(),
                                                             'info'=>$info,
                                                             'infoTabla'=>$infoTabla,               
