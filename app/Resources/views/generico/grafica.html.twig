@@ -3,8 +3,8 @@
 {% endblock %}
 {% block bodyGrafica %} 
      {% embed "generico/ventana.html.twig" %}                
-                {% block tituloVentana %}Ventana formulario{% endblock %} 
-                {% block subTituloVentana %}Sutitulo{% endblock %}
+                {% block tituloVentana %}{{info['grafica'].titulo}}{% endblock %} 
+                {% block subTituloVentana %}{{info['grafica'].subtitulo}}{% endblock %}
                  {% block bodyLink %}
                     <li><a  class="fa fa-bar-chart" id="BarraLink" onclick="Barra()"> Grafica, Barra</a></li>  
                     <li><a  class="fa fa-line-chart" id="LineaLink" onclick="Linea()"> Grafica, Linea</a></li>                    

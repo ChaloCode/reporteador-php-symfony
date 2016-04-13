@@ -7,8 +7,8 @@
 {% endblock %}
 {% block bodyFormulario %}     
         {% embed "generico/ventana.html.twig" %}
-                {% block tituloVentana %}Ventana formulario{% endblock %} 
-                {% block subTituloVentana %}Sutitulo{% endblock %}
+                {% block tituloVentana %}{{info['formulario'].titulo}}{% endblock %} 
+                {% block subTituloVentana %}{{info['formulario'].subtitulo}}{% endblock %}
                 {% block bodyVentana %}  
                 {{ form_start(form, {'attr': {'class': 'form-horizontal form-label-left '}}) }}
                 
