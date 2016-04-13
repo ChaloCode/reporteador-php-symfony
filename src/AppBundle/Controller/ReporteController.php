@@ -27,6 +27,8 @@ class ReporteController extends Controller
             ->add('TextAreaSQL', TextareaType::class,array('label' => 'Consulta SQL *', 
                                                          'label_attr' => array('class' => 'control-label col-md-3 col-sm-3 col-xs-12'),
                                                          'attr' => array('class' => 'col-md-7 col-xs-12'))) 
+           
+          
             ->getForm();       
         
        //Informacion de las paginas            
@@ -71,13 +73,7 @@ class ReporteController extends Controller
    
     private function reporte($info, $sql )
     {   
-        //Se crea el formulario
-         $form = $this->createFormBuilder()
-            ->add('TextAreaSQL', TextareaType::class,array('label' => 'Consulta SQL *', 
-                                                         'label_attr' => array('class' => 'control-label col-md-3 col-sm-3 col-xs-12'),
-                                                         'attr' => array('class' => 'col-md-7 col-xs-12'))) 
-            ->getForm(); 
-            
+    
        //Data de la consulta
        //Select filas
        try {
@@ -94,7 +90,8 @@ class ReporteController extends Controller
              return $this->redirectToRoute('Reporte');
         }        
         $filas=array();
-        $columnas=array();      
+        $columnas=array();   
+        $columnas_grafica=array();   
         //Renombra las filas y columnas
         for($i=0;$i<count($filasx);$i++)
         {
@@ -104,13 +101,31 @@ class ReporteController extends Controller
                      //Renombra las columnas
                     if($i==0)
                     {
-                        $columnas[$j]=$clave;                       
+                        $columnas[$j]=$clave;     
+                        $columnas_grafica[$clave]=$j;                   
                     }
                      $j++;
                
             } 
-        }
-      
+        }      
+      //Se crea el formulario
+         $form = $this->createFormBuilder()
+            ->add('TextAreaSQL', TextareaType::class,array('label' => 'Consulta SQL *', 
+                                                         'label_attr' => array('class' => 'control-label col-md-3 col-sm-3 col-xs-12'),
+                                                         'attr' => array('class' => 'col-md-7 col-xs-12')))                                          
+            ->add('xGrafica', ChoiceType::class, array(
+                                                'choices'  => $columnas_grafica,    
+                                                'label' => 'Grafica X *',                                                
+                                                'label_attr' => array('class' => 'control-label col-md-3 col-sm-3 col-xs-12'),
+                                                'attr' => array('class' => 'select2_single col-md-7 col-xs-12')
+                                                ))   
+            ->add('yGrafica', ChoiceType::class, array(
+                                                'choices'  => $columnas_grafica,    
+                                                'label' => 'Grafica Y *',                                                
+                                                'label_attr' => array('class' => 'control-label col-md-3 col-sm-3 col-xs-12'),
+                                                'attr' => array('class' => 'select2_single col-md-7 col-xs-12')
+                                                ))                                       
+            ->getForm(); 
         //informacion de la data de la tabla
         $infoTabla=array('filas'=>$filas,
                          'columnas'=>$columnas,
@@ -136,7 +151,9 @@ class ReporteController extends Controller
                         'titulo' => 'Grafica', 
                         'subtitulo' =>'Genereda: '.$fecha
                         )
-                     );    
+                     );
+                     
+          
        //Data de la grafica              
        $grafica= array('x' => array(
                                         2001,
