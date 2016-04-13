@@ -19,9 +19,12 @@
     <link href='{{ asset("css2/custom.css")}}'  rel="stylesheet">  
     <link href='{{ asset("css2/floatexamples.css")}}'  rel="stylesheet" type="text/css" />
     <link href='{{ asset("css2/icheck/flat/green.css")}}'  rel="stylesheet">    
+  
   {% endblock %}
   <script src='{{ asset("js/jquery.min.js")}}'></script>
   <script src='{{ asset("js/nprogress.js")}}'></script>
+  
+ 
   
   <style>
     img.logo-colibri {       
@@ -358,7 +361,7 @@
     <div class="clearfix"></div>
     <div id="notif-group" class="tabbed_notifications"></div>
   </div>
-{% block javascripts %}
+{% block javascripts %}    
     <!-- /footer content -->
     <script src='{{ asset("js/bootstrap.min.js")}}'></script>
     <!-- bootstrap progress js -->
@@ -369,7 +372,33 @@
     <script src='{{ asset("js/custom.js")}}'></script> 
     <!-- pace -->
     <script src='{{ asset("js/pace/pace.min.js")}}'></script>
+    <!-- PNotify -->
+    <script type="text/javascript" src='{{ asset("js/notify/pnotify.core.js")}}'></script>
+    <script type="text/javascript" src='{{ asset("js/notify/pnotify.buttons.js")}}'></script>
+    <script type="text/javascript" src='{{ asset("js/notify/pnotify.nonblock.js")}}'></script>
+</html>
+<script>                 
+    function Alerta(titulo,msm,tipo)
+    {       
+         new PNotify({
+            title: titulo,
+            text: msm,
+            type: tipo
+        });   
+    } 
+     {% for msg in app.session.flashBag.get('success') %} 
+       Alerta('Notificación','{{msg}}','success')    
+     {% endfor %}
+     {% for msg in app.session.flashBag.get('info') %}
+           Alerta('Información','{{msg}}','info')      
+     {% endfor %}
+     {% for msg in app.session.flashBag.get('error') %}
+            Alerta('Error','{{msg}}','error')       
+     {% endfor %}
+     {% for msg in app.session.flashBag.get('dark') %}
+         Alerta('Noticia','{{msg}}','dark') 
+     {% endfor %}
+</script>
 {% endblock %}
 </body>
 
-</html>

@@ -54,10 +54,8 @@ class ReporteController extends Controller
          if ($form->isSubmitted() && $form->isValid()) 
          {      
             
-             $this->addFlash(
-               'notice',
-               'Actualizado.'  
-             );   
+              
+             
              $sql=$request->get('form')['TextAreaSQL'];             
              return $this->reporte($info, $sql );
            
@@ -79,24 +77,22 @@ class ReporteController extends Controller
                                                          'label_attr' => array('class' => 'control-label col-md-3 col-sm-3 col-xs-12'),
                                                          'attr' => array('class' => 'col-md-7 col-xs-12'))) 
             ->getForm(); 
+            
        //Data de la consulta
        //Select filas
-        $em = $this->getDoctrine()->getEntityManager();
-        $connection = $em->getConnection();
-       /* $statement = $connection->prepare("
-                        SELECT                        
-                        prueba.Nombre,
-                        prueba.Sexo,
-                        prueba.Cargo,
-                        prueba.Edad,
-                        prueba.Salario
-                        FROM
-                        prueba
-                        ");  
-                        */
-        $statement = $connection->prepare($sql);  
-        $statement->execute();
-        $filasx = $statement->fetchAll();  
+       try {
+            $em = $this->getDoctrine()->getEntityManager();
+            $connection = $em->getConnection();         
+            $statement = $connection->prepare($sql);  
+            $statement->execute();
+            $filasx = $statement->fetchAll(); 
+        } catch (\Exception $e) {
+             $this->addFlash(
+               'error',
+               'Su sentencia SQL,no es correcta. Revísela y vuelva a intentarlo.'  
+             ); 
+             return $this->redirectToRoute('Reporte');
+        }        
         $filas=array();
         $columnas=array();      
         //Renombra las filas y columnas
@@ -192,7 +188,10 @@ class ReporteController extends Controller
                                         ) ,                                        
                                         );
        
-          
+      $this->addFlash(
+               'success',
+               'Reporte creado correctamente.'  
+             );   
        return $this->render('reporte/reporte.html.twig', array(
                                                             'form' => $form->createView(),
                                                             'info'=>$info,
