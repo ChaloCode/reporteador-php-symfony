@@ -11,10 +11,24 @@
                     <li><a  class="fa fa-area-chart" id="AreaLink" onclick="Area()"> Grafica, Area</a></li>                    
                     <li><a  class="fa fa-pie-chart" id="DonutLink" onclick="Donut()"> Grafica, Donut</a></li>
                  {% endblock %}                           
-                {% block bodyVentana %}                  
-                  <div id="tap-grafica" >                              
-                    <div id="Graficar" ></div>
-                  </div>
+                {% block bodyVentana %}                 
+                    <div>
+                        <p>Seleccione valores para el <strong>eje horizontal</strong></p>
+                        <select id='grafica-x'>
+                            {% for i in graficar %}
+                                <option value="{{ loop.index0 }}">{{i}}</option>               
+                            {% endfor %}
+                        </select> 
+                        <p>Seleccione valores para el <strong>eje vertical</strong></p>
+                        <select id='grafica-y'>
+                            {% for i in graficar %}
+                                <option value="{{ loop.index0 }}">{{i}}</option>               
+                            {% endfor %}
+                        </select> 
+                    </div>                
+                    <div id="tap-grafica" >                              
+                        <div id="Graficar" ></div>
+                    </div>
                {% endblock %}
         {% endembed %}          
 {% endblock %}
@@ -24,16 +38,44 @@
   <script src='{{ asset("js/moris/morris.min.js")}}'></script>
   
   <script type="text/javascript">
-  var datax=[
-       {% for i in 0..20 %}
-            { 
-                label: '{{grafica['x'][i]}}'
-                ,valor: {{grafica['y'][i]}} 
-                ,value: {{grafica['y'][i]}} 
-                
-            },
-        {% endfor %} 
-  ];
+   var datax;
+   var dataAll = {        
+    {% for i in 0..infoTabla['lengthFilas']   %}   
+    "{{i}}" :{        
+                {% for j in 0..infoTabla['lengthColumnas']  %}   
+                    "{{j}}": "{{infoTabla['filas'][i][j]}}",
+                {% endfor %}      
+            },    
+    {% endfor %}     
+    };
+  
+  $("#grafica-x").change(function() {
+      cargarGrafica();     
+  });
+  
+   $("#grafica-y").change(function() {
+        cargarGrafica();
+  });
+    
+  function cargarGrafica()
+  {
+        var xx=$("#grafica-x").val();
+        var yy=$("#grafica-y").val();
+        var data2 = {
+            'datax': []       
+        };
+        for (i=0;i<{{infoTabla['lengthFilas']}};i++)
+        {
+            data2.datax.push({ 'label':dataAll[i][xx]
+                                ,'valor':dataAll[i][yy]
+                                ,'value':dataAll[i][yy]
+                             });
+        }
+       // console.log(data2);
+        datax=data2.datax;
+       // console.log(datax);
+        Barra();
+  }
 
   function ResetTapGrafica()
   {
@@ -114,7 +156,8 @@
   }
       //Linea();
         //Area();
-        Barra();
+      // Barra();
        // Donut();
+       cargarGrafica();
   </script>
 {% endblock %}

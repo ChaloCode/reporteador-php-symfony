@@ -27,7 +27,7 @@ class ReporteController extends Controller
             ->add('TextAreaSQL', TextareaType::class,array('label' => 'Consulta SQL *', 
                                                          'label_attr' => array('class' => 'control-label col-md-3 col-sm-3 col-xs-12'),
                                                          'attr' => array('class' => 'col-md-7 col-xs-12'))) 
-           
+      
           
             ->getForm();       
         
@@ -59,17 +59,32 @@ class ReporteController extends Controller
               
              
              $sql=$request->get('form')['TextAreaSQL'];             
-             return $this->reporte($info, $sql );
-           
+             $retorno=$this->reporte($info, $sql );
+         
+           return $this->render('reporte/reporte.html.twig', array(
+                                                            'form' => $form->createView(),
+                                                            'info'=> $info,
+                                                            'infoTabla'=>$retorno['infoTabla'],               
+                                                            'grafica'=>$retorno['grafica'],
+                                                            'graficar'  => $retorno['columnas_grafica'],
+                                                            'control'=>5,
+                                                            'x'=>0,
+                                                             'y'=>0
+                                                        ));
         } 
           
-       return $this->render('reporte/index.html.twig', array(
+      return $this->render('reporte/reporte.html.twig', array(
                                                             'form' => $form->createView(),
-                                                            'info'=>$info                                                 
+                                                            'info'=>$info,
+                                                            'infoTabla'=>null,               
+                                                            'grafica'=>null,
+                                                            'control'=>0,
+                                                             'graficar'  => null,
+                                                             'x'=>0,
+                                                             'y'=>0
                                                         ));
-    }
-    
-    
+    }   
+  
    
     private function reporte($info, $sql )
     {   
@@ -132,26 +147,7 @@ class ReporteController extends Controller
                          'lengthColumnas'=>count($columnas)-1,   
                          'lengthFilas'=>count($filas)-1           
         );      
-       //Informacion de las paginas 
-           
-       $fecha=strftime("El día, %d del mes %m del %Y %H:%M");		
-       $info = array('pagina'=>array(
-                        'titulo' => 'Reporte SQL',
-                        ),                    
-                     'formulario'=>array(
-                        'titulo' => 'Diseñador del Reporte', 
-                        'subtitulo' =>'Consulta SQL'
-                        ),
-                      'tabla'=>array(
-                        'titulo' => 'Detalle', 
-                        'subtitulo' =>'Reporte',
-                        'descripcion'=>'Generado: '.$fecha
-                        ),
-                      'grafica'=>array(
-                        'titulo' => 'Grafica', 
-                        'subtitulo' =>'Genereda: '.$fecha
-                        )
-                     );
+     
                      
           
        //Data de la grafica              
@@ -209,11 +205,11 @@ class ReporteController extends Controller
                'success',
                'Reporte creado correctamente.'  
              );   
-       return $this->render('reporte/reporte.html.twig', array(
-                                                            'form' => $form->createView(),
-                                                            'info'=>$info,
-                                                            'infoTabla'=>$infoTabla,               
-                                                            'grafica'=>$grafica
-                                                        ));
+    return array(
+                    'columnas_grafica' => $columnas,                                                       
+                    'infoTabla'=>$infoTabla,               
+                    'grafica'=>$grafica,
+                    'control'=>5
+                );
     }
 }

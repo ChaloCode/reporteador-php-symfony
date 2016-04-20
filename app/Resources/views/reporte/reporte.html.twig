@@ -1,17 +1,21 @@
 {% extends "base.html.twig" %}
 
 {% use "generico/formulario.html.twig" %}
-{% use "generico/tabla.html.twig" %}
-{% use "generico/grafica.html.twig" %}
+{% if control>0 %}
+    {% use "generico/tabla.html.twig" %}
+    {% use "generico/grafica.html.twig" %}
+{% endif %}
 
 {% block stylesheets %}  
-    {{ parent() }} 
+    {{ parent() }}    
     {% block stylesheetsFormulario %}  
         {{ parent() }} 
-    {% endblock %}   
-    {% block stylesheetsTabla %} 
-        {{ parent() }} 
-    {% endblock %} 
+    {% endblock %}       
+    {% if control>0 %}
+        {% block stylesheetsTabla %} 
+            {{ parent() }} 
+        {% endblock %} 
+    {% endif %}
 {% endblock %}
 
 
@@ -21,22 +25,28 @@
 {% block body %}   
   <div class="col-md-6 col-sm-6 col-xs-12"> 
     {% block bodyFormulario %}      
-        {{ parent() }}  
+        {{ parent() }} 
+ 
     {% endblock %}
     </div>
-     <div class="col-md-6 col-sm-6 col-xs-12">  
-    {% block bodyGrafica %}
-        {{ parent() }}  
-    {% endblock %}
-    </div>
+    
+    {% if control>0 %}
+        <div class="col-md-6 col-sm-6 col-xs-12">  
+            {% block bodyGrafica %}               
+                {{ parent() }}                  
+            {% endblock %}
+            
+        </div>
+   {% endif %}
 {% endblock %}
 
-{% block body2 %}
-     
-    {% block bodyTabla %}
-        {{ parent() }}  
-    {% endblock %}
-  
+
+{% block body2 %} 
+    {% if control>0 %}    
+        {% block bodyTabla %}
+            {{ parent() }}  
+        {% endblock %} 
+    {% endif %} 
 {% endblock %}
 
 {% block body3 %}   
@@ -51,12 +61,14 @@
     {% block javascriptsFormulario %}   
         {{ parent() }} 
     {% endblock %}
-    {% block javascriptsTabla %}     
-        {{ parent() }} 
-    {% endblock %}
-     {% block javascriptsGrafica %}     
-        {{ parent() }} 
-    {% endblock %}
+    {% if control>0 %}
+        {% block javascriptsTabla %}     
+            {{ parent() }} 
+        {% endblock %}   
+        {% block javascriptsGrafica %}     
+            {{ parent() }} 
+        {% endblock %}
+    {% endif %}
 {% endblock %}
 
 
