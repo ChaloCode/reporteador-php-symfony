@@ -26,7 +26,7 @@ class ReporteController extends Controller
         $form = $this->createFormBuilder()
                      ->add('TextAreaSQL', TextareaType::class,array('label' => 'Consulta SQL *', 
                                                                     'label_attr' => array('class' => 'control-label col-md-3 col-sm-3 col-xs-12'),
-                                                                    'attr' => array('class' => 'col-md-7 col-xs-12')))  
+                                                                    'attr' => array('class' => 'col-md-12 col-xs-12')))  
                      ->getForm();       
 
         //Informacion de las paginas            
