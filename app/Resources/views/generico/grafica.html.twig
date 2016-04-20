@@ -15,13 +15,13 @@
                     <div>
                         <p>Seleccione valores para el <strong>eje horizontal</strong></p>
                         <select id='grafica-x'>
-                            {% for i in graficar %}
+                            {% for i in infoTabla['columnas'] %}
                                 <option value="{{ loop.index0 }}">{{i}}</option>               
                             {% endfor %}
                         </select> 
                         <p>Seleccione valores para el <strong>eje vertical</strong></p>
                         <select id='grafica-y'>
-                            {% for i in graficar %}
+                            {% for i in infoTabla['columnas'] %}
                                 <option value="{{ loop.index0 }}">{{i}}</option>               
                             {% endfor %}
                         </select> 
@@ -70,10 +70,8 @@
                                 ,'valor':dataAll[i][yy]
                                 ,'value':dataAll[i][yy]
                              });
-        }
-       // console.log(data2);
+        }      
         datax=data2.datax;
-       // console.log(datax);
         Barra();
   }
 

@@ -23,193 +23,111 @@ class ReporteController extends Controller
     public function indexAction(Request $request)
     {
         //Se crea el formulario
-         $form = $this->createFormBuilder()
-            ->add('TextAreaSQL', TextareaType::class,array('label' => 'Consulta SQL *', 
-                                                         'label_attr' => array('class' => 'control-label col-md-3 col-sm-3 col-xs-12'),
-                                                         'attr' => array('class' => 'col-md-7 col-xs-12'))) 
-      
-          
-            ->getForm();       
-        
-       //Informacion de las paginas            
-       $fecha=strftime("El día, %d del mes %m del %Y %H:%M");		
-       $info = array('pagina'=>array(
-                        'titulo' => 'Reporte SQL',
-                        ),                    
-                     'formulario'=>array(
-                        'titulo' => 'Diseñador de Informes', 
-                        'subtitulo' =>'Consulta SQL'
-                        ),
+        $form = $this->createFormBuilder()
+                     ->add('TextAreaSQL', TextareaType::class,array('label' => 'Consulta SQL *', 
+                                                                    'label_attr' => array('class' => 'control-label col-md-3 col-sm-3 col-xs-12'),
+                                                                    'attr' => array('class' => 'col-md-7 col-xs-12')))  
+                     ->getForm();       
+
+        //Informacion de las paginas            
+        $fecha=strftime("El día, %d del mes %m del %Y %H:%M");		
+        $info = array('pagina'=>array(
+                      'titulo' => 'Reporte SQL',
+                    ),                    
+                      'formulario'=>array(
+                      'titulo' => 'Diseñador de Informes', 
+                      'subtitulo' =>'Consulta SQL'
+                    ),
                       'tabla'=>array(
-                        'titulo' => 'Detalle', 
-                        'subtitulo' =>'Reporte',
-                        'descripcion'=>'Generado: '.$fecha
-                        ),
+                      'titulo' => 'Detalle', 
+                      'subtitulo' =>'Reporte',
+                      'descripcion'=>'Generado: '.$fecha
+                    ),
                       'grafica'=>array(
-                        'titulo' => 'Grafica', 
-                        'subtitulo' =>'Genereda: '.$fecha
-                        )
-                     );    
-       
-       $form->handleRequest($request);
-         
-         if ($form->isSubmitted() && $form->isValid()) 
-         {      
-            
-              
-             
-             $sql=$request->get('form')['TextAreaSQL'];             
-             $retorno=$this->reporte($info, $sql );
-         
-           return $this->render('reporte/reporte.html.twig', array(
+                      'titulo' => 'Grafica', 
+                      'subtitulo' =>'Genereda: '.$fecha
+                    )
+        );    
+
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) 
+        { 
+           $sql=$request->get('form')['TextAreaSQL'];             
+           $retorno=$this->reporte($sql );
+           if($retorno['control']>0)
+           {
+               return $this->render('reporte/reporte.html.twig', array(
                                                             'form' => $form->createView(),
                                                             'info'=> $info,
-                                                            'infoTabla'=>$retorno['infoTabla'],               
-                                                            'grafica'=>$retorno['grafica'],
-                                                            'graficar'  => $retorno['columnas_grafica'],
-                                                            'control'=>5,
-                                                            'x'=>0,
-                                                             'y'=>0
-                                                        ));
+                                                            'infoTabla'=>$retorno['infoTabla'], 
+                                                            'control'=>$retorno['control']                                                          
+                                                            ));
+           }
         } 
-          
-      return $this->render('reporte/reporte.html.twig', array(
-                                                            'form' => $form->createView(),
-                                                            'info'=>$info,
-                                                            'infoTabla'=>null,               
-                                                            'grafica'=>null,
-                                                            'control'=>0,
-                                                             'graficar'  => null,
-                                                             'x'=>0,
-                                                             'y'=>0
-                                                        ));
+
+        return $this->render('reporte/reporte.html.twig', array(
+                                                                'form' => $form->createView(),
+                                                                'info'=>$info,
+                                                                'infoTabla'=>null, 
+                                                                'control'=>0                                                          
+                                                               ));
     }   
   
    
-    private function reporte($info, $sql )
-    {   
-    
-       //Data de la consulta
-       //Select filas
-       try {
+    private function reporte($sql)
+    {       
+        //Data de la consulta
+        //Select filas
+        try {
             $em = $this->getDoctrine()->getEntityManager();
             $connection = $em->getConnection();         
             $statement = $connection->prepare($sql);  
             $statement->execute();
             $filasx = $statement->fetchAll(); 
         } catch (\Exception $e) {
-             $this->addFlash(
-               'error',
-               'Su sentencia SQL,no es correcta. Revísela y vuelva a intentarlo.'  
-             ); 
-             return $this->redirectToRoute('Reporte');
+                $this->addFlash(
+                'error',
+                'Su sentencia SQL,no es correcta. Revísela y vuelva a intentarlo.'  
+                ); 
+                return array(  
+                            'control'=>0              
+                           );
         }        
         $filas=array();
-        $columnas=array();   
-        $columnas_grafica=array();   
+        $columnas=array();
         //Renombra las filas y columnas
         for($i=0;$i<count($filasx);$i++)
         {
             $j=0;
             foreach ($filasx[$i] as $clave => $valor) {                     
                     $filas[$i][$j]=$valor;                    
-                     //Renombra las columnas
+                    //Renombra las columnas
                     if($i==0)
                     {
-                        $columnas[$j]=$clave;     
-                        $columnas_grafica[$clave]=$j;                   
+                        $columnas[$j]=$clave;
                     }
-                     $j++;
-               
+                    $j++;
+                
             } 
         }      
-      //Se crea el formulario
-         $form = $this->createFormBuilder()
-            ->add('TextAreaSQL', TextareaType::class,array('label' => 'Consulta SQL *', 
-                                                         'label_attr' => array('class' => 'control-label col-md-3 col-sm-3 col-xs-12'),
-                                                         'attr' => array('class' => 'col-md-7 col-xs-12')))                                          
-            ->add('xGrafica', ChoiceType::class, array(
-                                                'choices'  => $columnas_grafica,    
-                                                'label' => 'Grafica X *',                                                
-                                                'label_attr' => array('class' => 'control-label col-md-3 col-sm-3 col-xs-12'),
-                                                'attr' => array('class' => 'select2_single col-md-7 col-xs-12')
-                                                ))   
-            ->add('yGrafica', ChoiceType::class, array(
-                                                'choices'  => $columnas_grafica,    
-                                                'label' => 'Grafica Y *',                                                
-                                                'label_attr' => array('class' => 'control-label col-md-3 col-sm-3 col-xs-12'),
-                                                'attr' => array('class' => 'select2_single col-md-7 col-xs-12')
-                                                ))                                       
-            ->getForm(); 
+
         //informacion de la data de la tabla
         $infoTabla=array('filas'=>$filas,
-                         'columnas'=>$columnas,
-                         'lengthColumnas'=>count($columnas)-1,   
-                         'lengthFilas'=>count($filas)-1           
+                            'columnas'=>$columnas,
+                            'lengthColumnas'=>count($columnas)-1,   
+                            'lengthFilas'=>count($filas)-1           
         );      
-     
-                     
-          
-       //Data de la grafica              
-       $grafica= array('x' => array(
-                                        2001,
-                                        2002,
-                                        2003,
-                                        2004,
-                                        2005,
-                                        2006,
-                                        2007,
-                                        2008,
-                                        2009,
-                                        2010,
-                                        2011,
-                                        2012,
-                                        2013,
-                                        2014,
-                                        2015,
-                                        2016,
-                                        2017,
-                                        2018,
-                                        2019,
-                                        2020,
-                                        2021,
-                                        2022
-                                        ) ,
-                      'y' => array(
-                                        10,
-                                        31,
-                                        22,
-                                        23,
-                                        44,
-                                        25,
-                                        56,
-                                        77,
-                                        58,
-                                        29,
-                                        30,
-                                        41,
-                                        32,
-                                        53,
-                                        34,
-                                        65,
-                                        76,
-                                        57,
-                                        18,
-                                        69,
-                                        40,
-                                        41
-                                        ) ,                                        
-                                        );
-       
-      $this->addFlash(
-               'success',
-               'Reporte creado correctamente.'  
-             );   
-    return array(
-                    'columnas_grafica' => $columnas,                                                       
-                    'infoTabla'=>$infoTabla,               
-                    'grafica'=>$grafica,
-                    'control'=>5
+
+
+        $this->addFlash(
+                'success',
+                'Reporte creado correctamente.'  
                 );
+                
+        return array(                                                                      
+                    'infoTabla'=>$infoTabla ,      
+                    'control'=>5              
+                    );
     }
 }
