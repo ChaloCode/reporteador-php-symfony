@@ -63,15 +63,16 @@
   
   $("#grafica-y").change(function() {
         cargarGrafica();
-  });
-  
+  }); 
   
   var ykeys_temp= ['valor']; 
+  var labels_serie_temp= ['valor']; 
   var oldSerie=[];
   $("#addSerie").click(function() {       
         var xx=$("#grafica-x").val();
         var yy=$("#grafica-y").val();  
-        var serie=$("#grafica-serie").val();
+        var serie=$("#grafica-serie").val();        
+          
         if(xx!=serie && yy!=serie)
         {
             addSeries(serie,xx,yy);
@@ -88,6 +89,11 @@
      
         var valuex='valor'+serie;
         ykeys_temp.push(valuex);
+        
+        var labels_serie = 'Serie '+serie+', '+$("#grafica-serie option:selected").html();
+        labels_serie_temp.push(labels_serie);
+      
+    
         var data2 = {
             'datax': []       
         };
@@ -131,6 +137,7 @@
             {
                 control=false;
                 ykeys_temp.pop(); 
+                labels_serie_temp.pop(); 
                 alert('Seleccione una serie, que solo contenga valores numéricos.');
                 break;
             }
@@ -156,6 +163,7 @@
   {
         //Reset de series previamnete cargadas
         ykeys_temp= ['valor']; 
+        labels_serie_temp= ['valor']; 
         oldSerie=[];
         
         var xx=$("#grafica-x").val();
@@ -196,7 +204,7 @@
             ykeys: ykeys_temp,          
             // Labels for the ykeys -- will be displayed when you hover over the
             // chart.           
-            labels: ykeys_temp
+            labels: labels_serie_temp
             
             
             });
@@ -220,7 +228,7 @@
             ykeys: ykeys_temp,
             // Labels for the ykeys -- will be displayed when you hover over the
             // chart.
-            labels: ykeys_temp
+            labels: labels_serie_temp
             });
   }
   
@@ -239,7 +247,7 @@
             ykeys: ykeys_temp,
             // Labels for the ykeys -- will be displayed when you hover over the
             // chart.
-            labels: ykeys_temp
+            labels: labels_serie_temp
             });
   }
   
