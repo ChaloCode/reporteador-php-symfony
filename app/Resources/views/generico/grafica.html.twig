@@ -69,7 +69,23 @@
   var ykeys_temp= ['valor']; 
   var oldSerie=[];
   $("#addSerie").click(function() {       
+        var xx=$("#grafica-x").val();
+        var yy=$("#grafica-y").val();  
         var serie=$("#grafica-serie").val();
+        if(xx!=serie && yy!=serie)
+        {
+            addSeries(serie,xx,yy);
+        }
+        else{
+               alert('Esta serie ya se encuentra seleccionada, en uno de los ejes de la grafica.\nSeleccione otra serie para continuar.');
+        }
+        
+        
+  });
+  
+  function addSeries(serie,xx,yy)
+  {
+     
         var valuex='valor'+serie;
         ykeys_temp.push(valuex);
         var data2 = {
@@ -78,8 +94,7 @@
         
          
         // console.log(ykeys_temp);
-        var xx=$("#grafica-x").val();
-        var yy=$("#grafica-y").val();
+       
         
         var oldSerieTemp=[];             
         var oldSerieLength=oldSerie.length-1;
@@ -153,12 +168,14 @@
            Barra();
     
        }
-    
-        
-  });
+  }
     
   function cargarGrafica()
   {
+        //Reset de series previamnete cargadas
+        ykeys_temp= ['valor']; 
+        oldSerie=[];
+        
         var xx=$("#grafica-x").val();
         var yy=$("#grafica-y").val();
         var data2 = {
