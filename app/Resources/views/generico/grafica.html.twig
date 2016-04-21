@@ -77,7 +77,7 @@
             addSeries(serie,xx,yy);
         }
         else{
-               alert('Esta serie ya se encuentra seleccionada, en uno de los ejes de la grafica.\nSeleccione otra serie para continuar.');
+               alert('Esta serie ya se encuentra seleccionada, en uno de los ejes de la gráfica.\nSeleccione otra serie para continuar.');
         }
         
         
@@ -91,10 +91,6 @@
         var data2 = {
             'datax': []       
         };
-        
-         
-        // console.log(ykeys_temp);
-       
         
         var oldSerieTemp=[];             
         var oldSerieLength=oldSerie.length-1;
@@ -115,14 +111,10 @@
                 { 
                     var textTemp = '{ '+serieNew+','+label+','+valor+','+value;
                     for (k=0;k<oldSerieLength;k++)
-                    {   
-                        //console.log(oldSerie[k]);  
-                       // var lll=oldSerie[k];              
-                       textTemp = textTemp+','+oldSerie[k];
-                       // console.log(textTemp);
+                    {           
+                       textTemp = textTemp+','+oldSerie[k];                    
                     }
-                    textTemp =textTemp+'}';
-                   // console.log(textTemp);
+                    textTemp =textTemp+'}';                 
                     text=textTemp;
                 }
                 else{
@@ -153,20 +145,10 @@
             }
             else{
                  oldSerie+= oldSerieTemp;
-            }
-           
-            // console.log(oldSerie);
-             oldSerie = oldSerie.split(','); 
-            // console.log(oldSerie[0]); 
-             // console.log(oldSerie[1]); 
-           // console.log(data2);
-           
-             datax=data2.datax;
-             console.log(ykeys_temp);
-             console.log(datax);
-            
-           Barra();
-    
+            }  
+             oldSerie = oldSerie.split(',');
+             datax=data2.datax; 
+             Barra();    
        }
   }
     
