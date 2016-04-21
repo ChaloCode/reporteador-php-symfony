@@ -24,7 +24,15 @@
                             {% for i in infoTabla['columnas'] %}
                                 <option value="{{ loop.index0 }}">{{i}}</option>               
                             {% endfor %}
+                        </select>
+                        <div class="ln_solid"></div> 
+                        <p>Seleccione valores para agregar una <strong>nueva serie</strong></p>
+                        <select id='grafica-serie'>
+                            {% for i in infoTabla['columnas'] %}
+                                <option value="{{ loop.index0 }}">{{i}}</option>               
+                            {% endfor %}
                         </select> 
+                         <button  id="addSerie" class="btn btn-success">Agregar</button>
                     </div>                
                     <div id="tap-grafica" >                              
                         <div id="Graficar" ></div>
@@ -53,8 +61,100 @@
       cargarGrafica();     
   });
   
-   $("#grafica-y").change(function() {
+  $("#grafica-y").change(function() {
         cargarGrafica();
+  });
+  
+  
+  var ykeys_temp= ['valor']; 
+  var oldSerie=[];
+  $("#addSerie").click(function() {       
+        var serie=$("#grafica-serie").val();
+        var valuex='valor'+serie;
+        ykeys_temp.push(valuex);
+        var data2 = {
+            'datax': []       
+        };
+        
+         
+        // console.log(ykeys_temp);
+        var xx=$("#grafica-x").val();
+        var yy=$("#grafica-y").val();
+        
+        var oldSerieTemp=[];             
+        var oldSerieLength=oldSerie.length-1;
+        var text;
+       
+        var control=true;
+        for (i=0;i<{{infoTabla['lengthFilas']}};i++)
+        {         
+            var n=dataAll[i][serie];
+            n=n/n;
+            if( Number.isInteger(n))
+            {
+                var serieNew='"'+valuex+'":'+dataAll[i][serie];
+                var label='"label":'+dataAll[i][xx];
+                var valor='"valor":'+dataAll[i][yy];
+                var value='"value":'+dataAll[i][yy];
+                if(oldSerieLength>0)
+                { 
+                    var textTemp = '{ '+serieNew+','+label+','+valor+','+value;
+                    for (k=0;k<oldSerieLength;k++)
+                    {   
+                        //console.log(oldSerie[k]);  
+                       // var lll=oldSerie[k];              
+                       textTemp = textTemp+','+oldSerie[k];
+                       // console.log(textTemp);
+                    }
+                    textTemp =textTemp+'}';
+                   // console.log(textTemp);
+                    text=textTemp;
+                }
+                else{
+                     text = '{ '+serieNew+','+label+','+valor+','+value+'}';
+                }
+              
+                var myobj = JSON.parse(text);
+                data2.datax.push(myobj);
+                //Global de las series selecionada                
+                oldSerieTemp.push(serieNew);
+                
+            }
+            else
+            {
+                control=false;
+                ykeys_temp.pop(); 
+                alert('Seleccione una serie, que solo contenga valores numéricos.');
+                break;
+            }
+           
+         
+        }      
+       if(control)
+       {
+            if(oldSerieLength>0)
+            { 
+                 oldSerie+=','+ oldSerieTemp;
+            }
+            else{
+                 oldSerie+= oldSerieTemp;
+            }
+           
+            // console.log(oldSerie);
+             oldSerie = oldSerie.split(','); 
+            // console.log(oldSerie[0]); 
+             // console.log(oldSerie[1]); 
+           // console.log(data2);
+           
+             datax=data2.datax;
+             console.log(ykeys_temp);
+             console.log(datax);
+            
+           Barra();
+    
+       }
+    
+        
   });
     
   function cargarGrafica()
@@ -92,10 +192,10 @@
             // The name of the data record attribute that contains x-values.
             xkey: 'label',
             // A list of names of data record attributes that contain y-values.
-            ykeys: ['valor'],
+            ykeys: ykeys_temp,          
             // Labels for the ykeys -- will be displayed when you hover over the
-            // chart.
-            labels: ['valor']
+            // chart.           
+            labels: ykeys_temp
             
             
             });
@@ -114,10 +214,10 @@
             // The name of the data record attribute that contains x-values.
             xkey: 'label',
             // A list of names of data record attributes that contain y-values.
-            ykeys: ['valor'],
+            ykeys: ykeys_temp,
             // Labels for the ykeys -- will be displayed when you hover over the
             // chart.
-            labels: ['valor']
+            labels: ykeys_temp
             });
   }
   
@@ -133,10 +233,10 @@
             // The name of the data record attribute that contains x-values.
             xkey: 'label',
             // A list of names of data record attributes that contain y-values.
-            ykeys: ['valor'],
+            ykeys: ykeys_temp,
             // Labels for the ykeys -- will be displayed when you hover over the
             // chart.
-            labels: ['valor']
+            labels: ykeys_temp
             });
   }
   
