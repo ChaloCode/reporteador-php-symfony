@@ -65,8 +65,9 @@
         cargarGrafica();
   }); 
   
+  
   var ykeys_temp= ['valor']; 
-  var labels_serie_temp= ['valor']; 
+  var labels_serie_temp= ['Valor']; 
   var oldSerie=[];
   $("#addSerie").click(function() {       
         var xx=$("#grafica-x").val();
@@ -74,8 +75,14 @@
         var serie=$("#grafica-serie").val();        
           
         if(xx!=serie && yy!=serie)
-        {
-            addSeries(serie,xx,yy);
+        {           
+            if( ykeys_temp.indexOf('valor'+serie)<0)
+            {
+                addSeries(serie,xx,yy);
+            }
+            else{
+                alert('Esta serie ya se encuentra graficada.\nSeleccione otra serie para continuar.');
+            }
         }
         else{
                alert('Esta serie ya se encuentra seleccionada, en uno de los ejes de la gráfica.\nSeleccione otra serie para continuar.');
@@ -163,7 +170,7 @@
   {
         //Reset de series previamnete cargadas
         ykeys_temp= ['valor']; 
-        labels_serie_temp= ['valor']; 
+        labels_serie_temp= ['Valor']; 
         oldSerie=[];
         
         var xx=$("#grafica-x").val();
