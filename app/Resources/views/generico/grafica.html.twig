@@ -69,6 +69,7 @@
   var ykeys_temp= ['valor']; 
   var labels_serie_temp= ['Valor']; 
   var oldSerie=[];
+  var numSerie=1;
   $("#addSerie").click(function() {       
         var xx=$("#grafica-x").val();
         var yy=$("#grafica-y").val();  
@@ -97,8 +98,9 @@
         var valuex='valor'+serie;
         ykeys_temp.push(valuex);
         
-        var labels_serie = 'Serie '+serie+', '+$("#grafica-serie option:selected").html();
+        var labels_serie = 'Serie '+numSerie+', '+$("#grafica-serie option:selected").html();
         labels_serie_temp.push(labels_serie);
+        numSerie++;
       
     
         var data2 = {
@@ -145,6 +147,7 @@
                 control=false;
                 ykeys_temp.pop(); 
                 labels_serie_temp.pop(); 
+                numSerie--;
                 alert('Seleccione una serie, que solo contenga valores numéricos.');
                 break;
             }
@@ -172,6 +175,7 @@
         ykeys_temp= ['valor']; 
         labels_serie_temp= ['Valor']; 
         oldSerie=[];
+        numSerie=1;
         
         var xx=$("#grafica-x").val();
         var yy=$("#grafica-y").val();
