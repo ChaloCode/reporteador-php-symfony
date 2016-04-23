@@ -58,7 +58,7 @@
     };
   
   $("#grafica-x").change(function() {
-      cargarGrafica();     
+      cargarGrafica(); 
   });
   
   $("#grafica-y").change(function() {
@@ -82,11 +82,13 @@
                 addSeries(serie,xx,yy);
             }
             else{
-                alert('Esta serie ya se encuentra graficada.\nSeleccione otra serie para continuar.');
+                Alerta('Error','Esta serie ya se encuentra graficada.\nSeleccione otra serie para continuar.','error');
+                //alert('Esta serie ya se encuentra graficada.\nSeleccione otra serie para continuar.');
             }
         }
         else{
-               alert('Esta serie ya se encuentra seleccionada, en uno de los ejes de la gráfica.\nSeleccione otra serie para continuar.');
+               Alerta('Error','Esta serie ya se encuentra seleccionada, en uno de los ejes de la gráfica.\nSeleccione otra serie para continuar.','error');
+               //alert('Esta serie ya se encuentra seleccionada, en uno de los ejes de la gráfica.\nSeleccione otra serie para continuar.');
         }
         
         
@@ -148,7 +150,8 @@
                 ykeys_temp.pop(); 
                 labels_serie_temp.pop(); 
                 numSerie--;
-                alert('Seleccione una serie, que solo contenga valores numéricos.');
+                Alerta('Error','Seleccione una serie, que solo contenga valores numéricos.','error');
+                //alert('Seleccione una serie, que solo contenga valores numéricos.');
                 break;
             }
            
