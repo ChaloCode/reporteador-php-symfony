@@ -14,7 +14,7 @@ use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\ResetType;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
-
+use Doctrine\DBAL\DriverManager;
 class DefaultController extends Controller
 {
     /**
@@ -22,159 +22,26 @@ class DefaultController extends Controller
      */
     public function indexAction(Request $request)
     {
-         $form = $this->createFormBuilder()
+      
         
-            ->add('Texto', TextType::class,array('label' => 'Texto *', 
-                                                'label_attr' => array('class' => 'control-label col-md-3 col-sm-3 col-xs-12'),
-                                                'attr' => array('class' => 'col-md-7 col-xs-12')))
-            ->add('Numero', IntegerType::class,array('label' => 'Numero *', 
-                                                    'label_attr' => array('class' => 'control-label col-md-3 col-sm-3 col-xs-12'),
-                                                    'attr' => array('class' => 'col-md-7 col-xs-12')))
-           
-            ->add('TextoArea', TextareaType::class,array('label' => 'Text Area *', 
-                                                         'label_attr' => array('class' => 'control-label col-md-3 col-sm-3 col-xs-12'),
-                                                         'attr' => array('class' => 'col-md-7 col-xs-12')))
-            
-       
-            ->add('isAttending', ChoiceType::class, array(
-                                                    'choices'  => array(
-                                                                        'Maybe' => null,
-                                                                        'Yes' => true,
-                                                                        'No' => false,
-                                                                        ),    
-                                                 'label' => 'Check List *',                                                
-                                                 'label_attr' => array('class' => 'control-label col-md-3 col-sm-3 col-xs-12'),
-                                                 'attr' => array('class' => 'col-md-7 col-xs-12')
-                                                 )) 
-             ->add('isAttending33', ChoiceType::class, array(
-                                                    'choices'  => array(
-                                                                        'Maybe' => null,
-                                                                        'Yes' => true,
-                                                                        'No' => false,
-                                                                        ),    
-                                                 'label' => 'Check List *',                                                
-                                                 'label_attr' => array('class' => 'control-label col-md-3 col-sm-3 col-xs-12'),
-                                                 'attr' => array('class' => 'select2_single col-md-7 col-xs-12')
-                                                 ))                                                                                    
-            ->add('public', CheckboxType::class, array(                                                
-                                                'required' => false,
-                                                 'label' => 'Single Check *',                                                 
-                                                 'label_attr' => array('class' => 'control-label col-md-3 col-sm-3 col-xs-12'),
-                                                 'attr' => array('class' => 'flat')
-                                                 )) 
-                                                 
-         
-            ->add('attending2', ChoiceType::class, array(
-                                                    'choices' => array(
-                                                        'Yes' => true,
-                                                        'No' => false,
-                                                        'Maybe' => null,
-                                                    ),
-                                                    'choices_as_values' => true,
-                                                    'expanded' => true,
-                                                    'multiple' => false,
-                                                    'label_attr' => array('class' => 'control-label col-md-3 col-sm-3 col-xs-12'),
-                                                    'choice_attr' => function($val, $key, $index) {
-                                                        // adds a class like attending_yes, attending_no, etc
-                                                        return ['class' => 'flat'];
-                                                    },
-                                                ))                 
-                             
-                                                              
-            ->add('Fecha', TextType::class,array('label' => 'Fecha *',
-                                            'label_attr' => array('class' => 'control-label col-md-3 col-sm-3 col-xs-12'),
-                                            'attr' => array('class' => 'date-picker-control col-md-7 col-xs-12')
-                                            ))   
-                                                 
-                    // ->add('cancelar', ResetType::class, array('label' => 'Cancelar','attr' => array('class' => 'btn btn-success')))
-            
-            ->getForm(); 
-        // replace this example code with whatever you need
-         $em = $this->getDoctrine()->getEntityManager();
-        $connection = $em->getConnection();
-        $statement = $connection->prepare("
-                        SELECT                        
-                        prueba.Nombre AS '0',
-                        prueba.Sexo AS '1',
-                        prueba.Cargo AS '2',
-                        prueba.Edad AS '3',
-                        prueba.Salario AS '4'
-                        FROM
-                        prueba
-                        ");  
-        $statement->execute();
-        $constantes = $statement->fetchAll();  
-        $columnas = array('Nombre',
-                        'Sexo',
-                        'Cargo',
-                        'Edad',
-                        'Salario' ); 
-       $info = array('paginaTitulo' => 'Tabla generica', 
-                      'tablaTitulo' =>'Tabla generica',
-                      'tablaSubTitulo' => 'Data por SQL',
-                      'tablaInfo' =>'Esta tabla puede ser cargada dinamicamente por cualquier sentecia SQL (o un array asociativo) siempre cuando los nombres del SELECT SQL esten enumerodados de cero en adelante (0,1,2,3..)' 
-                     );    
-                     
-       $grafica= array('x' => array(
-                                        2001,
-                                        2002,
-                                        2003,
-                                        2004,
-                                        2005,
-                                        2006,
-                                        2007,
-                                        2008,
-                                        2009,
-                                        2010,
-                                        2011,
-                                        2012,
-                                        2013,
-                                        2014,
-                                        2015,
-                                        2016,
-                                        2017,
-                                        2018,
-                                        2019,
-                                        2020,
-                                        2021,
-                                        2022
-                                        ) ,
-                      'y' => array(
-                                        10,
-                                        31,
-                                        22,
-                                        23,
-                                        44,
-                                        25,
-                                        56,
-                                        77,
-                                        58,
-                                        29,
-                                        30,
-                                        41,
-                                        32,
-                                        53,
-                                        34,
-                                        65,
-                                        76,
-                                        57,
-                                        18,
-                                        69,
-                                        40,
-                                        41
-
-                                        ) ,
-                                        
-                                        );
-       return $this->render('default/index.html.twig', array(
-            'form' => $form->createView(),
-             'formularioTitulo' => 'Hola index',
-             'columnas'=>$columnas,
-                                                               'filas' =>$constantes,
-                                                               'numfila'=>count($constantes)-1,
-                                                               'numcolumna'=>count($columnas)-1,
-                                                               'info'=>$info,
-                                                               'grafica'=>$grafica
-                 ));
+        //Con esto se va probar las conexiones de las BD de los usuarios
+        $conn = DriverManager::getConnection(array(
+     'wrapperClass' => 'Doctrine\DBAL\Connections\MasterSlaveConnection',
+     'driver' => 'pdo_mysql',
+     'master' => array('user' => 'root', 'password' => '', 'host' => '127.0.0.1', 'dbname' => 'pruebacolibri'),
+     'slaves' => array(
+         array('user' => 'slave1', 'password', 'host' => '', 'dbname' => '')
+        
+     )
+  ));
+  $conn->connect('master');
+$sql = "SELECT Nombre FROM prueba";
+$stmt = $conn->prepare($sql);
+//$stmt->bindValue(1, $id);
+$stmt->execute();
+   $filasx = $stmt->fetchAll(); 
+        
+     
+      var_dump( $filasx);
     }
 }
