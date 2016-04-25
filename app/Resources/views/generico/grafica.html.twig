@@ -12,30 +12,35 @@
                     <li><a  class="fa fa-pie-chart" id="DonutLink" onclick="Donut()"> Grafica, Donut</a></li>
                  {% endblock %}                           
                 {% block bodyVentana %}                 
-                    <div>
-                        <p>Seleccione valores para el <strong>eje horizontal</strong></p>
-                        <select id='grafica-x'>
-                            {% for i in infoTabla['columnas'] %}
-                                <option value="{{ loop.index0 }}">{{i}}</option>               
-                            {% endfor %}
-                        </select> 
-                        <p>Seleccione valores para el <strong>eje vertical</strong></p>
-                        <select id='grafica-y'>
-                            {% for i in infoTabla['columnas'] %}
-                                <option value="{{ loop.index0 }}">{{i}}</option>               
-                            {% endfor %}
-                        </select>
-                        <div class="ln_solid"></div> 
-                        <p>Seleccione valores para agregar una <strong>nueva serie</strong></p>
-                        <select id='grafica-serie'>
-                            {% for i in infoTabla['columnas'] %}
-                                <option value="{{ loop.index0 }}">{{i}}</option>               
-                            {% endfor %}
-                        </select> 
-                         <button  id="addSerie" class="btn btn-success">Agregar</button>
-                    </div>                
-                    <div id="tap-grafica" >                              
-                        <div id="Graficar" ></div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <p>Seleccione valores para el <strong>eje horizontal</strong></p>
+                                <select id='grafica-x'>
+                                    {% for i in infoTabla['columnas'] %}
+                                        <option value="{{ loop.index0 }}">{{i}}</option>               
+                                    {% endfor %}
+                                </select> 
+                            <p>Seleccione valores para el <strong>eje vertical</strong></p>
+                            <select id='grafica-y'>
+                                {% for i in infoTabla['columnas'] %}
+                                    <option value="{{ loop.index0 }}">{{i}}</option>               
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <div id='divSeries' class="col-md-6">
+                            <p>Seleccione valores para agregar una <strong>nueva serie</strong></p>
+                            <select id='grafica-serie'>
+                                {% for i in infoTabla['columnas'] %}
+                                    <option value="{{ loop.index0 }}">{{i}}</option>               
+                                {% endfor %}
+                            </select> 
+                            <button  id="addSerie" class="btn btn-success">Agregar</button>
+                        </div>
+                        </div> 
+                        <div class="ln_solid"></div>                
+                        <div id="tap-grafica" >                              
+                            <div id="Graficar" >
+                        </div>
                     </div>
                {% endblock %}
         {% endembed %}          
@@ -196,14 +201,22 @@
         Barra();
   }
 
-  function ResetTapGrafica()
+  function ResetTapGrafica(habilitar)
   {
       $('#Graficar').remove();
       $('#tap-grafica').append( '<div id="Graficar" ></div>' );
+      if(habilitar)
+      {
+          Alerta('Información','La gráfica Donut, solo muestra información de los ejes horizontal y vertical.','info') ;
+          $("#divSeries").children().prop('disabled',true);
+      }
+      else{
+          $("#divSeries").children().prop('disabled',false);
+      }
   }
   function Linea()
   {     
-       ResetTapGrafica()
+       ResetTapGrafica(false);
        Morris.Line({
             // ID of the element in which to draw the chart.
             element: 'Graficar',
@@ -225,8 +238,8 @@
   }
   
   function Area()
-  {
-      ResetTapGrafica()
+  {      
+      ResetTapGrafica(false);
      //$('#AreaLink').removeAttr('onclick');
       Morris.Area({
             // ID of the element in which to draw the chart.
@@ -247,8 +260,8 @@
   }
   
   function Barra()
-  {
-       ResetTapGrafica()
+  {      
+       ResetTapGrafica(false);
        Morris.Bar({
             // ID of the element in which to draw the chart.
             element: 'Graficar',
@@ -266,8 +279,8 @@
   }
   
   function Donut()
-  {
-         ResetTapGrafica()
+  {       
+         ResetTapGrafica(true);
          Morris.Donut({
             // ID of the element in which to draw the chart.
             element: 'Graficar',
