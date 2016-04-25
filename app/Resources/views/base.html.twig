@@ -390,7 +390,7 @@
        Alerta('Notificación','{{msg}}','success')    
      {% endfor %}
      {% for msg in app.session.flashBag.get('info') %}
-           Alerta('Información','{{msg}}','info')      
+           Alerta('Advertencia','{{msg}}','info')      
      {% endfor %}
      {% for msg in app.session.flashBag.get('error') %}
             Alerta('Error','{{msg}}','error')       

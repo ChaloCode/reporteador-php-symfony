@@ -190,24 +190,55 @@
         var data2 = {
             'datax': []       
         };
+        var control2=true;
         for (i=0;i<{{infoTabla['lengthFilas']}};i++)
         {
+            var n=dataAll[i][xx];
+            if(n==0){
+                n++;
+            }
+            n=n/n;
+            var n2=dataAll[i][yy];            
+            if(n2==0){
+                n2++;
+            }
+            n2=n2/n2;
+            if(control2)
+            {
+                if( !Number.isInteger(n) || !Number.isInteger(n2) )
+                {    
+                    control2=false;
+                    if( !Number.isInteger(n2) ){
+                         Alerta('Error','En el eje vertical, solo puede contener valores numéricos.\nSeleccione otro valor para continuar.','error');
+                    }
+                }
+            }
+           
             data2.datax.push({ 'label':dataAll[i][xx]
                                 ,'valor':dataAll[i][yy]
                                 ,'value':dataAll[i][yy]
                              });
-        }      
-        datax=data2.datax;
-        Barra();
+        }  
+         datax=data2.datax;
+        if(!control2)
+        {           
+            Alerta('Advertencia','A seleccionado un eje, que NO contiene valores numéricos.\nEsto le impide agregar series mas adelante.','info') ;
+            Barra(true);
+        }
+        else{              
+             Barra(false);        
+        }    
+       
+        
   }
+  
 
-  function ResetTapGrafica(habilitar)
+  function ResetTapGrafica(inabilitar=false)
   {
       $('#Graficar').remove();
       $('#tap-grafica').append( '<div id="Graficar" ></div>' );
-      if(habilitar)
+      if(inabilitar)
       {
-          Alerta('Información','La gráfica Donut, solo muestra información de los ejes horizontal y vertical.','info') ;
           $("#divSeries").children().prop('disabled',true);
       }
       else{
@@ -216,7 +247,7 @@
   }
   function Linea()
   {     
-       ResetTapGrafica(false);
+       ResetTapGrafica();
        Morris.Line({
             // ID of the element in which to draw the chart.
             element: 'Graficar',
@@ -239,7 +270,7 @@
   
   function Area()
   {      
-      ResetTapGrafica(false);
+      ResetTapGrafica();
      //$('#AreaLink').removeAttr('onclick');
       Morris.Area({
             // ID of the element in which to draw the chart.
@@ -259,9 +290,9 @@
             });
   }
   
-  function Barra()
-  {      
-       ResetTapGrafica(false);
+  function Barra(a=false)
+  {  
+       ResetTapGrafica(a);
        Morris.Bar({
             // ID of the element in which to draw the chart.
             element: 'Graficar',
@@ -280,6 +311,7 @@
   
   function Donut()
   {       
+         Alerta('Advertencia','La gráfica Donut, solo muestra información de los ejes horizontal y vertical.','info') ;
          ResetTapGrafica(true);
          Morris.Donut({
             // ID of the element in which to draw the chart.
