@@ -115,13 +115,16 @@
         };
         
         var oldSerieTemp=[];             
-        var oldSerieLength=oldSerie.length-1;
+        var oldSerieLength=oldSerie.length-1;       
         var text;
        
         var control=true;
         for (i=0;i<{{infoTabla['lengthFilas']}};i++)
         {         
             var n=dataAll[i][serie];
+            if(n==0){
+                n++;
+            }
             n=n/n;
             if( Number.isInteger(n))
             {
@@ -129,24 +132,35 @@
                 var label='"label":'+dataAll[i][xx];
                 var valor='"valor":'+dataAll[i][yy];
                 var value='"value":'+dataAll[i][yy];
+                
                 if(oldSerieLength>0)
                 { 
                     var textTemp = '{ '+serieNew+','+label+','+valor+','+value;
                     for (k=0;k<oldSerieLength;k++)
                     {           
-                       textTemp = textTemp+','+oldSerie[k];                    
+                       textTemp = textTemp+','+oldSerie[k];   
                     }
-                    textTemp =textTemp+'}';                 
+                    textTemp =textTemp+'}';  
                     text=textTemp;
                 }
                 else{
-                     text = '{ '+serieNew+','+label+','+valor+','+value+'}';
+                     text = '{ '+serieNew+','+label+','+valor+','+value+'}';    
                 }
-              
-                var myobj = JSON.parse(text);
-                data2.datax.push(myobj);
-                //Global de las series selecionada                
-                oldSerieTemp.push(serieNew);
+                try {
+                    var myobj = JSON.parse(text);
+                    data2.datax.push(myobj);
+                    //Global de las series selecionada                
+                    oldSerieTemp.push(serieNew);
+                }
+                catch(err) {
+                    control=false;
+                    ykeys_temp.pop(); 
+                    labels_serie_temp.pop(); 
+                    numSerie--;                    
+                    Alerta('Error','Lo sentimos :<big>'+ labels_serie +'</big> no se pudo graficar.\nRecomendaciones:\n*Vuelva intentarlo.\n*Revise la información que sea coherente con los ejes graficados.','error');
+                    break;
+                }
+                
                 
             }
             else
@@ -158,9 +172,7 @@
                 Alerta('Error','Seleccione una serie, que solo contenga valores numéricos.','error');
                 //alert('Seleccione una serie, que solo contenga valores numéricos.');
                 break;
-            }
-           
-         
+            }         
         }      
        if(control)
        {
@@ -173,7 +185,7 @@
             }  
              oldSerie = oldSerie.split(',');
              datax=data2.datax; 
-             Barra();    
+             Barra();
        }
   }
     
