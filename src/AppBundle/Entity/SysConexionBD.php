@@ -5,12 +5,12 @@ namespace AppBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * Sys_Conexion_BD
+ * SysConexionBD
  *
- * @ORM\Table(name="sys__conexion__b_d")
- * @ORM\Entity(repositoryClass="AppBundle\Repository\Sys_Conexion_BDRepository")
+ * @ORM\Table(name="sys_conexion_bd")
+ * @ORM\Entity(repositoryClass="AppBundle\Repository\SysConexionBDRepository")
  */
-class Sys_Conexion_BD
+class SysConexionBD
 {
     /**
      * @var int
@@ -22,51 +22,44 @@ class Sys_Conexion_BD
     private $id;
 
     /**
-     * @var int
-     *
-     * @ORM\Column(name="Id_Usuario", type="integer")
-     */
-    private $idUsuario;
-
-    /**
      * @var string
      *
-     * @ORM\Column(name="Driver", type="string", length=255)
+     * @ORM\Column(name="driver", type="string", length=255)
      */
     private $driver;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="Host", type="string", length=255)
+     * @ORM\Column(name="host", type="string", length=255)
      */
     private $host;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="Port", type="string", length=255)
+     * @ORM\Column(name="port", type="string", length=255)
      */
     private $port;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="DB_Name", type="string", length=255)
+     * @ORM\Column(name="nameBD", type="string", length=255)
      */
-    private $dBName;
+    private $nameBD;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="User", type="string", length=255)
+     * @ORM\Column(name="user", type="string", length=255)
      */
     private $user;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="Password", type="string", length=255)
+     * @ORM\Column(name="password", type="string", length=255)
      */
     private $password;
 
@@ -82,35 +75,11 @@ class Sys_Conexion_BD
     }
 
     /**
-     * Set idUsuario
-     *
-     * @param integer $idUsuario
-     *
-     * @return Sys_Conexion_BD
-     */
-    public function setIdUsuario($idUsuario)
-    {
-        $this->idUsuario = $idUsuario;
-    
-        return $this;
-    }
-
-    /**
-     * Get idUsuario
-     *
-     * @return integer
-     */
-    public function getIdUsuario()
-    {
-        return $this->idUsuario;
-    }
-
-    /**
      * Set driver
      *
      * @param string $driver
      *
-     * @return Sys_Conexion_BD
+     * @return SysConexionBD
      */
     public function setDriver($driver)
     {
@@ -134,7 +103,7 @@ class Sys_Conexion_BD
      *
      * @param string $host
      *
-     * @return Sys_Conexion_BD
+     * @return SysConexionBD
      */
     public function setHost($host)
     {
@@ -158,7 +127,7 @@ class Sys_Conexion_BD
      *
      * @param string $port
      *
-     * @return Sys_Conexion_BD
+     * @return SysConexionBD
      */
     public function setPort($port)
     {
@@ -178,27 +147,27 @@ class Sys_Conexion_BD
     }
 
     /**
-     * Set dBName
+     * Set nameBD
      *
-     * @param string $dBName
+     * @param string $nameBD
      *
-     * @return Sys_Conexion_BD
+     * @return SysConexionBD
      */
-    public function setDBName($dBName)
+    public function setNameBD($nameBD)
     {
-        $this->dBName = $dBName;
+        $this->nameBD = $nameBD;
     
         return $this;
     }
 
     /**
-     * Get dBName
+     * Get nameBD
      *
      * @return string
      */
-    public function getDBName()
+    public function getNameBD()
     {
-        return $this->dBName;
+        return $this->nameBD;
     }
 
     /**
@@ -206,7 +175,7 @@ class Sys_Conexion_BD
      *
      * @param string $user
      *
-     * @return Sys_Conexion_BD
+     * @return SysConexionBD
      */
     public function setUser($user)
     {
@@ -230,7 +199,7 @@ class Sys_Conexion_BD
      *
      * @param string $password
      *
-     * @return Sys_Conexion_BD
+     * @return SysConexionBD
      */
     public function setPassword($password)
     {

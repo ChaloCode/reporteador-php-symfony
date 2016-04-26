@@ -22,26 +22,25 @@ class DefaultController extends Controller
      */
     public function indexAction(Request $request)
     {
-      
         
         //Con esto se va probar las conexiones de las BD de los usuarios
         $conn = DriverManager::getConnection(array(
-     'wrapperClass' => 'Doctrine\DBAL\Connections\MasterSlaveConnection',
-     'driver' => 'pdo_mysql',
-     'master' => array('user' => 'root', 'password' => '', 'host' => '127.0.0.1', 'dbname' => 'pruebacolibri'),
-     'slaves' => array(
-         array('user' => 'slave1', 'password', 'host' => '', 'dbname' => '')
+            'wrapperClass' => 'Doctrine\DBAL\Connections\MasterSlaveConnection',
+            'driver' => 'pdo_mysql',
+            'master' => array('user' => 'root', 'port'=>'','password' => '', 'host' => '127.0.0.1', 'dbname' => 'pruebacolibri'),
+            'slaves' => array(
+                array('user' => 'slave1', 'password', 'host' => '', 'dbname' => '')
+            )
+        ));
         
-     )
-  ));
-  $conn->connect('master');
-$sql = "SELECT Nombre FROM prueba";
-$stmt = $conn->prepare($sql);
-//$stmt->bindValue(1, $id);
-$stmt->execute();
-   $filasx = $stmt->fetchAll(); 
+        $conn->connect('master');
+        $sql = "SELECT Nombre FROM prueba";
+        $stmt = $conn->prepare($sql);
+        //$stmt->bindValue(1, $id);
+        $stmt->execute();
+        $filasx = $stmt->fetchAll(); 
         
-     
-      var_dump( $filasx);
+        var_dump( $filasx);
+        die;
     }
 }

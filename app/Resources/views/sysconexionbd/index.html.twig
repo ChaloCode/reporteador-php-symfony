@@ -1,0 +1,54 @@
+{% extends "base.html.twig" %}
+
+
+{% if control>0 %}
+    {% use "generico/tablaCRUD.html.twig" %}   
+{% endif %}
+
+{% block stylesheets %}  
+    {{ parent() }} 
+    {% if control>0 %}
+        {% block stylesheetsTabla %} 
+            {{ parent() }} 
+        {% endblock %} 
+    {% endif %}
+{% endblock %}
+
+
+{% block title %}{{info['pagina'].titulo}}{% endblock %}
+
+
+{% block body %}
+{% endblock %}
+
+
+{% block body2 %} 
+    {% if control>0 %}    
+        {% block bodyTabla %}
+            {{ parent() }}  
+        {% endblock %} 
+    {% endif %} 
+{% endblock %}
+
+{% block body3 %}
+{% endblock %}
+
+   
+
+
+{% block javascripts %}  
+    {{ parent() }}
+    {% if control>0 %}
+        {% block javascriptsTabla %}     
+            {{ parent() }} 
+        {% endblock %} 
+    {% endif %}
+{% endblock %}
+
+
+
+
+
+
+
+

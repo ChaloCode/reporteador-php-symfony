@@ -260,6 +260,16 @@ class PruebaController extends Controller
         //die('fin query');
         return $this->render('capa/index.html.twig', array('capas' =>$capas));
     }
+    public function add(){
+         $fecha=new\DateTime('now');
+             $abonoPrestamo->setIdPrestamo($id);
+             $abonoPrestamo->setFecha($fecha);
+             $abonoPrestamo->setIdUsuario(111);
+             
+             $em=$this->getDoctrine()->getManager();
+             $em->persist($abonoPrestamo);
+             $em->flush();
+    }
     
   
 }
