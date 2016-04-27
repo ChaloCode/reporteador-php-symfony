@@ -23,36 +23,7 @@ use Doctrine\DBAL\DriverManager;
 
 
 class SysConexionBDController extends Controller
-{
-    /**
-     * @Route("/conexion/esperar", name="ConexionBD")
-     */
-    public function tablaAction(Request $request)
-    { 
-          //Informacion de las paginas            
-        $fecha=strftime("El día, %d del mes %m del %Y %H:%M");		
-        $info = array('pagina'=>array(
-                      'titulo' => 'Conexiones BD Externa',
-                    ),                    
-                      'tabla'=>array(
-                      'titulo' => 'Conexiones', 
-                      'subtitulo' =>'Base de datos externas',
-                      'descripcion'=>'Generado: '.$fecha
-                    )
-        );  
-        
-          $sql="SELECT * FROM  sys_conexion_bd";  
-          $retorno=$this->newTabla($sql,false);
-          return $this->render('sysconexionbd/index.html.twig', array(                                                            
-                                                            'info'=> $info,
-                                                            'infoTabla'=>$retorno['infoTabla'], 
-                                                            'control'=>$retorno['control']                                                          
-                                                            ));
-        
-    
-       
-        
-    }
+{   
     
     private function newTabla($sql,$msm=true)
     {
@@ -114,28 +85,45 @@ class SysConexionBDController extends Controller
     }
             
       /**
-     * @Route("/constantes/list/{id}", name="Detalle_Constantes")
+     * @Route("/conexion/list/{id}", name="Detalle_Conexion")
      */
     public function listAction($id)
     {
+        //Solucion temporar , solucionar modal mandando toda la informacion desde imagecolorsforindex
+        //Explorar solucion ajax
         $em = $this->getDoctrine()->getEntityManager();
         $connection = $em->getConnection();
-        $statement = $connection->prepare("SELECT
-                        constantes.id,
-                        constantes.Nombre AS nombre,
-                        constantes.Utilidad AS utilidad,
-                        constantes.Plazo AS plazo,
-                        constantes.Dias_Clavo AS diasClavo,
-                        constantes.id_Oficina AS idOficina,                        
-                        oficina.Nombre_Oficina AS nombreOficina
-                        FROM
-                        constantes 
-                        INNER JOIN oficina ON constantes.id_Oficina=oficina.id
-                        WHERE constantes.id=:id");            
+        $sql="  SELECT
+                sys_conexion_bd.id,
+                sys_conexion_bd.Nombre_Conexion AS 'Nombre Conexion ',                
+                sys_conexion_bd.`Host`,
+                sys_conexion_bd.`Port`,
+                sys_conexion_bd.Nombre_BD AS 'Nombre BD ',
+                sys_conexion_bd.Usuario,
+                sys_conexion_bd.`Password` AS Contraseña
+                FROM `sys_conexion_bd`
+                WHERE sys_conexion_bd.id=:id "; 
+        $statement = $connection->prepare($sql);            
         $statement->bindValue('id', $id);
         $statement->execute();
-        $constante = $statement->fetchAll();        
-        return $this->render('constantes/list.html.twig', array('constante' =>$constante['0']));
+        $conexion = $statement->fetchAll(); 
+        $a='';
+        foreach ($conexion[0] as $key => $value) {
+            if(empty($value))
+            {
+                $value='NULO';
+            }
+            if(empty($a))
+            {
+                $a=$key.': '.$value;
+            }
+            else{
+                $a=$a.'\n'.$key.': '.$value;
+            }
+            
+        }      
+        $this->addFlash('success',$a); 
+        return $this->redirectToRoute('Crear_Conexion_BD');  
     }
     
     /**
