@@ -238,14 +238,22 @@ class SysConexionBDController extends Controller
                       'subtitulo' =>': '.$fecha
                     )
         );   
-        $sql="SELECT * FROM  sys_conexion_bd";  
+        $sql="  SELECT
+                sys_conexion_bd.id,
+                sys_conexion_bd.Nombre_Conexion AS 'Nombre Conexion ',                
+                sys_conexion_bd.`Host`,
+                sys_conexion_bd.`Port`,
+                sys_conexion_bd.Nombre_BD AS 'Nombre BD ',
+                sys_conexion_bd.Usuario,
+                sys_conexion_bd.`Password` AS Contraseña
+                FROM `sys_conexion_bd`";  
         $retorno=$this->newTabla($sql,false);   
         $infoTabla=$retorno['infoTabla'];   
-          
+         
         if(empty($infoTabla['filas'])){
             $control=0;
         }
-        else{
+        else{           
             $control=$retorno['control']; 
         }
         
@@ -285,45 +293,110 @@ class SysConexionBDController extends Controller
     
     
     /**
-     * @Route("/constantes/update/{id}/{id_ofi}", name="Actualizar_Constantes")
+     * @Route("/conexion/update/{id}", name="Actualizar_Conexion")
      */
-    public function updateAction($id,$id_ofi,Request $request)
+    public function updateAction($id,Request $request)
     {
-        $constante=$this->getDoctrine()
-              ->getRepository('AppBundle:Constantes')
+        $sysConexionBD=$this->getDoctrine()
+              ->getRepository('AppBundle:SysConexionBD')
               ->find($id);            
          
-        $form = $this->createFormBuilder($constante)
-            ->add('nombre', TextType::class)  
-            ->add('utilidad', IntegerType::class)
-            ->add('plazo', IntegerType::class)
-            ->add('diasClavo', IntegerType::class)                   
-            ->add('idOficina', EntityType::class, array( 
-                    'label'=>'Oficina',                  
-                    'class' => 'AppBundle:Oficina',
-                    'choice_label' => 'nombreOficina',                   
-                ))        
-            ->add('save', SubmitType::class, array('label' => 'Editar Constante','attr' => array('class' => 'ui-widget-header ui-corner-all editar')))
-            ->getForm();
+        $form = $this->createFormBuilder($sysConexionBD) 
+                ->add('nombreConexion', TextType::class,array('label' => 'Nombre de la conexión *', 
+                                                    'label_attr' => array('class' => 'control-label col-md-3 col-sm-3 col-xs-12'),
+                                                    'attr' => array('class' => 'col-md-7 col-xs-12')))
+                                                        
+                ->add('host', TextType::class,array('label' => 'Host *', 
+                                                    'label_attr' => array('class' => 'control-label col-md-3 col-sm-3 col-xs-12'),
+                                                    'attr' => array('title'=>'Ejemplo: 127.0.0.1 o https://hostname','class' => 'col-md-7 col-xs-12','placeholder'=>'127.0.0.1','pattern'=>'\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}')))
+                                                    
+                ->add('port', IntegerType::class,array('label' => 'Port', 
+                                                        'required'=>false,
+                                                        'label_attr' => array('class' => 'control-label col-md-3 col-sm-3 col-xs-12'),
+                                                        'attr' => array('class' => 'col-md-7 col-xs-12','placeholder'=>'3306')))
+            
+                ->add('nameBD', TextType::class,array('label' => 'Nombre de la BD *', 
+                                                    'label_attr' => array('class' => 'control-label col-md-3 col-sm-3 col-xs-12'),
+                                                    'attr' => array('class' => 'col-md-7 col-xs-12')))
+        
+                ->add('user', TextType::class,array('label' => 'Usuario de la BD *', 
+                                                    'label_attr' => array('class' => 'control-label col-md-3 col-sm-3 col-xs-12'),
+                                                    'attr' => array('placeholder'=>'root','class' => 'col-md-7 col-xs-12')))
+        
+                ->add('password', PasswordType::class,array('label' => 'Contraseña de la BD',
+                                                            'required'=>false, 
+                                                            'label_attr' => array('class' => 'control-label col-md-3 col-sm-3 col-xs-12'),
+                                                            'attr' => array('class' => 'col-md-7 col-xs-12')))  
+        
+                ->add('driver', ChoiceType::class, array(
+                                                        'choices'  => array(
+                                                                            'MySQL' => 'pdo_mysql',
+                                                                            'SQLite' => 'pdo_sqlite',
+                                                                            'PostgreSQL' => 'pdo_pgsql',
+                                                                            'Oracle' => 'pdo_oci'                                                                       
+                                                                            ),    
+                                                    'label' => 'Tipo conexión de la BD *',                                                
+                                                    'label_attr' => array('class' => 'control-label col-md-3 col-sm-3 col-xs-12'),
+                                                    'attr' => array('class' => 'col-md-7 col-xs-12')
+                                                    )) 
+                
+                ->getForm();
             
          $form->handleRequest($request);
          
          if ($form->isSubmitted() && $form->isValid()) 
-         {  
-             $constante->setIdOficina((int)$_POST['form']['idOficina']);             
-             $em=$this->getDoctrine()->getManager();             
-             $em->flush();              
-             
-             $this->addFlash(
-               'notice',
-               'Actualizado.'  
-             );         
-            return $this->redirectToRoute('Constantes');
+         {    
+             $driver=$request->get('form')['driver'];
+             $user=$request->get('form')['user'];
+             $port=$request->get('form')['port'];
+             $password=$request->get('form')['password'];
+             $host=$request->get('form')['host'];
+             $dbname=$request->get('form')['nameBD'];
+             $valConexion=$this->validarConexion($driver,$user,$port,$password,$host,$dbname);
+             if( $valConexion)
+             {       
+                $em=$this->getDoctrine()->getManager();             
+                $em->flush();              
+                
+                $this->addFlash(
+                                    'success',
+                                    'Conexión de la BD externa, actualizada correctamente.'  
+                                ); 
+                            
+                return $this->redirectToRoute('Crear_Conexion_BD');   
+             }
+             else {
+                   $this->addFlash(
+                                'error',
+                                'No se pudo establecer conexión, con la base de datos externa.\nRevise los datos de conexión y vuelva a intentarlo.'  
+                                ); 
+                
+             }
         } 
-             
-        return $this->render('constantes/update.html.twig', array(
-            'form' => $form->createView(),'oficina'=>$id_ofi
-        ));
+        
+        //Informacion de las paginas            
+        $fecha=strftime("El día, %d del mes %m del %Y %H:%M");		
+        $info = array('pagina'=>array(
+                      'titulo' => 'Conexiones BD Externa',
+                    ),                    
+                      'formulario'=>array(
+                      'titulo' => 'Actualizar Fuente de Datos', 
+                      'subtitulo' =>'Base de datos externa'
+                    ),
+                      'tabla'=>array(
+                      'titulo' => '', 
+                      'subtitulo' =>'',
+                      'descripcion'=>'Generado: '.$fecha                      
+                    ),
+                      'grafica'=>array(
+                      'titulo' => '', 
+                      'subtitulo' =>': '.$fecha
+                    )
+        );       
+        return $this->render('sysconexionbd/update.html.twig', array(
+                                                                    'form' => $form->createView(),
+                                                                    'info'=>$info
+                                                                   ));
            
     }
     
