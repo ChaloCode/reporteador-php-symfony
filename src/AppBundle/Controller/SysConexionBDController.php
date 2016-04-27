@@ -179,7 +179,7 @@ class SysConexionBDController extends Controller
                                                                         'PostgreSQL' => 'pdo_pgsql',
                                                                         'Oracle' => 'pdo_oci'                                                                       
                                                                         ),    
-                                                 'label' => 'Tipo conexión de BD *',                                                
+                                                 'label' => 'Tipo conexión de la BD *',                                                
                                                  'label_attr' => array('class' => 'control-label col-md-3 col-sm-3 col-xs-12'),
                                                  'attr' => array('class' => 'col-md-7 col-xs-12')
                                                  )) 
@@ -239,12 +239,21 @@ class SysConexionBDController extends Controller
                     )
         );   
         $sql="SELECT * FROM  sys_conexion_bd";  
-        $retorno=$this->newTabla($sql,false);        
+        $retorno=$this->newTabla($sql,false);   
+        $infoTabla=$retorno['infoTabla'];   
+          
+        if(empty($infoTabla['filas'])){
+            $control=0;
+        }
+        else{
+            $control=$retorno['control']; 
+        }
+        
         return $this->render('sysconexionbd/index.html.twig', array(
                                                                     'form' => $form->createView(),
                                                                     'info'=>$info,
-                                                                    'infoTabla'=>$retorno['infoTabla'], 
-                                                                    'control'=>$retorno['control']                                                          
+                                                                    'infoTabla'=>$infoTabla, 
+                                                                    'control'=> $control                                                          
                                                         
                                                                 ));
     }
@@ -345,7 +354,7 @@ class SysConexionBDController extends Controller
           
          $this->addFlash(
                         'success',
-                        'Se ha borrado con exito la conexión.'  
+                        'Se ha borrado con éxito la conexión.'  
                         );
 
         return $this->redirectToRoute('Crear_Conexion_BD');   

@@ -24,49 +24,49 @@ class SysConexionBD
     /**
      * @var string
      *
-     * @ORM\Column(name="nombreConexion", type="string", length=255)
+     * @ORM\Column(name="Nombre_Conexion", type="string", length=255)
      */
     private $nombreConexion;    
 
     /**
      * @var string
      *
-     * @ORM\Column(name="driver", type="string", length=255)
+     * @ORM\Column(name="Driver", type="string", length=255)
      */
     private $driver;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="host", type="string", length=255)
+     * @ORM\Column(name="Host", type="string", length=255)
      */
     private $host;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="port", type="string", length=255, nullable=true)
+     * @ORM\Column(name="Port", type="string", length=255, nullable=true)
      */
     private $port;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="nameBD", type="string", length=255)
+     * @ORM\Column(name="Nombre_BD", type="string", length=255)
      */
     private $nameBD;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="user", type="string", length=255)
+     * @ORM\Column(name="Usuario", type="string", length=255)
      */
     private $user;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="password", type="string", length=255, nullable=true)
+     * @ORM\Column(name="Password", type="string", length=255, nullable=true)
      */
     private $password;
 
