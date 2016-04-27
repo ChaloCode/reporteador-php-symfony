@@ -33,11 +33,11 @@
                             {% for j in 1..infoTabla['lengthColumnas']  %}              
                                 <td>{{infoTabla['filas'][i][j]}}</td>
                             {% endfor %}
-                          
+                         
                             <td>
-                              <a class="fa fa-search btn btn-success btn-xs" href="/empleado/list/{{infoTabla['filas'][i][0]}}" > </a>
-                              <a class="fa fa-pencil btn btn-info btn-xs"  href="/empleado/update/{{infoTabla['filas'][i][0]}}"> </a>
-                              <a class="fa fa-trash-o btn btn-danger btn-xs" href="/empleado/delete/{{infoTabla['filas'][i][0]}}"> </a>
+                              <a class="fa fa-search btn btn-info  btn-xs" href="list/{{infoTabla['filas'][i][0]}}" > </a>
+                              <a class="fa fa-pencil btn btn-success btn-xs"  href="update/{{infoTabla['filas'][i][0]}}"> </a>
+                              <a class="fa fa-trash-o btn btn-danger btn-xs" href="delete/{{infoTabla['filas'][i][0]}}"> </a>
                             </td>
                         </tr> 
                     {% endfor %}     

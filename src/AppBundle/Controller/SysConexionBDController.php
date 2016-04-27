@@ -17,7 +17,7 @@ use Symfony\Component\Form\Extension\Core\Type\ResetType;
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 
-
+use Doctrine\DBAL\DriverManager;
 
 
 
@@ -25,7 +25,7 @@ use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 class SysConexionBDController extends Controller
 {
     /**
-     * @Route("/conexion/", name="ConexionBD")
+     * @Route("/conexion/esperar", name="ConexionBD")
      */
     public function tablaAction(Request $request)
     { 
@@ -139,17 +139,23 @@ class SysConexionBDController extends Controller
     }
     
     /**
-     * @Route("/conexion/add/", name="Crear_Conexion_BD")
+     * @Route("/conexion/", name="Crear_Conexion_BD")
      */
     public function addAction(Request $request)
     {  
+        
         $sysConexionBD=new SysConexionBD();         
-        $form = $this->createFormBuilder($sysConexionBD)        
+        $form = $this->createFormBuilder($sysConexionBD) 
+             ->add('nombreConexion', TextType::class,array('label' => 'Nombre de la conexión *', 
+                                                'label_attr' => array('class' => 'control-label col-md-3 col-sm-3 col-xs-12'),
+                                                'attr' => array('class' => 'col-md-7 col-xs-12')))
+                                                       
             ->add('host', TextType::class,array('label' => 'Host *', 
                                                 'label_attr' => array('class' => 'control-label col-md-3 col-sm-3 col-xs-12'),
                                                 'attr' => array('title'=>'Ejemplo: 127.0.0.1 o https://hostname','class' => 'col-md-7 col-xs-12','placeholder'=>'127.0.0.1','pattern'=>'\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}')))
                                                 
-            ->add('port', IntegerType::class,array('label' => 'Port *', 
+            ->add('port', IntegerType::class,array('label' => 'Port', 
+                                                    'required'=>false,
                                                     'label_attr' => array('class' => 'control-label col-md-3 col-sm-3 col-xs-12'),
                                                     'attr' => array('class' => 'col-md-7 col-xs-12','placeholder'=>'3306')))
            
@@ -161,7 +167,8 @@ class SysConexionBDController extends Controller
                                                 'label_attr' => array('class' => 'control-label col-md-3 col-sm-3 col-xs-12'),
                                                 'attr' => array('placeholder'=>'root','class' => 'col-md-7 col-xs-12')))
       
-            ->add('password', PasswordType::class,array('label' => 'Contraseña de la BD *', 
+            ->add('password', PasswordType::class,array('label' => 'Contraseña de la BD',
+                                                        'required'=>false, 
                                                         'label_attr' => array('class' => 'control-label col-md-3 col-sm-3 col-xs-12'),
                                                         'attr' => array('class' => 'col-md-7 col-xs-12')))  
        
@@ -181,41 +188,90 @@ class SysConexionBDController extends Controller
          $form->handleRequest($request);         
          if ($form->isSubmitted() && $form->isValid()) 
          {             
-             
-            //Insert 
-            $em=$this->getDoctrine()->getManager();
-            $em->persist($sysConexionBD);
-            $em->flush();               
-            //return $this->redirectToRoute('Constantes');
-             $this->addFlash(
-                'success',
-                'Conexión de la BD externa, creada correctamente.'  
-                );                     
+             $driver=$request->get('form')['driver'];
+             $user=$request->get('form')['user'];
+             $port=$request->get('form')['port'];
+             $password=$request->get('form')['password'];
+             $host=$request->get('form')['host'];
+             $dbname=$request->get('form')['nameBD'];
+             $valConexion=$this->validarConexion($driver,$user,$port,$password,$host,$dbname);
+             if( $valConexion)
+             {
+                 //Insert 
+                $em=$this->getDoctrine()->getManager();
+                $em->persist($sysConexionBD);
+                $em->flush();               
+                
+                $this->addFlash(
+                                'success',
+                                'Conexión de la BD externa, creada correctamente.'  
+                               ); 
+                
+                return $this->redirectToRoute('Crear_Conexion_BD');   
+             }
+             else {
+                   $this->addFlash(
+                                'error',
+                                'No se pudo establecer conexión, con la base de datos externa.\nRevise los datos de conexión y vuelva a intentarlo.'  
+                                ); 
+                
+             }
+                             
           
         }   
          //Informacion de las paginas            
         $fecha=strftime("El día, %d del mes %m del %Y %H:%M");		
         $info = array('pagina'=>array(
-                      'titulo' => 'Nueva Conexion',
+                      'titulo' => 'Conexiones BD Externa',
                     ),                    
                       'formulario'=>array(
                       'titulo' => 'Nueva Fuente de Datos', 
                       'subtitulo' =>'Base de datos externa'
                     ),
                       'tabla'=>array(
-                      'titulo' => '', 
-                      'subtitulo' =>'',
-                      'descripcion'=>': '.$fecha
+                      'titulo' => 'Conexiones', 
+                      'subtitulo' =>'Base de datos externas',
+                      'descripcion'=>'Generado: '.$fecha                      
                     ),
                       'grafica'=>array(
                       'titulo' => '', 
                       'subtitulo' =>': '.$fecha
                     )
-        );           
-        return $this->render('sysconexionbd/add.html.twig', array(
+        );   
+        $sql="SELECT * FROM  sys_conexion_bd";  
+        $retorno=$this->newTabla($sql,false);        
+        return $this->render('sysconexionbd/index.html.twig', array(
                                                                     'form' => $form->createView(),
-                                                                    'info'=>$info
+                                                                    'info'=>$info,
+                                                                    'infoTabla'=>$retorno['infoTabla'], 
+                                                                    'control'=>$retorno['control']                                                          
+                                                        
                                                                 ));
+    }
+    
+    private function validarConexion($driver,$user,$port,$password,$host,$dbname)
+    {
+        
+         try {
+                $conn = DriverManager::getConnection(array(
+                    'wrapperClass' => 'Doctrine\DBAL\Connections\MasterSlaveConnection',
+                    'driver' => $driver,
+                    'master' => array(
+                                        'user' => $user, 
+                                        'port'=>$port,
+                                        'password' => $password,
+                                        'host' => $host,
+                                        'dbname' => $dbname),
+                    'slaves' => array(
+                                        array('user' => 'slave1', 'password', 'host' => '', 'dbname' => '')
+                                     )
+                ));
+
+                $conn->connect('master');
+        } catch (\Exception $e) {
+                return false;
+        }
+        return true;  
     }
     
     
@@ -263,43 +319,36 @@ class SysConexionBDController extends Controller
     }
     
      /**
-     * @Route("/constantes/delete/{id}", name="Borrar_Constantes")
+     * @Route("/conexion/delete/{id}", name="Borrar_Conexion")
      */
-    public function deleteOficinaAction($id)
+    public function deleteAction($id)
     {
-        $em = $this->getDoctrine()->getManager();
-        $oficina = $em->getRepository('AppBundle:Constantes')->find($id);
+        try {
+                $em = $this->getDoctrine()->getManager();
+                $conexion = $em->getRepository('AppBundle:SysConexionBD')->find($id);
 
-        if (!$oficina) {
-            throw $this->createNotFoundException(
-                'No product found for id '.$id
-            );
+                if (!$conexion) {
+                    $this->addFlash(
+                                    'info',
+                                    'Esta conexión ya habia sido borrada.'  
+                                   );
+                }
+
+                $em->remove($conexion);
+                $em->flush();
+        } catch (\Exception $e) {
+                $this->addFlash(
+                        'error',
+                        'No se pudo borrar la conexión.\nRecargue la pagina y vuelva a intentarlo.'  
+                        );
         }
+          
+         $this->addFlash(
+                        'success',
+                        'Se ha borrado con exito la conexión.'  
+                        );
 
-        $em->remove($oficina);
-        $em->flush();
-
-        return $this->redirectToRoute('Constantes');
-    }
-    
-      /**
-     * @Route("/capas/consulta/{id}", name="Query_Capa")
-     */
-    public function consultaCapaAction($id)
-    {
-        
-        $em = $this->getDoctrine()->getManager();
-        $query = $em->createQuery(
-            'SELECT
-            c
-            FROM AppBundle:Capa c
-            WHERE c.colorCapa=:price'  
-        )->setParameter('price', $id);
-
-        $capas = $query->getResult();
-        //var_dump($products);
-        //die('fin query');
-        return $this->render('capa/index.html.twig', array('capas' =>$capas));
+        return $this->redirectToRoute('Crear_Conexion_BD');   
     }
     
   

@@ -20,6 +20,13 @@ class SysConexionBD
      * @ORM\GeneratedValue(strategy="AUTO")
      */
     private $id;
+    
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="nombreConexion", type="string", length=255)
+     */
+    private $nombreConexion;    
 
     /**
      * @var string
@@ -38,7 +45,7 @@ class SysConexionBD
     /**
      * @var string
      *
-     * @ORM\Column(name="port", type="string", length=255)
+     * @ORM\Column(name="port", type="string", length=255, nullable=true)
      */
     private $port;
 
@@ -59,7 +66,7 @@ class SysConexionBD
     /**
      * @var string
      *
-     * @ORM\Column(name="password", type="string", length=255)
+     * @ORM\Column(name="password", type="string", length=255, nullable=true)
      */
     private $password;
 
@@ -146,6 +153,31 @@ class SysConexionBD
         return $this->port;
     }
 
+
+    /**
+     * Set nameBD
+     *
+     * @param string $nombreConexion
+     *
+     * @return SysConexionBD
+     */
+    public function setNombreConexion($nombreConexion)
+    {
+        $this->nombreConexion = $nombreConexion;
+    
+        return $this;
+    }
+
+    /**
+     * Get nombreConexion
+     *
+     * @return string
+     */
+    public function getNombreConexion()
+    {
+        return $this->nombreConexion;
+    }
+    
     /**
      * Set nameBD
      *
