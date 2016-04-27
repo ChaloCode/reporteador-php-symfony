@@ -386,17 +386,17 @@
             type: tipo
         });   
     } 
-     {% for msg in app.session.flashBag.get('success') %} 
-       Alerta('Notificación','{{msg}}','success')    
+     {% for msg in app.session.flashBag.get('advertencia') %} 
+        Alerta('Advertencia','{{msg}}','success')    
      {% endfor %}
      {% for msg in app.session.flashBag.get('info') %}
-           Alerta('Advertencia','{{msg}}','info')      
+        Alerta('Información','{{msg}}','info')      
      {% endfor %}
      {% for msg in app.session.flashBag.get('error') %}
-            Alerta('Error','{{msg}}','error')       
+        Alerta('Error','{{msg}}','error')       
      {% endfor %}
-     {% for msg in app.session.flashBag.get('dark') %}
-         Alerta('Noticia','{{msg}}','dark') 
+     {% for msg in app.session.flashBag.get('noticia') %}
+        Alerta('Noticia','{{msg}}','dark') 
      {% endfor %}
 </script>
 {% endblock %}

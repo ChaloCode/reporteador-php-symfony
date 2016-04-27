@@ -73,7 +73,7 @@ class SysConexionBDController extends Controller
 
         if($msm){
             $this->addFlash(
-                'success',
+                'info',
                 'Reporte creado correctamente.'  
                 );
         }    
@@ -122,7 +122,7 @@ class SysConexionBDController extends Controller
             }
             
         }      
-        $this->addFlash('success',$a); 
+        $this->addFlash('info',$a); 
         return $this->redirectToRoute('Crear_Conexion_BD');  
     }
     
@@ -191,7 +191,7 @@ class SysConexionBDController extends Controller
                 $em->flush();               
                 
                 $this->addFlash(
-                                'success',
+                                'info',
                                 'Conexión de la BD externa, creada correctamente.'  
                                ); 
                 
@@ -227,13 +227,14 @@ class SysConexionBDController extends Controller
                     )
         );   
         $sql="  SELECT
-                sys_conexion_bd.id,
-                sys_conexion_bd.Nombre_Conexion AS 'Nombre Conexion ',                
+                sys_conexion_bd.id  ,
+                sys_conexion_bd.Nombre_Conexion AS 'Nombre Conexion ',                              
                 sys_conexion_bd.`Host`,
                 sys_conexion_bd.`Port`,
                 sys_conexion_bd.Nombre_BD AS 'Nombre BD ',
                 sys_conexion_bd.Usuario,
-                sys_conexion_bd.`Password` AS Contraseña
+                sys_conexion_bd.`Password` AS Contraseña,
+                sys_conexion_bd.Driver AS 'Tipo Conexion'
                 FROM `sys_conexion_bd`";  
         $retorno=$this->newTabla($sql,false);   
         $infoTabla=$retorno['infoTabla'];   
@@ -242,7 +243,7 @@ class SysConexionBDController extends Controller
             $control=0;
         }
         else{           
-            $control=$retorno['control']; 
+            $control=$retorno['control'];
         }
         
         return $this->render('sysconexionbd/index.html.twig', array(
@@ -347,7 +348,7 @@ class SysConexionBDController extends Controller
                 $em->flush();              
                 
                 $this->addFlash(
-                                    'success',
+                                    'info',
                                     'Conexión de la BD externa, actualizada correctamente.'  
                                 ); 
                             
@@ -399,7 +400,7 @@ class SysConexionBDController extends Controller
 
                 if (!$conexion) {
                     $this->addFlash(
-                                    'info',
+                                    'advertencia',
                                     'Esta conexión ya habia sido borrada.'  
                                    );
                 }
@@ -414,7 +415,7 @@ class SysConexionBDController extends Controller
         }
           
          $this->addFlash(
-                        'success',
+                        'info',
                         'Se ha borrado con éxito la conexión.'  
                         );
 

@@ -121,7 +121,7 @@ class ReporteController extends Controller
 
 
         $this->addFlash(
-                'success',
+                'info',
                 'Reporte creado correctamente.'  
                 );
                 

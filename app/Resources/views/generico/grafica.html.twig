@@ -234,7 +234,7 @@
          datax=data2.datax;
         if(!control2)
         {           
-            Alerta('Advertencia','A seleccionado un eje, que NO contiene valores numéricos.\nEsto le impide agregar series mas adelante.','info') ;
+            Alerta('Advertencia','A seleccionado un eje, que NO contiene valores numéricos.\nEsto le impide agregar series mas adelante.','success') ;
             Barra(true);
         }
         else{              
@@ -323,7 +323,7 @@
   
   function Donut()
   {       
-         Alerta('Advertencia','La gráfica Donut, solo muestra información de los ejes horizontal y vertical.','info') ;
+         Alerta('Advertencia','La gráfica Donut, solo muestra información de los ejes horizontal y vertical.','success') ;
          ResetTapGrafica(true);
          Morris.Donut({
             // ID of the element in which to draw the chart.
