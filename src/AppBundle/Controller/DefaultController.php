@@ -22,9 +22,27 @@ class DefaultController extends Controller
      */
     public function indexAction(Request $request)
     {
+        //Informacion de las paginas            
+        $fecha=strftime("El día, %d del mes %m del %Y %H:%M");		
+        $info = array('pagina'=>array(
+                      'titulo' => 'Reporte SQL',
+                    ),                    
+                      'formulario'=>array(
+                      'titulo' => 'Diseñador de Informes', 
+                      'subtitulo' =>'Consulta SQL'
+                    ),
+                      'tabla'=>array(
+                      'titulo' => 'Detalle', 
+                      'subtitulo' =>'Reporte',
+                      'descripcion'=>'Generado: '.$fecha
+                    ),
+                      'grafica'=>array(
+                      'titulo' => 'Grafica', 
+                      'subtitulo' =>'Genereda: '.$fecha
+                    )
+        );
         
-        $this->regresionLineal();
-        die;
+        return $this->render('regresion/regresion.html.twig',array('info' => $info ));
     }
     
      private function regresionCuadratica()

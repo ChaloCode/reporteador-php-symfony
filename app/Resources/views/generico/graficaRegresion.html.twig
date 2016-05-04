@@ -1,0 +1,131 @@
+
+{% block stylesheetsGrafica %}    
+{% endblock %}
+{% block bodyGrafica %} 
+     {% embed "generico/ventana.html.twig" %}                
+                {% block tituloVentana %}{{info['grafica'].titulo}}{% endblock %} 
+                {% block subTituloVentana %}{{info['grafica'].subtitulo}}{% endblock %}
+                 {% block bodyLink %}                  
+                 {% endblock %}                           
+                {% block bodyVentana %}                 
+                    <div class="row">
+                        <div id="main" style="height:350px; width:98%;"></div>
+                    </div>
+               {% endblock %}
+        {% endembed %}          
+{% endblock %}
+{% block javascriptsGrafica %}  
+<!-- echart -->
+<script src='{{asset("js/echart/echarts-all.js")}}'></script>
+<script src='{{asset("js/echart/green.js")}}'></script>
+  
+<script type="text/javascript">
+    
+function lineal()
+{
+    var myChart = echarts.init(document.getElementById('main'));
+    var option = {
+            title : {
+                    text: 'Regresión Lineal',
+                    subtext: 'y=3.22+0.98x35'
+                },
+                tooltip : {
+                    trigger: 'axis'
+                },
+            
+                toolbox: {
+                    show : true,
+                    feature : {
+                        mark : {show: false},
+                        dataView : {show: false, readOnly: false},
+                        restore : {
+                            show : true,
+                            title : 'Refrescar'
+                        },
+                        saveAsImage : {
+                            show : true,
+                            title : 'Descargar',
+                            type : 'png',
+                            lang : ['Click para empezar la descarga.']
+                        
+                        }
+                    }
+                
+                },
+            
+                xAxis : [
+                    {
+                        type : 'category',
+                        boundaryGap : true,
+                        data : function (){
+                            var list = [];
+                            for (var i = 0; i <6; i++) {
+                                list.push( i);
+                            }
+                            return list;
+                        }()
+                    },
+                    {
+                        type : 'value',
+                        scale : true,
+                        splitNumber: 29,
+                        axisLabel: {show:false},
+                        splitLine: {show:false}
+                    }
+                ],
+                yAxis : [
+                    {
+                        type : 'value'
+                    },
+                    {
+                        type : 'value'
+                    }
+                ],
+                animation: true,
+                series : [
+                    {
+                        name:'punto',
+                        type:'scatter',
+                        tooltip : {
+                            trigger: 'item',
+                            formatter : function (params) {
+                                return  params.seriesName + ' : ' 
+                                    + params.value[0] + ', ' 
+                                    + params.value[1]; 
+                            }
+                        },
+                    
+                        symbol: 'circle',
+                    
+                        data: (function () {
+                            var d =d =[[1,5], [ 2,5], [ 3,5], [ 4,6.8], [ 5,9]];
+                            var len = 200;
+                            var value;
+                    
+                            return d;
+                        })()
+                    },
+                    {
+                        name:'y=3.22+0.98x35',
+                        type:'line',
+                        tooltip : {
+                            trigger: 'item',
+                            formatter : function (params) {
+                                return  params.seriesName + '<br>Predicción: ' 
+                                    + params.value
+                            }
+                        },
+                        data:function (){
+                        var list =[3.22,4.2,5.18,6.16,7.14,8.12];    
+                        return list;
+                        }()
+                    }
+                ]
+            };
+    myChart.setOption(option);
+}
+            
+ lineal();       
+
+</script>
+{% endblock %}

@@ -1,0 +1,44 @@
+{% extends "base.html.twig" %}
+
+{% use "generico/graficaRegresion.html.twig" %}
+
+
+{% block stylesheets %}  
+    {{ parent() }} 
+{% endblock %}
+
+
+
+
+
+{% block body %}   
+  
+            {% block bodyGrafica %}               
+                {{ parent() }}                  
+            {% endblock %}
+            
+        
+{% endblock %}
+
+
+{% block body3 %}   
+    
+{% endblock %}
+
+   
+
+
+{% block javascripts %}  
+    {{ parent() }} 
+        {% block javascriptsGrafica %}     
+            {{ parent() }} 
+        {% endblock %} 
+{% endblock %}
+
+
+
+
+
+
+
+
