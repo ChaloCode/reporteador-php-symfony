@@ -1,5 +1,11 @@
 
 {% block stylesheetsGrafica %}    
+<style>
+.margen{
+    margin-top: 2px;
+    margin-bottom: 8px;
+}
+</style>
 {% endblock %}
 {% block bodyGrafica %} 
      {% embed "generico/ventana.html.twig" %}                
@@ -15,13 +21,13 @@
                     <div class="row">
                         <div class="col-md-6">
                             <p>Seleccione valores para el <strong>eje horizontal</strong></p>
-                                <select id='grafica-x'>
+                                <select id='grafica-x' class="margen">
                                     {% for i in infoTabla['columnas'] %}
                                         <option value="{{ loop.index0 }}">{{i}}</option>               
                                     {% endfor %}
                                 </select> 
                             <p>Seleccione valores para el <strong>eje vertical</strong></p>
-                            <select id='grafica-y'>
+                            <select id='grafica-y' class="margen">
                                 {% for i in infoTabla['columnas'] %}
                                     <option value="{{ loop.index0 }}">{{i}}</option>               
                                 {% endfor %}
@@ -29,7 +35,7 @@
                         </div>
                         <div id='divSeries' class="col-md-6">
                             <p>Seleccione valores para agregar una <strong>nueva serie</strong></p>
-                            <select id='grafica-serie'>
+                            <select id='grafica-serie' class="margen">
                                 {% for i in infoTabla['columnas'] %}
                                     <option value="{{ loop.index0 }}">{{i}}</option>               
                                 {% endfor %}

@@ -24,7 +24,7 @@ use Doctrine\DBAL\DriverManager;
 
 class SysConexionBDController extends Controller
 {   
-    
+    //Este metodo se volverar generico y se llamara cargarInfo
     private function newTabla($sql,$msm=true)
     {
         //Data de la consulta

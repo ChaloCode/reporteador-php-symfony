@@ -1,10 +1,9 @@
 {% extends "base.html.twig" %}
 
 {% use "generico/formulario.html.twig" %}
-{% if control>0 %}
-    {% use "generico/tabla.html.twig" %}
-    {% use "generico/grafica.html.twig" %}
-{% endif %}
+{% use "generico/tabla.html.twig" %}
+{% use "generico/grafica.html.twig" %}
+
 
 {% block stylesheets %}  
     {{ parent() }}    
@@ -13,6 +12,9 @@
     {% endblock %}       
     {% if control>0 %}
         {% block stylesheetsTabla %} 
+            {{ parent() }} 
+        {% endblock %}
+        {% block stylesheetsGrafica %}    
             {{ parent() }} 
         {% endblock %} 
     {% endif %}

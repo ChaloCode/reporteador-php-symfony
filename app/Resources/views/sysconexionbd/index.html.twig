@@ -1,10 +1,8 @@
 {% extends "base.html.twig" %}
 
 {% use "generico/formulario.html.twig" %}
+{% use "generico/tablaCRUD.html.twig" %}   
 
-{% if control>0 %}
-    {% use "generico/tablaCRUD.html.twig" %}   
-{% endif %}
 
 {% block stylesheets %}  
     {{ parent() }} 

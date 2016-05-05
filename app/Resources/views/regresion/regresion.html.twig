@@ -1,28 +1,46 @@
 {% extends "base.html.twig" %}
 
+{% use "generico/formulario.html.twig" %}
 {% use "generico/graficaRegresion.html.twig" %}
 
 
 {% block stylesheets %}  
-    {{ parent() }} 
+    {{ parent() }}    
+    {% block stylesheetsFormulario %}  
+        {{ parent() }} 
+    {% endblock %}
+    {% block stylesheetsGrafica %}    
+        {{ parent() }} 
+    {% endblock %}
 {% endblock %}
 
 
-
+{% block title %}{{info['pagina'].titulo}}{% endblock %}
 
 
 {% block body %}   
-  
+  <div class="col-md-6 col-sm-6 col-xs-12"> 
+    {% block bodyFormulario %}      
+        {{ parent() }} 
+ 
+    {% endblock %}
+    </div>
+    
+    {% if control>0 %}
+        <div class="col-md-6 col-sm-6 col-xs-12">  
             {% block bodyGrafica %}               
                 {{ parent() }}                  
             {% endblock %}
             
-        
+        </div>
+   {% endif %}
 {% endblock %}
 
 
-{% block body3 %}   
-    
+{% block body2 %}  
+{% endblock %}
+
+{% block body3 %}       
 {% endblock %}
 
    
@@ -30,10 +48,23 @@
 
 {% block javascripts %}  
     {{ parent() }} 
+    {% block javascriptsFormulario %}   
+        {{ parent() }} 
+    {% endblock %}
+    {% if control>0 %}        
         {% block javascriptsGrafica %}     
             {{ parent() }} 
-        {% endblock %} 
+        {% endblock %}
+    {% endif %}
 {% endblock %}
+
+
+
+
+
+
+
+
 
 
 
