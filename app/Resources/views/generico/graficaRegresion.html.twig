@@ -149,12 +149,12 @@ function regresionLineal(xarray,yarray,pm)
             dias_proyectados=(pm-a)/b;
     }
     else{
-        dias_proyectados=Infinity; //Infinitos
+        dias_proyectados=999999999; //Infinitos
     }
     dp=dias_proyectados.toFixed(2);
     console.log(dp);
     if(dp>=999999999){
-         Alerta('Error','Lo sentimos no es posible usar Regresión Lineal.\nEl valor de la predicción es un número gigante.\nRecomendaciones:\n* Cambie valor a predecir.\n* Seleccione otro tipo de regresión..\n* Revise la información de los ejes sea coherente.','error');
+         Alerta('Error','Lo sentimos no es posible usar Regresión Lineal.\nEl valor de la predicción es un número gigante.\nRecomendaciones:\n* Cambie valor a predecir.\n* Seleccione otro tipo de regresión..\n* Revise la información de los ejes,que sea coherente.','error');
     }
     else{
         alert('bien');
