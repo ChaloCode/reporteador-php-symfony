@@ -29,7 +29,7 @@
                                 {% endfor %}
                             </select>
                         </div>
-                        <div id='divSeries' class="col-md-6">
+                        <div class="col-md-6">
                             <p>Seleccione tipo de regresión <strong>a calcular</strong></p>
                             <select id='grafica-serie' class="margen">
                                     <option value='lineal'>Regresión Lineal</option> 
@@ -42,7 +42,7 @@
                      </div>   
                         <div class="ln_solid"></div>                
                         <div id="tap-grafica" >                              
-                            <div id="main" style="height:350px; width:98%;"></div>
+                            <div id="graficar" style="height:350px; width:98%;"></div>
                         </div>
                    
                {% endblock %}
@@ -54,10 +54,120 @@
 <script src='{{asset("js/echart/green.js")}}'></script>
   
 <script type="text/javascript">
+
+var dataAll = {        
+{% for i in 0..infoTabla['lengthFilas']   %}   
+"{{i}}" :{        
+            {% for j in 0..infoTabla['lengthColumnas']  %}   
+                "{{j}}": "{{infoTabla['filas'][i][j]}}",
+            {% endfor %}      
+        },    
+{% endfor %}     
+};
+
+$("#grafica-x").change(function() {
+    cargarGrafica(); 
+});
+
+$("#grafica-y").change(function() {
+    cargarGrafica();
+}); 
+  
+function cargarGrafica()
+{   
+    var xx=$("#grafica-x").val();
+    var yy=$("#grafica-y").val();
+    var control2=true;
+    var xarray=[];
+    var yarray=[];
+    
+    for (i=0;i<{{infoTabla['lengthFilas']}};i++)
+    {
+        var n=dataAll[i][xx];
+        xarray.push(n);
+        if(n==0){
+            n++;
+        }
+        n=n/n;
+        var n2=dataAll[i][yy]; 
+        yarray.push(n2);           
+        if(n2==0){
+            n2++;
+        }
+        n2=n2/n2;
+       
+        if(!Number.isInteger(n)){    
+            control2=false;
+            Alerta('Error','En el eje horizontal, solo puede contener valores numéricos.\nSeleccione otro valor para continuar.','error');
+            break;
+        }
+        if( !Number.isInteger(n2) ){
+                control2=false;
+                Alerta('Error','En el eje vertical, solo puede contener valores numéricos.\nSeleccione otro valor para continuar.','error');
+                break;
+        }
+        
+        
+        
+        
+    }   
+    if(control2)
+    {           
+        regresionLineal(xarray,yarray,100);
+    }
+}
+    
+
+function regresionLineal(xarray,yarray,pm)
+{
+    //var xarray=[1, 2, 3, 4, 5 ];	//Dias
+    //var yarray=[5, 5, 5, 6.8, 9]; //Porcentaje de ejecucion
+    var pm=100; //Valor futuro
+    var x2=0;
+    var y=0;
+    var x=0;
+    var xy=0;
+    var cantidad=xarray.length;
+    for(var i=0;i<cantidad;i++){
+        //Tabla de datos
+        console.log(xarray[i]+' '+yarray[i]);
+        //Calculo de terminos
+        x2 += xarray[i]*xarray[i];
+        y  += yarray[i];
+        x  += xarray[i];
+        xy += xarray[i]*yarray[i];
+    }
+    //Coeficiente parcial de regresion
+    var b=(cantidad*xy-x*y)/(cantidad*x2-x*x);
+    //Calculo del intercepto
+    var a=(y-b*x)/cantidad;
+    //Recta tendencial
+    //y=a+bx
+    console.log('y='+a.toFixed(2)+'+'+b.toFixed(2)+'x');
+    //Proyeccion en dias para un 100% de la ejecucion:
+    if (b!=0){
+            dias_proyectados=(pm-a)/b;
+    }
+    else{
+        dias_proyectados=Infinity; //Infinitos
+    }
+    dp=dias_proyectados.toFixed(2);
+    console.log(dp);
+    if(dp>=999999999){
+         Alerta('Error','Lo sentimos no es posible usar Regresión Lineal.\nEl valor de la predicción es un número gigante.\nRecomendaciones:\n* Cambie valor a predecir.\n* Seleccione otro tipo de regresión..\n* Revise la información de los ejes sea coherente.','error');
+    }
+    else{
+        alert('bien');
+    }
+   
+  
+    
+}
+
     
 function lineal()
 {
-    var myChart = echarts.init(document.getElementById('main'));
+    var myChart = echarts.init(document.getElementById('graficar'));
     var option = {
             title : {
                     text: 'Regresión Lineal',
