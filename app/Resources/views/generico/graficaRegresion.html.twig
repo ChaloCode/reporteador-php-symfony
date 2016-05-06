@@ -36,7 +36,7 @@
                                     <option value='cuadrada'>Regresión Cuadratica</option> 
                             </select> 
                             <p>Digite valor <strong>a predecir</strong></p>
-                            <input type="number" id="valorFuturo" placeholder="1,5">
+                            <input id="valorFuturo" placeholder="1,5">
                             <button  id="calRegresion" class="btn btn-success">Calcular</button>
                         </div>
                      </div>   
@@ -69,28 +69,29 @@ var dataAll = {
 
 $("#grafica-y").change(function() {
         $('#resultado').html('');
+        $("#valorFuturo").removeAttr("style");
 }); 
 
 $("#grafica-x").change(function() {
         $('#resultado').html('');
+        $("#valorFuturo").removeAttr("style");
 }); 
 
 
 $("#calRegresion").click(function() {    
-        var pm=$('#valorFuturo').val();
-        
+        var pm=$('#valorFuturo').val();        
         if($.isNumeric(pm)){ 
               var x=cargarGrafica(pm);
               if(x!='false')
               {
-                   $('#resultado').append('<p><font color="red"><strong>Predición:</strong> '+x+'</font></p>');
+                   $("#valorFuturo").removeAttr("style");
+                   $('#resultado').append('<p><font color="blue"><strong>Predición:</strong> '+x+'</font></p>');
                    Alerta('Resultado:','Predición: '+x,'info') 
               }
-             
-              
         }
         else{
-              Alerta('Error: Valor a predecir','Digite solo valores numéricos.\nSi es un decimal, separelo por coma. Ejemplo: 1,5\nSeleccione otro valor para continuar.','error');
+              $('#valorFuturo').css("border", "1px solid red");
+              Alerta('Error: Valor a predecir','Digite solo valores numéricos.\nSeleccione otro valor para continuar.','error');
         }
         
 }); 
