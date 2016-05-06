@@ -80,17 +80,21 @@ function cargarGrafica()
     var control2=true;
     var xarray=[];
     var yarray=[];
+    var xy=[];
     
     for (i=0;i<{{infoTabla['lengthFilas']}};i++)
     {
         var n=dataAll[i][xx];
         xarray.push(n);
+        
+        var n2=dataAll[i][yy]; 
+        yarray.push(n2); 
+        
+        xy.push([n,n2]);  
         if(n==0){
             n++;
         }
-        n=n/n;
-        var n2=dataAll[i][yy]; 
-        yarray.push(n2);           
+        n=n/n;               
         if(n2==0){
             n2++;
         }
@@ -112,13 +116,14 @@ function cargarGrafica()
         
     }   
     if(control2)
-    {           
-        regresionLineal(xarray,yarray,100);
+    { 
+        //console.log(xy);          
+        regresionLineal(xarray,yarray,100,xy);
     }
 }
     
 
-function regresionLineal(xarray,yarray,pm)
+function regresionLineal(xarray,yarray,pm,grafica_xy)
 {
     //var xarray=[1, 2, 3, 4, 5 ];	//Dias
     //var yarray=[5, 5, 5, 6.8, 9]; //Porcentaje de ejecucion
@@ -130,12 +135,12 @@ function regresionLineal(xarray,yarray,pm)
     var cantidad=xarray.length;
     for(var i=0;i<cantidad;i++){
         //Tabla de datos
-        console.log(xarray[i]+' '+yarray[i]);
+       // console.log(xarray[i]+' '+yarray[i]);
         //Calculo de terminos
-        x2 += xarray[i]*xarray[i];
-        y  += yarray[i];
-        x  += xarray[i];
-        xy += xarray[i]*yarray[i];
+        x2 += Number(xarray[i])*Number(xarray[i]);
+        y  += Number(yarray[i]);
+        x  += Number(xarray[i]);
+        xy += Number(xarray[i])*Number(yarray[i]);
     }
     //Coeficiente parcial de regresion
     var b=(cantidad*xy-x*y)/(cantidad*x2-x*x);
@@ -143,7 +148,7 @@ function regresionLineal(xarray,yarray,pm)
     var a=(y-b*x)/cantidad;
     //Recta tendencial
     //y=a+bx
-    console.log('y='+a.toFixed(2)+'+'+b.toFixed(2)+'x');
+    var title_grafica='y='+a.toFixed(2)+'+'+b.toFixed(2)+'x';
     //Proyeccion en dias para un 100% de la ejecucion:
     if (b!=0){
             dias_proyectados=(pm-a)/b;
@@ -152,12 +157,41 @@ function regresionLineal(xarray,yarray,pm)
         dias_proyectados=999999999; //Infinitos
     }
     dp=dias_proyectados.toFixed(2);
-    console.log(dp);
+    //console.log(dp);
     if(dp>=999999999){
-         Alerta('Error','Lo sentimos no es posible usar Regresión Lineal.\nEl valor de la predicción es un número gigante.\nRecomendaciones:\n* Cambie valor a predecir.\n* Seleccione otro tipo de regresión..\n* Revise la información de los ejes,que sea coherente.','error');
+         Alerta('Error','Lo sentimos no es posible usar Regresión Lineal.\nEl valor de la predicción es un número gigante.\nRecomendaciones:\n* Cambie el valor a predecir.\n* Seleccione otro tipo de regresión.\n* Asegure que la información de los ejes sea coherente.','error');
     }
     else{
-        alert('bien');
+        var y_grafica=[];       
+        var x_med=0;
+        var x_min=Number(xarray[0]);
+        var x_max=Number(xarray[0]);
+        console.log('minimo inicial '+x_min);
+        for(var i=0;i<cantidad;i++){  
+            //y=a+bx
+            y=a+b*Number(xarray[i]);
+            y_grafica.push(y.toFixed(2)); 
+            x_med=x_med+Number(xarray[i]); 
+            if(Number(x_min)>Number(xarray[i]))
+            {
+                 x_min=Number(xarray[i]);
+                console.log(x_min+'<'+xarray[i]);
+               
+            }
+            else{
+                x_max=Number(xarray[i]);
+            }    
+        }
+       // x_min=Math.min(xarray); 
+        //x_max=Math.max(xarray); 
+        console.log('med suma '+x_med);
+        x_med=x_med/cantidad; 
+         console.log('med div '+x_med);
+        x_med=Number(x_med).toFixed(0);
+        console.log('min '+x_min);   
+        console.log('max '+x_max);
+        console.log('med '+x_med);
+        lineal(x_min,x_max,x_med,title_grafica,y_grafica,grafica_xy);
     }
    
   
@@ -165,13 +199,13 @@ function regresionLineal(xarray,yarray,pm)
 }
 
     
-function lineal()
+function lineal(x_min,x_max,x_med,title_grafica,y_grafica,xy)
 {
     var myChart = echarts.init(document.getElementById('graficar'));
     var option = {
             title : {
                     text: 'Regresión Lineal',
-                    subtext: 'y=3.22+0.98x35'
+                    subtext: title_grafica
                 },
                 tooltip : {
                     trigger: 'axis'
@@ -203,9 +237,13 @@ function lineal()
                         boundaryGap : true,
                         data : function (){
                             var list = [];
-                            for (var i = 0; i <6; i++) {
-                                list.push( i);
+                            var i = Number(x_min);
+                            for (;i<=x_max;) {
+                                list.push(i);
+                                i++;
                             }
+                            console.log('x ordenada');
+                            console.log(list);
                             return list;
                         }()
                     },
@@ -242,16 +280,16 @@ function lineal()
                         symbol: 'circle',
                     
                         data: (function () {
-                            var d =d =[[1,5], [ 2,5], [ 3,5], [ 4,6.8], [ 5,9]];
-                            var len = 200;
-                            var value;
-                    
-                            return d;
+                            var d=xy; 
+                             console.log('x y ');
+                            console.log(d);                                              
+                            return xy;
                         })()
                     },
                     {
-                        name:'y=3.22+0.98x35',
+                        name:title_grafica,
                         type:'line',
+                        /*
                         tooltip : {
                             trigger: 'item',
                             formatter : function (params) {
@@ -259,9 +297,12 @@ function lineal()
                                     + params.value
                             }
                         },
+                        */
                         data:function (){
-                        var list =[3.22,4.2,5.18,6.16,7.14,8.12];    
-                        return list;
+                        var list =y_grafica;  
+                        console.log('y');
+                            console.log(list);  
+                        return y_grafica;
                         }()
                     }
                 ]
