@@ -172,7 +172,7 @@ function regresionLineal(xarray,yarray,pm,grafica_xy)
     //y=a+bx
     var title_grafica='y='+a.toFixed(2)+'+'+b.toFixed(2)+'x';
     //Proyeccion en dias para un 100% de la ejecucion:
-    if (b!=0){
+    if (Math.abs(Math.round(b))!=0){
             valor_proyectado=(pm-a)/b;
     }
     else{
@@ -181,6 +181,7 @@ function regresionLineal(xarray,yarray,pm,grafica_xy)
     dp=valor_proyectado.toFixed(2);    
     if(dp>=999999999){
          Alerta('Error','Lo sentimos no es posible usar Regresión Lineal.\nEl valor de la predicción es un número gigante.\nRecomendaciones:\n* Cambie el valor a predecir.\n* Seleccione otro tipo de regresión.\n* Asegure que la información de los ejes sea coherente.','error');
+         dp='Indefinido';
     }
     else{
         var y_grafica=[];
@@ -200,9 +201,9 @@ function regresionLineal(xarray,yarray,pm,grafica_xy)
             }    
         }        
         
-        lineal(x_min,x_max,title_grafica,y_grafica,grafica_xy);
-        return dp;
+        lineal(x_min,x_max,title_grafica,y_grafica,grafica_xy);       
     }
+     return dp;
    
   
     
