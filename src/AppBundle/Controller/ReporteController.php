@@ -55,7 +55,14 @@ class ReporteController extends Controller
         { 
            $sql=$request->get('form')['TextAreaSQL'];             
            $retorno=$this->reporte($sql );
-           if($retorno['control']>0)
+           if(empty($retorno['infoTabla']['filas']))
+           {
+                  $this->addFlash(
+                        'advertencia',
+                        'La consulta no ha arrojado datos. Recomendaciones:* Revise su consulta.* Asegurese que su base de datos tenga datos.'  
+                        ); 
+           } 
+           else if($retorno['control']>0)
            {
                return $this->render('reporte/reporte.html.twig', array(
                                                             'form' => $form->createView(),
