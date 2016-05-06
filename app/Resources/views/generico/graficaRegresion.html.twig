@@ -105,7 +105,7 @@ function cargarGrafica(pm)
     var yarray=[];
     var xy=[];
     
-    for (i=0;i<{{infoTabla['lengthFilas']}};i++)
+    for (i=0;i<{{infoTabla['lengthFilas']+1}};i++)
     {
         var n=dataAll[i][xx];
         xarray.push(n);
@@ -154,16 +154,16 @@ function regresionLineal(xarray,yarray,pm,grafica_xy)
     var y=0;
     var x=0;
     var xy=0;
-    var cantidad=xarray.length;
+    var cantidad=xarray.length;   
     for(var i=0;i<cantidad;i++){
         //Tabla de datos
-       // console.log(xarray[i]+' '+yarray[i]);
+        //console.log(xarray[i]+' '+yarray[i]);
         //Calculo de terminos
-        x2 += Number(xarray[i])*Number(xarray[i]);
-        y  += Number(yarray[i]);
-        x  += Number(xarray[i]);
-        xy += Number(xarray[i])*Number(yarray[i]);
-    }
+        x2 += parseFloat(xarray[i])*parseFloat(xarray[i]);
+        y  += parseFloat(yarray[i]);      
+        x  += parseFloat(xarray[i]);
+        xy += parseFloat(xarray[i])*parseFloat(yarray[i]);
+    }     
     //Coeficiente parcial de regresion
     var b=(cantidad*xy-x*y)/(cantidad*x2-x*x);
     //Calculo del intercepto
@@ -191,7 +191,7 @@ function regresionLineal(xarray,yarray,pm,grafica_xy)
             //y=a+bx
             y=a+b*Number(xarray[i]);
             y_grafica.push(y.toFixed(2));            
-            if(Number(x_min)>Number(xarray[i]))
+            if(parseFloat(x_min)>parseFloat(xarray[i]))
             {
                 x_min=Number(xarray[i]);
             }

@@ -22,6 +22,7 @@ class DefaultController extends Controller
      */
     public function indexAction(Request $request)
     {
+        $this->regresionLineal();
        die('Area de pruebas');
     }
     
@@ -101,7 +102,7 @@ class DefaultController extends Controller
         $a=($y-$b*$x)/$cantidad;
         //Recta tendencial
         //y=a+bx
-        print('y='.round($a,4).'+'.round($b,4).'x');
+        print('y='.round($a,4).'+'.round($b,4).'x'."<br>");
         //Proyeccion en dias para un 100% de la ejecucion:
         if ($b!=0){
              $dias_proyectados=($pm-$a)/$b;
@@ -109,7 +110,8 @@ class DefaultController extends Controller
         else{
             $dias_proyectados=999999; //Infinitos
        }
-       // $dp=round($dias_proyectados,0);
+       $dp=round($dias_proyectados,0);
+       print($dp.'<br>');
        
      }
 
