@@ -196,31 +196,21 @@ function regresionLineal(xarray,yarray,pm,grafica_xy)
     var vf=a+b*pm;
     console.log('Real '+vf);
     //lpuntos de la linea tendencial 
-        var y_grafica=[];
-        var x_min=Number(xarray[0]);
-        var x_max=Number(xarray[0]);
-        var x_grafica=[];
-      
+        var y_grafica=[];        
+        var x_grafica=[];      
         for(var i=0;i<n;i++){  
             //y=a+bx
             y=a+b*parseFloat(xarray[i]);
             y_grafica.push(y.toFixed(2));  
-            x_grafica.push(parseFloat(xarray[i]));            
-            if(parseFloat(x_min)>parseFloat(xarray[i]))
-            {
-                x_min=Number(xarray[i]);
-            }
-            else{
-                x_max=Number(xarray[i]);
-            }    
+            x_grafica.push(parseFloat(xarray[i])); 
         }   
              
       //Grafica  
       if(r>0){          
-          lineal(x_min,x_max,title_grafica,y_grafica.sort(function(a, b){return a>b}),grafica_xy,x_grafica.sort(function(a, b){return a>b}));    
+          lineal(title_grafica,y_grafica.sort(function(a, b){return a>b}),grafica_xy,x_grafica.sort(function(a, b){return a>b}));    
       }
       else{          
-          lineal(x_min,x_max,title_grafica,y_grafica.sort(function(a, b){return a<b}),grafica_xy,x_grafica.sort(function(a, b){return a<b}));    
+          lineal(title_grafica,y_grafica.sort(function(a, b){return a<b}),grafica_xy,x_grafica.sort(function(a, b){return a<b}));    
       }         
    
      // return vf.toFixed(2);
@@ -230,7 +220,7 @@ function regresionLineal(xarray,yarray,pm,grafica_xy)
 }
 
     
-function lineal(x_min,x_max,title_grafica,y_grafica,xy,xarray)
+function lineal(title_grafica,y_grafica,xy,xarray)
 {
     Alerta('Información','y=a+bx, donde x es el valor a predecir.\nr => Indica el valor de ajuste de la linea tendencial.\nr => Entre mas se acerque al 100%, mejor sera la predición.\nr => Si su valor es negativo, indica que la tedencia es DECRECIENTE.\nRecomendación:\nRepita la predicción con los diferentes metodos de regresión y seleccione el resultado que contega el r mayor.\nNota:\nPara restablecer, cambie la selección de los ejes.','dark')   
     var myChart = echarts.init(document.getElementById('graficar'));
@@ -267,16 +257,8 @@ function lineal(x_min,x_max,title_grafica,y_grafica,xy,xarray)
                     {
                         type : 'category',
                         boundaryGap : true,
-                        data : function (){
-                            var list = xarray;
-                            /*
-                            var i = Number(x_min);
-                            for (;i<=x_max;) {
-                                list.push(i);
-                                i++;
-                            }     
-                            */                       
-                            return list;
+                        data : function (){                            
+                            return xarray;
                         }()
                     },
                     {
