@@ -192,7 +192,7 @@ function regresionLineal(xarray,yarray,pm,grafica_xy)
     var r=r2_1/r2_2;   
      //Recta tendencial
     //y=a+bx
-    var title_grafica='y= '+a.toFixed(2)+'+'+b.toFixed(2)+'x'+'\nr= '+Math.round(r*100)+'%';    
+    var title_grafica='y= '+a.toFixed(2)+'+'+b.toFixed(2)+'x';  
     var vf=a+b*pm;
     console.log('Real '+vf);
     //lpuntos de la linea tendencial 
@@ -207,10 +207,10 @@ function regresionLineal(xarray,yarray,pm,grafica_xy)
              
       //Grafica  
       if(r>0){          
-          lineal(title_grafica,y_grafica.sort(function(a, b){return a>b}),grafica_xy,x_grafica.sort(function(a, b){return a>b}));    
+          lineal(title_grafica,y_grafica.sort(function(a, b){return a>b}),grafica_xy,x_grafica.sort(function(a, b){return a>b}),r);    
       }
       else{          
-          lineal(title_grafica,y_grafica.sort(function(a, b){return a<b}),grafica_xy,x_grafica.sort(function(a, b){return a<b}));    
+          lineal(title_grafica,y_grafica.sort(function(a, b){return a<b}),grafica_xy,x_grafica.sort(function(a, b){return a<b}),r);    
       }         
    
      // return vf.toFixed(2);
@@ -220,13 +220,13 @@ function regresionLineal(xarray,yarray,pm,grafica_xy)
 }
 
     
-function lineal(title_grafica,y_grafica,xy,xarray)
+function lineal(title_grafica,y_grafica,xy,xarray,r)
 {
     Alerta('Información','y=a+bx, donde x es el valor a predecir.\nr => Indica el valor de ajuste de la linea tendencial.\nr => Entre mas se acerque al 100%, mejor sera la predición.\nr => Si su valor es negativo, indica que la tedencia es DECRECIENTE.\nRecomendación:\nRepita la predicción con los diferentes metodos de regresión y seleccione el resultado que contega el r mayor.\nNota:\nPara restablecer, cambie la selección de los ejes.','dark')   
     var myChart = echarts.init(document.getElementById('graficar'));
     var option = {
             title : {
-                    text: 'Regresión Lineal',
+                    text: 'Regresión Lineal, '+'r: '+Math.round(r*100)+'%', 
                     subtext: title_grafica
                 },
                 tooltip : {
