@@ -68,11 +68,15 @@ var dataAll = {
 };
 
 $("#grafica-y").change(function() {
+        b_lineal=0;
+        a_lineal=0;
         $('#resultado').html('');
         $("#valorFuturo").removeAttr("style");
 }); 
 
 $("#grafica-x").change(function() {
+        b_lineal=0;
+        a_lineal=0;
         $('#resultado').html('');
         $("#valorFuturo").removeAttr("style");
 }); 
@@ -81,13 +85,18 @@ $("#grafica-x").change(function() {
 $("#calRegresion").click(function() {    
         var pm=$('#valorFuturo').val();        
         if($.isNumeric(pm)){ 
-              var x=cargarGrafica(pm);
-              if(x!='false')
-              {
-                   $("#valorFuturo").removeAttr("style");
-                   $('#resultado').append('<p><font color="blue"><strong>Predición:</strong> '+x+'</font></p>');
-                   Alerta('Resultado:','Predición: '+x,'info') 
-              }
+            var x=true;
+            if(Number(b_lineal+a_lineal)==0){
+                 x=cargarGrafica(pm);
+            }              
+            if(x!=false)
+            {
+                x=a_lineal+b_lineal*pm;    
+                x=x.toFixed(2);               
+                $("#valorFuturo").removeAttr("style");
+                $('#resultado').append('<p><font color="blue"><strong>Predición:</strong> '+x+'</font></p>');
+                Alerta('Resultado:','Predición: '+x,'info') 
+            }
         }
         else{
               $('#valorFuturo').css("border", "1px solid red");
@@ -139,77 +148,60 @@ function cargarGrafica(pm)
         
         if($('#tipo-regresion').val()=='lineal')
         {
-            return regresionLineal(xarray,yarray,pm,xy);
+           regresionLineal(xarray,yarray,pm,xy);
+           return true;
         }             
         
     }
     else {
-        return 'false';
+        return false;
     }
 }
     
-
+var b_lineal=0;
+var a_lineal=0;
 function regresionLineal(xarray,yarray,pm,grafica_xy)
 {   
     var x2=0;
     var y=0;
     var x=0;
     var xy=0;
-    var y2=0;
-    var cantidad=xarray.length;   
-    var n=cantidad;
-  // xarray =xarray.sort(function(a, b){return a>b})
-   //yarray=yarray.sort(function(a, b){return a>b})
-    for(var i=0;i<cantidad;i++){
+    var y2=0;  
+    var n=xarray.length;
+    for(var i=0;i<n;i++){
         //Tabla de datos
-        console.log(xarray[i]+' '+yarray[i]);
+        //console.log(xarray[i]+' '+yarray[i]);
         //Calculo de terminos
         x2 += parseFloat(xarray[i])*parseFloat(xarray[i]);
         y2 += parseFloat(yarray[i])*parseFloat(yarray[i]);  
         y  += parseFloat(yarray[i]);     
         x  += parseFloat(xarray[i]);
         xy += parseFloat(xarray[i])*parseFloat(yarray[i]);
-    }     
-    console.log(y2)
+    } 
     //Coeficiente parcial de regresion
-    var b=(cantidad*xy-x*y)/(cantidad*x2-x*x);
-   //var b=(xy-(x*y/n))/(x2-(x*x/n));
+    var b=(n*xy-x*y)/(n*x2-x*x); 
+    b_lineal=b; 
     //Calculo del intercepto
-    var a=(y-b*x)/cantidad;
-    //var a=(y/n)-(b*(x/n));
-    //Recta tendencial
-    //y=a+bx
-    var title_grafica='y='+a.toFixed(2)+'+'+b.toFixed(2)+'x';
+    var a=(y-b*x)/n;
+    a_lineal=a;
+ 
     //Coeficiente de correlacion
     //R
-
     var r2_1=n*xy-x*y;
     var r2_2=Math.sqrt(n*x2-Math.pow(x,2))*Math.sqrt(n*y2-Math.pow(y,2));
-    var r2=r2_1/r2_2;
-      console.log(Math.round(r2*100)+' %');
-    
-    
-    
-    
-    //Proyeccion en dias para un 100% de la ejecucion:
-    if (Math.abs(Math.round(b))!=0){
-            valor_proyectado=(pm-a)/b;
-    }
-    else{
-        valor_proyectado=999999999; //Infinitos
-    }
-    dp=valor_proyectado.toFixed(2);    
-    if(dp>=999999999){
-         Alerta('Error','Lo sentimos no es posible usar Regresión Lineal.\nEl valor de la predicción es un número gigante.\nRecomendaciones:\n* Cambie el valor a predecir.\n* Seleccione otro tipo de regresión.\n* Asegure que la información de los ejes sea coherente.','error');
-         dp='Indefinido';
-    }
-    //else{
+    var r=r2_1/r2_2;   
+     //Recta tendencial
+    //y=a+bx
+    var title_grafica='y= '+a.toFixed(2)+'+'+b.toFixed(2)+'x'+'\nr= '+Math.round(r*100)+'%';    
+    var vf=a+b*pm;
+    console.log('Real '+vf);
+    //lpuntos de la linea tendencial 
         var y_grafica=[];
         var x_min=Number(xarray[0]);
         var x_max=Number(xarray[0]);
         var x_grafica=[];
       
-        for(var i=0;i<cantidad;i++){  
+        for(var i=0;i<n;i++){  
             //y=a+bx
             y=a+b*parseFloat(xarray[i]);
             y_grafica.push(y.toFixed(2));  
@@ -221,11 +213,17 @@ function regresionLineal(xarray,yarray,pm,grafica_xy)
             else{
                 x_max=Number(xarray[i]);
             }    
-        }        
-      
-        lineal(x_min,x_max,title_grafica,y_grafica.sort(function(a, b){return a<b}),grafica_xy,x_grafica.sort(function(a, b){return a<b}));       
-    //}
-     return dp;
+        }   
+             
+      //Grafica  
+      if(r>0){          
+          lineal(x_min,x_max,title_grafica,y_grafica.sort(function(a, b){return a>b}),grafica_xy,x_grafica.sort(function(a, b){return a>b}));    
+      }
+      else{          
+          lineal(x_min,x_max,title_grafica,y_grafica.sort(function(a, b){return a<b}),grafica_xy,x_grafica.sort(function(a, b){return a<b}));    
+      }         
+   
+     // return vf.toFixed(2);
    
   
     
@@ -234,6 +232,7 @@ function regresionLineal(xarray,yarray,pm,grafica_xy)
     
 function lineal(x_min,x_max,title_grafica,y_grafica,xy,xarray)
 {
+    Alerta('Información','y=a+bx, donde x es el valor a predecir.\nr => Indica el valor de ajuste de la linea tendencial.\nr => Entre mas se acerque al 100%, mejor sera la predición.\nr => Si su valor es negativo, indica que la tedencia es DECRECIENTE.\nRecomendación:\nRepita la predicción con los diferentes metodos de regresión y seleccione el resultado que contega el r mayor.\nNota:\nPara restablecer, cambie la selección de los ejes.','dark')   
     var myChart = echarts.init(document.getElementById('graficar'));
     var option = {
             title : {
