@@ -226,14 +226,15 @@ function regresionLineal(xarray,yarray,pm,grafica_xy)
             y=a+b*parseFloat(xarray[i]);
             y_grafica.push(y.toFixed(2));  
             x_grafica.push(parseFloat(xarray[i])); 
+            console.log(xarray[i]+' , '+y)
         }   
              
       //Grafica  
       if(r>0){          
-          lineal(title_grafica_1,title_grafica,y_grafica.sort(function(a, b){return a>b}),grafica_xy,x_grafica.sort(function(a, b){return a>b}),r);    
+          lineal(title_grafica_1,title_grafica,y_grafica,grafica_xy,x_grafica.sort(function(a, b){return a>b}),r);    
       }
       else{          
-          lineal(title_grafica_1,title_grafica,y_grafica.sort(function(a, b){return a<b}),grafica_xy,x_grafica.sort(function(a, b){return a<b}),r);    
+          lineal(title_grafica_1,title_grafica,y_grafica,grafica_xy,x_grafica.sort(function(a, b){return a<b}),r);    
       }         
    
      // return vf.toFixed(2);
@@ -296,16 +297,22 @@ function regresionCuadratica(x_array,y_array,pm,grafica_xy)
     //lpuntos de la linea tendencial 
         var y_grafica=[];        
         var x_grafica=[];      
+        var x_temp=0;
         for(var i=0;i<n;i++){  
             //y=a+bx+c(x2)
-            y=a+b*parseFloat(x_array[i])+c*Math.pow(x_array[i],2);
+            x_temp=parseFloat(x_array[i]);
+           // console.log(x_temp)
+            
+            y=a+b*x_temp+c*Math.pow(x_temp,2);
+            
             y_grafica.push(y.toFixed(2));  
-            x_grafica.push(parseFloat(x_array[i])); 
+            x_grafica.push(x_temp); 
+            console.log(x_temp+' , '+y)
         }   
              
       //Grafica  
       if(r>0){          
-          lineal(title_grafica_1,title_grafica,y_grafica.sort(function(a, b){return a>b}),grafica_xy,x_grafica.sort(function(a, b){return a>b}),r);    
+          lineal(title_grafica_1,title_grafica,y_grafica,grafica_xy,x_grafica.sort(function(a, b){return a>b}),r);    
       }
       else{          
           lineal(title_grafica_1,title_grafica,y_grafica.sort(function(a, b){return a<b}),grafica_xy,x_grafica.sort(function(a, b){return a<b}),r);    
