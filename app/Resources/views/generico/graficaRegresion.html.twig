@@ -296,7 +296,7 @@ function regresionCuadratica(x_array,y_array,pm,grafica_xy)
         var min=Math.min.apply(null, x_array);  
         var max=Math.max.apply(null, x_array);  
              
-        for(var i=min;i<max;i++){ 
+        for(var i=min;i<=max;i++){ 
            //y=a+bx+c(x2)         
             y=a+b*i+c*Math.pow(i,2);                        
             y_grafica.push(y.toFixed(2));   
