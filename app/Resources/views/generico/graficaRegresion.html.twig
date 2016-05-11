@@ -220,24 +220,20 @@ function regresionLineal(xarray,yarray,pm,grafica_xy)
     console.log('Real lineal '+vf);
     //lpuntos de la linea tendencial 
         var y_grafica=[];        
-        var x_grafica=[];      
-        for(var i=0;i<n;i++){  
+        var x_grafica=[];  
+        var min=Math.min.apply(null, xarray);     
+        var max=Math.max.apply(null, xarray);         
+        
+        for(var i=min;i<=max;i++){  
             //y=a+bx
-            y=a+b*parseFloat(xarray[i]);
-            y_grafica.push(y.toFixed(2));  
-            x_grafica.push(parseFloat(xarray[i])); 
-            console.log(xarray[i]+' , '+y)
+            y=a+b*parseFloat(i);
+            y_grafica.push(y.toFixed(2)); 
+            x_grafica.push(i); 
+            console.log(i+' , '+y)            
         }   
              
       //Grafica  
-      if(r>0){          
-          lineal(title_grafica_1,title_grafica,y_grafica,grafica_xy,x_grafica.sort(function(a, b){return a>b}),r);    
-      }
-      else{          
-          lineal(title_grafica_1,title_grafica,y_grafica,grafica_xy,x_grafica.sort(function(a, b){return a<b}),r);    
-      }         
-   
-     // return vf.toFixed(2);
+      lineal(title_grafica_1,title_grafica,y_grafica,grafica_xy,x_grafica.sort(function(a, b){return a>b}),r);      
 }
 
 var c_cuadratica=0;
@@ -296,27 +292,20 @@ function regresionCuadratica(x_array,y_array,pm,grafica_xy)
     console.log('Real cuadratica '+vf);
     //lpuntos de la linea tendencial 
         var y_grafica=[];        
-        var x_grafica=[];      
-        var x_temp=0;
-        for(var i=0;i<n;i++){  
-            //y=a+bx+c(x2)
-            x_temp=parseFloat(x_array[i]);
-           // console.log(x_temp)
-            
-            y=a+b*x_temp+c*Math.pow(x_temp,2);
-            
-            y_grafica.push(y.toFixed(2));  
-            x_grafica.push(x_temp); 
-            console.log(x_temp+' , '+y)
+        var x_grafica=[]; 
+        var min=Math.min.apply(null, x_array);  
+        var max=Math.max.apply(null, x_array);  
+             
+        for(var i=min;i<max;i++){ 
+           //y=a+bx+c(x2)         
+            y=a+b*i+c*Math.pow(i,2);                        
+            y_grafica.push(y.toFixed(2));   
+            x_grafica.push(i);           
+            console.log(i+' , '+y)
         }   
              
       //Grafica  
-      if(r>0){          
-          lineal(title_grafica_1,title_grafica,y_grafica,grafica_xy,x_grafica.sort(function(a, b){return a>b}),r);    
-      }
-      else{          
-          lineal(title_grafica_1,title_grafica,y_grafica.sort(function(a, b){return a<b}),grafica_xy,x_grafica.sort(function(a, b){return a<b}),r);    
-      }   
+      lineal(title_grafica_1,title_grafica,y_grafica,grafica_xy,x_grafica.sort(function(a, b){return a>b}),r);      
     
     }
     
