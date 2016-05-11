@@ -36,6 +36,7 @@
                             <select id='tipo-regresion' class="margen">
                                     <option value='lineal'>Regresión Lineal</option> 
                                     <option value='cuadrada'>Regresión Cuadratica</option> 
+                                    <option value='exponencial'>Regresión Exponencial</option> 
                             </select> 
                             <p>Digite valor <strong>a predecir</strong></p>
                             <input id="valorFuturo" placeholder="1.5">
@@ -108,12 +109,14 @@ $("#calRegresion").click(function() {
                 
                 if($('#tipo-regresion').val()=='lineal')
                 {
-                  x=a_lineal+b_lineal*pm;   
-                }  
-                else{
+                    x=a_lineal+b_lineal*pm;   
+                }                 
+                else if($('#tipo-regresion').val()=='cuadrada'){
                     x=a_lineal+b_lineal*pm+c_cuadratica*Math.pow(pm,2);
-                }   
-                 
+                }
+                else if($('#tipo-regresion').val()=='exponencial'){
+                    x=a_lineal*Math.exp(b_lineal*pm); 
+                } 
                 x=x.toFixed(2);               
                 $("#valorFuturo").removeAttr("style");
                 $('#resultado').append('<p><font color="blue"><strong>Predición:</strong> '+x+'</font></p>');
@@ -172,9 +175,12 @@ function cargarGrafica(pm)
         {
            regresionLineal(xarray,yarray,pm,xy);
         }  
-        else{
+        else if($('#tipo-regresion').val()=='cuadrada'){
             regresionCuadratica(xarray,yarray,pm,xy);
-        }           
+        }
+        else if($('#tipo-regresion').val()=='exponencial'){
+            regresionExponencial(xarray,yarray,pm,xy);
+        }             
         return true;
     }
     else {
@@ -235,7 +241,7 @@ function regresionLineal(xarray,yarray,pm,grafica_xy)
         }   
              
       //Grafica  
-      lineal(title_grafica_1,title_grafica,y_grafica,grafica_xy,x_grafica.sort(function(a, b){return a>b}),r);      
+      lineal(title_grafica_1,title_grafica,y_grafica,grafica_xy,x_grafica,r);      
 }
 
 var c_cuadratica=0;
@@ -307,10 +313,85 @@ function regresionCuadratica(x_array,y_array,pm,grafica_xy)
         }   
              
       //Grafica  
-      lineal(title_grafica_1,title_grafica,y_grafica,grafica_xy,x_grafica.sort(function(a, b){return a>b}),r);      
+      lineal(title_grafica_1,title_grafica,y_grafica,grafica_xy,x_grafica,r);  
+}
+
+function regresionExponencial(x_array,y_array,pm,grafica_xy)
+{
+    var x=0;
+    var y=0;
+    var lny=0;
+    var x2=0;
+    var xlny=0;
+    var lny2=0;
+    var n=y_array.length;  
+    var xy=0;
+    var y2=0; 
     
+    var x_temp=0;
+    var y_temp=0;  
+    
+    
+    for(var i=0;i<n;i++){
+        //Tabla de datos
+        //console.log(x_array[i]+"   "+y_array[i]);
+        //Calculo de terminos        
+        x_temp=parseFloat(x_array[i]);
+        y_temp=parseFloat(y_array[i]);
+        
+        x+=x_temp;
+        y+=y_temp;
+        xy+=x_temp*y_temp;
+        x2+=Math.pow(x_temp,2);
+        y2+=Math.pow(y_temp,2);
+        lny+=Math.log(y_temp);
+        xlny+=x_temp*Math.log(y_temp);
+        lny2+=Math.pow(Math.log(y_temp),2); 
+            
     }
-    
+   
+   var x_med=x/n;
+   var lny_med=lny/n;
+
+   var b1=xlny-lny_med*x;
+   var b2=x2-x_med*x;
+   var b=b1/b2;
+   var a1=lny_med-b*x_med;
+   var a=Math.exp(a1); 
+   
+   b_lineal=b;
+   a_lineal=a;
+  
+    //Coeficiente de correlacion
+    //R
+    var r2_1=n*xy-x*y;
+    var r2_2=Math.sqrt(n*x2-Math.pow(x,2))*Math.sqrt(n*y2-Math.pow(y,2));
+    var r=r2_1/r2_2;   
+     //tendencial
+    //y=a*e(bx)
+    var title_grafica='y= '+a.toFixed(2)+'e^('+b.toFixed(2)+'x)';
+    var title_grafica_1='Regresión Exponencial, ';
+    var vf=a*Math.exp(b*pm); 
+    console.log('Real Exponencial '+vf);
+    //lpuntos de la linea tendencial 
+        var y_grafica=[];        
+        var x_grafica=[]; 
+        var min=Math.min.apply(null, x_array);  
+        var max=Math.max.apply(null, x_array);  
+             
+        for(var i=min;i<=max;i++){ 
+           //y=a*e(bx)       
+            y=a*Math.exp(b*i);                         
+            y_grafica.push(y.toFixed(2));   
+            x_grafica.push(i);           
+            console.log(i+' , '+y)
+        }   
+             
+      //Grafica  
+      lineal(title_grafica_1,title_grafica,y_grafica,grafica_xy,x_grafica,r);  
+     
+}
+
 function lineal(title_grafica_1,title_grafica,y_grafica,xy,xarray,r)
 {
     Alerta('Información','y= f(x), donde x es el valor a predecir.\n\nr => Indica el valor de ajuste de la linea tendencial.\n\nr => Entre mas se acerque al 100%, mejor sera la predición.\n\nr => Si su valor es negativo, indica que la tedencia es DECRECIENTE.\n\nNota:\nPara restablecer, cambie la selección de los ejes o el tipo de regresión.','dark')   
