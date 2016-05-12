@@ -37,6 +37,8 @@
                                     <option value='lineal'>Regresión Lineal</option> 
                                     <option value='cuadrada'>Regresión Cuadratica</option> 
                                     <option value='exponencial'>Regresión Exponencial</option> 
+                                    <option value='logaritmica'>Regresión Logarítmica</option> 
+                                    
                             </select> 
                             <p>Digite valor <strong>a predecir</strong></p>
                             <input id="valorFuturo" placeholder="1.5">
@@ -117,6 +119,9 @@ $("#calRegresion").click(function() {
                 else if($('#tipo-regresion').val()=='exponencial'){
                     x=a_lineal*Math.exp(b_lineal*pm); 
                 } 
+                else if($('#tipo-regresion').val()=='logaritmica'){
+                    x=a_lineal*Math.log(pm)+b_lineal;
+                } 
                 x=x.toFixed(2);               
                 $("#valorFuturo").removeAttr("style");
                 $('#resultado').append('<p><font color="blue"><strong>Predición:</strong> '+x+'</font></p>');
@@ -180,7 +185,10 @@ function cargarGrafica(pm)
         }
         else if($('#tipo-regresion').val()=='exponencial'){
             regresionExponencial(xarray,yarray,pm,xy);
-        }             
+        }
+        else if($('#tipo-regresion').val()=='logaritmica'){
+            regresionLogaritmica(xarray,yarray,pm,xy);
+        }           
         return true;
     }
     else {
@@ -222,7 +230,7 @@ function regresionLineal(xarray,yarray,pm,grafica_xy)
     var r=r2_1/r2_2;   
      //Recta tendencial
     //y=a+bx
-    var title_grafica='y= '+a.toFixed(2)+'+'+b.toFixed(2)+'x';  
+    var title_grafica='y= '+a.toFixed(2)+' + '+b.toFixed(2)+' x';  
     var title_grafica_1='Regresión Lineal, ';
     var vf=a+b*pm;
     console.log('Real lineal '+vf);
@@ -294,7 +302,7 @@ function regresionCuadratica(x_array,y_array,pm,grafica_xy)
     var r=r2_1/r2_2;   
      //Parabola tendencial
     //y=a+bx+c(x2)
-    var title_grafica='y= '+a.toFixed(2)+'+'+b.toFixed(2)+'x+'+c.toFixed(2)+'x^2';
+    var title_grafica='y= '+a.toFixed(2)+' + '+b.toFixed(2)+' x + '+c.toFixed(2)+' x^2';
     var title_grafica_1='Regresión Cuadratica, ';
     var vf=a+b*pm+c*Math.pow(pm,2);
     console.log('Real cuadratica '+vf);
@@ -369,7 +377,7 @@ function regresionExponencial(x_array,y_array,pm,grafica_xy)
     var r=r2_1/r2_2;   
      //tendencial
     //y=a*e(bx)
-    var title_grafica='y= '+a.toFixed(2)+'e^('+b.toFixed(2)+'x)';
+    var title_grafica='y= '+a.toFixed(2)+' e^( '+b.toFixed(2)+' x )';
     var title_grafica_1='Regresión Exponencial, ';
     var vf=a*Math.exp(b*pm); 
     console.log('Real Exponencial '+vf);
@@ -382,6 +390,83 @@ function regresionExponencial(x_array,y_array,pm,grafica_xy)
         for(var i=min;i<=max;i++){ 
            //y=a*e(bx)       
             y=a*Math.exp(b*i);                         
+            y_grafica.push(y.toFixed(2));   
+            x_grafica.push(i);           
+            console.log(i+' , '+y)
+        }   
+             
+      //Grafica  
+      lineal(title_grafica_1,title_grafica,y_grafica,grafica_xy,x_grafica,r);  
+     
+}
+
+
+function regresionLogaritmica(x_array,y_array,pm,grafica_xy)
+{
+    var x=0;
+    var y=0;
+    var lnx=0;
+    var lnx2=0;
+    var lnxy=0;
+    var y2=0; 
+    
+    var n=y_array.length;  
+    var xy=0;
+    var x2=0;
+    
+    var x_temp=0;
+    var y_temp=0; 
+    
+    for(var i=0;i<n;i++){
+        //Tabla de datos
+        //console.log(x_array[i]+"   "+y_array[i]);
+        //Calculo de terminos        
+        x_temp=parseFloat(x_array[i]);
+        y_temp=parseFloat(y_array[i]);
+        
+        x+=x_temp;
+        y+=y_temp;
+        lnx+=Math.log(x_temp);
+        lnx2+=Math.pow(Math.log(x_temp),2); 
+        lnxy+=y_temp*Math.log(x_temp); 
+        y2+=Math.pow(y_temp,2);
+         
+        xy+=x_temp*y_temp;
+        x2+=Math.pow(x_temp,2);
+    }
+   
+   var y_med=y/n;
+   var lnx_med=lnx/n;
+
+   var a1=lnxy-y_med*lnx;
+   var a2=lnx2-lnx_med*lnx;
+   var a=a1/a2;
+      
+   var b=y_med-a*lnx_med;
+      
+   b_lineal=b;
+   a_lineal=a;
+  
+    //Coeficiente de correlacion
+    //R
+    var r2_1=n*xy-x*y;
+    var r2_2=Math.sqrt(n*x2-Math.pow(x,2))*Math.sqrt(n*y2-Math.pow(y,2));
+    var r=r2_1/r2_2;   
+     //tendencial
+    //y=a*lnx+b
+    var title_grafica='y= '+a.toFixed(2)+' lnx + '+b.toFixed(2);
+    var title_grafica_1='Regresión Logarítmica, ';
+    var vf=a*Math.log(pm)+b;
+    console.log('Real Logarítmica '+vf);
+    //lpuntos de la linea tendencial 
+        var y_grafica=[];        
+        var x_grafica=[]; 
+        var min=Math.min.apply(null, x_array);  
+        var max=Math.max.apply(null, x_array);  
+             
+        for(var i=min;i<=max;i++){ 
+           //y=a*lnx+b    
+            y=a*Math.log(i)+b;                         
             y_grafica.push(y.toFixed(2));   
             x_grafica.push(i);           
             console.log(i+' , '+y)
