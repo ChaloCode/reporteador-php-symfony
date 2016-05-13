@@ -62,7 +62,7 @@
         <div class="left_col scroll-view">
 
           <div class="navbar nav_title" style="border: 0;">
-            <a href='{{ asset("/")}}' class="site_title"><i ><img class="logo-colibri" src="{{ asset('images2/img.png') }}" /></i> <span>Proyecto Colibrí</span></a>
+            <a href='{{ asset("/")}}' class="site_title"><i ><img class="logo-colibri" src="{{ asset('images2/img.png') }}" /></i> <span>Colibrí Report</span></a>
           </div>
           <div class="clearfix"></div>
 
@@ -72,8 +72,8 @@
               <img src='{{ asset("images2/img.jpg")}}' alt="..." class="img-circle profile_img">
             </div>
             <div class="profile_info">
-              <span>Welcome,</span>
-              <h2>John Doe</h2>
+              <span>Bienvenido,</span>
+              <h2>{{ app.user.username }}</h2>
             </div>
           </div>
           <!-- /menu prile quick info -->
@@ -227,9 +227,9 @@
             </div>
 
             <ul class="nav navbar-nav navbar-right">
-              <li class="">
+              <li class="">              
                 <a href="javascript:;" class="user-profile dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
-                  <img src='{{ asset("images2/img.jpg")}}' alt="">John Doe
+                  <img src='{{ asset("images2/img.jpg")}}' alt="">{{ app.user.username }}
                   <span class=" fa fa-angle-down"></span>
                 </a>
                 <ul class="dropdown-menu dropdown-usermenu animated fadeInDown pull-right">
