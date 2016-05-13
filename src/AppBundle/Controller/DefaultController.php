@@ -22,8 +22,7 @@ class DefaultController extends Controller
      */
     public function indexAction(Request $request)
     {
-        $this->regresionLineal();
-       die('Area de pruebas');
+        return $this->redirectToRoute('Reporte');
     }
     
      private function regresionCuadratica()
