@@ -1,0 +1,41 @@
+{% extends "FOSUserBundle::layout.html.twig" %}
+{% block title %}Nuevo Usuario{% endblock %}
+{% block stylesheets %}
+    {{ parent() }}  
+    <style>
+    .login_content form input[type="submit"], #content form .submit{
+        float: none !important;
+        margin-left: 0 !important;
+    }
+    .contrasena-error{
+        font-size: 16px;
+        color: red;
+        
+    }
+    </style>
+{% endblock %}
+
+
+{% block fos_user_content %}
+{% include "FOSUserBundle:Registration:register_content.html.twig" %}
+{% endblock fos_user_content %}
+{% block error %}
+$('#fos_user_registration_form_plainPassword_second').keyup(function(){
+    var a=$('#fos_user_registration_form_plainPassword_first').val();
+    var b=$('#fos_user_registration_form_plainPassword_second').val();
+    var control=true;
+    if( a!=b && control)
+    {        
+        $('#error_pass').html("<p class='contrasena-error'><i class='fa fa-exclamation-circle'></i> La contraseña no coincide</p>");
+        control=false;
+        $('#bton-new-user').prop( "disabled", true );
+    }
+    if(a==b)
+    {
+         $('#error_pass').html('');
+         control=true;
+         $('#bton-new-user').prop( "disabled", false );
+    }
+}); 
+   
+{% endblock error %}

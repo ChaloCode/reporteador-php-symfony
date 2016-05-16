@@ -1,0 +1,59 @@
+{% extends "FOSUserBundle::layout.html.twig" %}
+
+{% trans_default_domain 'FOSUserBundle' %}
+
+{% block title %}Bienvenido Colibrí Report{% endblock %}
+{% block stylesheets %}
+     {{ parent() }}   
+{% endblock %}
+{% block fos_user_content %}
+ <div class="">
+    <a class="hiddenanchor" id="toregister"></a>
+    <a class="hiddenanchor" id="tologin"></a>
+
+    <div id="wrapper">
+      <div id="login" class="animate form">
+        <section class="login_content">
+          <form action="{{ path("fos_user_security_check") }}" method="post">
+            <h1>Colibrí Report</h1>            
+            <input type="hidden" name="_csrf_token" value="{{ csrf_token }}" />
+            <div>
+              <input type="text" class="form-control" placeholder="Usuario" id="username" name="_username" value="{{ last_username }}" required="required" />
+            </div>
+            <div>
+              <input type="password" class="form-control" placeholder="Contraseña" id="password" name="_password" required="required" />
+            </div>
+            <div class="recordar">
+                Recordar sesión:
+                <input type="checkbox" id="remember_me" name="_remember_me" value="on" />
+            </div>
+            <div>
+              <input class="btn btn-default" type="submit" id="_submit" name="_submit" value="Iniciar sesión" />
+              <a class="reset_pass" href="#">Recuperar Contraseña?</a>
+            </div>
+            <div class="clearfix"></div>
+            <div class="separator">
+
+              <p class="change_link">Eres nuevo?
+                <a href="{{ asset('/register') }}" > Crear cuenta </a>
+              </p>
+              <div class="clearfix"></div>
+              <br />
+              <div>
+                <h1><i ><img class="logo-colibrix" src="{{ asset('images2/img.png') }}" /></i> Colibrí Report</h1>
+                <p>©2016 Todos los derechos reservados.</p>
+              </div>
+            </div>
+          </form>
+          <!-- form -->
+        </section>
+        <!-- content -->
+      </div>
+  </div>
+  </div>   
+{% endblock fos_user_content %}
+{% block error %}
+    {% if error %}     
+        Alerta('Error',"{{error.messageKey|trans(error.messageData, 'security')}}",'error') 
+    {% endif %}
+{% endblock error %}

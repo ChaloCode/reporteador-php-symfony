@@ -1,0 +1,46 @@
+{% trans_default_domain 'FOSUserBundle' %}
+  <div>
+    <div id="wrapper">
+    <section class="login_content">
+        {{ form_start(form, {'method': 'post', 'action': path('fos_user_registration_register'), 'attr': {'class': 'fos_user_registration_register'}}) }}
+        
+            <h1>Nuevo Usuario</h1>  
+            <div>                 
+             {{ form_errors(form) }}
+            </div>
+            <div>       
+                {{ form_errors(form.email) }}
+                {{ form_widget(form.email, {'attr': {'class': 'form-control','placeholder':'Email'}}) }}
+            </div>
+            <div>
+                 {{ form_errors(form.username) }}
+                 {{ form_widget(form.username, {'attr': {'class': 'form-control','placeholder':'Usuario'}}) }}
+            </div>
+            <div>
+                {{ form_errors(form.plainPassword.first) }}
+                {{ form_widget(form.plainPassword.first, {'attr': {'class': 'form-control','placeholder':'Contraseña'}}) }}
+            <div>
+                {{ form_errors(form.plainPassword.second) }}
+                {{ form_widget(form.plainPassword.second, {'attr': {'class': 'form-control','placeholder':'Repita la Contraseña'}}) }}
+                <div id='error_pass'></div>
+            </div>
+            <div>
+                <input id="bton-new-user" class="btn btn-default submit" type="submit" value="{{ 'registration.submit'|trans }}" />
+            </div> 
+             <div class="clearfix"></div>
+            <div class="separator">
+
+              <p class="change_link">Ya eres usuario ?  
+                <a href="{{ asset('/login') }}"> Iniciar sesión  </a>
+              </p>
+              <div class="clearfix"></div>
+              <br />
+               <div>
+                <h1><i ><img class="logo-colibrix" src="{{ asset('images2/img.png') }}" /></i> Colibrí Report</h1>
+                <p>©2016 Todos los derechos reservados.</p>
+              </div>
+            </div>   
+        {{ form_end(form) }}
+    </section>
+    </div>
+</div>
