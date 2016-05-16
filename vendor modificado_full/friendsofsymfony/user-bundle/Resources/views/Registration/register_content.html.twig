@@ -19,6 +19,7 @@
             <div>
                 {{ form_errors(form.plainPassword.first) }}
                 {{ form_widget(form.plainPassword.first, {'attr': {'class': 'form-control','placeholder':'Contraseña'}}) }}
+            </div>
             <div>
                 {{ form_errors(form.plainPassword.second) }}
                 {{ form_widget(form.plainPassword.second, {'attr': {'class': 'form-control','placeholder':'Repita la Contraseña'}}) }}
@@ -27,7 +28,7 @@
             <div>
                 <input id="bton-new-user" class="btn btn-default submit" type="submit" value="{{ 'registration.submit'|trans }}" />
             </div> 
-             <div class="clearfix"></div>
+            <div class="clearfix"></div>
             <div class="separator">
 
               <p class="change_link">Ya eres usuario ?  
@@ -37,7 +38,7 @@
               <br />
                <div>
                 <h1><i ><img class="logo-colibrix" src="{{ asset('images2/img.png') }}" /></i> Colibrí Report</h1>
-                <p>©2016 Todos los derechos reservados.</p>
+                <p id="copyright"></p>
               </div>
             </div>   
         {{ form_end(form) }}

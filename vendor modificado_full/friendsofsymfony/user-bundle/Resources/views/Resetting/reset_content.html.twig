@@ -1,8 +1,36 @@
 {% trans_default_domain 'FOSUserBundle' %}
-
-{{ form_start(form, { 'action': path('fos_user_resetting_reset', {'token': token}), 'attr': { 'class': 'fos_user_resetting_reset' } }) }}
-    {{ form_widget(form) }}
-    <div>
-        <input type="submit" value="{{ 'resetting.reset.submit'|trans }}" />
+<div>
+    <div id="wrapper">
+    <section class="login_content">
+        {{ form_start(form, { 'action': path('fos_user_resetting_reset', {'token': token}), 'attr': { 'class': 'fos_user_resetting_reset' } }) }}
+           <h1>Nueva Contraseña</h1>  
+            <div>                 
+             {{ form_errors(form) }}
+            </div>
+            <div>
+                {{ form_errors(form.plainPassword.first) }}
+                {{ form_widget(form.plainPassword.first, {'attr': {'class': 'form-control','placeholder':'Nueva Contraseña'}}) }}
+            </div>
+            <div>
+                {{ form_errors(form.plainPassword.second) }}
+                {{ form_widget(form.plainPassword.second, {'attr': {'class': 'form-control','placeholder':'Repita la Contraseña'}}) }}
+                <div id='error_pass'></div>
+            </div>
+            <div>
+                <input class="btn btn-default submit" type="submit" value="{{ 'resetting.reset.submit'|trans }}" />
+            </div>
+            <div class="clearfix"></div>
+            <div class="separator">
+              <div class="clearfix"></div>
+              <br />
+               <div>
+                <h1><i ><img class="logo-colibrix" src="{{ asset('images2/img.png') }}" /></i> Colibrí Report</h1>
+                <p id="copyright"></p>
+              </div>
+            </div>   
+        {{ form_end(form) }}
+        
+   </section>
     </div>
-{{ form_end(form) }}
+</div>
+       

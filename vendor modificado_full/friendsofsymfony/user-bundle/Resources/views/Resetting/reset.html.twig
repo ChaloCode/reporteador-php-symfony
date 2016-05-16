@@ -1,5 +1,30 @@
 {% extends "FOSUserBundle::layout.html.twig" %}
 
+{% block title %}Restablecer Contraseña{% endblock %}
+{% block stylesheets %}
+     {{ parent() }}   
+{% endblock %}
+
 {% block fos_user_content %}
 {% include "FOSUserBundle:Resetting:reset_content.html.twig" %}
 {% endblock fos_user_content %}
+{% block error %}
+$('#fos_user_resetting_form_plainPassword_second').keyup(function(){
+    var a=$('#fos_user_resetting_form_plainPassword_first').val();
+    var b=$('#fos_user_resetting_form_plainPassword_second').val();
+    var control=true;
+    if( a!=b && control)
+    {        
+        $('#error_pass').html("<p class='contrasena-error'><i class='fa fa-exclamation-circle'></i> La contraseña no coincide</p>");
+        control=false;
+        $('#bton-new-user').prop( "disabled", true );
+    }
+    if(a==b)
+    {
+         $('#error_pass').html('');
+         control=true;
+         $('#bton-new-user').prop( "disabled", false );
+    }
+}); 
+   
+{% endblock error %}

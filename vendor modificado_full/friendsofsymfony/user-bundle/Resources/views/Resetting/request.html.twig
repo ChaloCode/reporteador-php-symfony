@@ -1,5 +1,9 @@
 {% extends "FOSUserBundle::layout.html.twig" %}
 
+{% block title %}Restablecer Contraseña{% endblock %}
+{% block stylesheets %}
+     {{ parent() }}   
+{% endblock %}
 {% block fos_user_content %}
 {% include "FOSUserBundle:Resetting:request_content.html.twig" %}
 {% endblock fos_user_content %}

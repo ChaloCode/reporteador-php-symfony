@@ -1,14 +1,31 @@
 {% trans_default_domain 'FOSUserBundle' %}
+<div>
+    <div id="wrapper">
+    <section class="login_content">
+        <form action="{{ path('fos_user_resetting_send_email') }}" method="POST" class="fos_user_resetting_request">
+            <h1>Restablecer</h1>
+            <div>
+                {% if invalid_username is defined %}
+                    <p>{{ 'resetting.request.invalid_username'|trans({'%username%': invalid_username}) }}</p>
+                {% endif %}               
+                <input class="form-control" placeholder='Usuario o Email' type="text" id="username" name="username" required="required" />
+            </div>
+            <div>
+                <input  class=" btn btn-default submit" type="submit" value="{{ 'resetting.request.submit'|trans }}" />
+            </div>
+            <div class="clearfix"></div>
+            <div class="separator">
+                <p class="change_link">¿Recorde la contraseña?  
+                <a href="{{ asset('/login') }}"> Iniciar sesión  </a>
+              </p>
+                <div class="clearfix"></div>
+                <br />
+                <div>
+                <h1><i ><img class="logo-colibrix" src="{{ asset('images2/img.png') }}" /></i> Colibrí Report</h1>
+                <p id="copyright"></p>
+            </div>
+        </form>
+  </section>
+  </div>
+</div>
 
-<form action="{{ path('fos_user_resetting_send_email') }}" method="POST" class="fos_user_resetting_request">
-    <div>
-        {% if invalid_username is defined %}
-            <p>{{ 'resetting.request.invalid_username'|trans({'%username%': invalid_username}) }}</p>
-        {% endif %}
-        <label for="username">{{ 'resetting.request.username'|trans }}</label>
-        <input type="text" id="username" name="username" required="required" />
-    </div>
-    <div>
-        <input type="submit" value="{{ 'resetting.request.submit'|trans }}" />
-    </div>
-</form>
