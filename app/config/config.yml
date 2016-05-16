@@ -71,7 +71,11 @@ fos_user:
     db_driver: orm # other valid values are 'mongodb', 'couchdb' and 'propel'
     firewall_name: main
     user_class: AppBundle\Entity\User  
+    from_email:
+        address:        info@colibrireport.co
+        sender_name:    Bienvenido a Colibrí Report
     registration:
         confirmation:
             enabled: true
+            
   
