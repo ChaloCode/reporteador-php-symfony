@@ -18,6 +18,7 @@ use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 
 use AppBundle\Entity\User;
 
+
 class UsuarioController extends Controller
 {
     /**
@@ -53,14 +54,17 @@ class UsuarioController extends Controller
   
     
     /**
-     * @Route("/usuario/perfil/edit/{id}", name="Usuario_Editar")
+     * @Route("/usuario/perfil/edit/", name="Usuario_Editar")
      */
-    public function editAction($id,Request $request)
+    public function editAction(Request $request)
     {
-      $perfil=$this->getDoctrine()
-              ->getRepository('AppBundle:User')
-              ->find($id);     
-        //var_dump($perfil);
+        $perfil = $this->get('security.token_storage')->getToken()->getUser();
+      //var_dump($user->getId());
+      //die('fin');
+     // $perfil=$this->getDoctrine()
+            //  ->getRepository('AppBundle:User')
+            //  ->find($id); 
+         
         
         //Se crea el formulario
         $form = $this->createFormBuilder($perfil)   
@@ -96,6 +100,8 @@ class UsuarioController extends Controller
 
         if ($form->isSubmitted() && $form->isValid()) 
         { 
+          
+           $perfil->setPlainPassword('123');
             $em=$this->getDoctrine()->getManager();             
             $em->flush();  
             $this->addFlash(
