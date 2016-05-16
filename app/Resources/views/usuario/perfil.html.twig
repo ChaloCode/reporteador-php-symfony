@@ -1,0 +1,79 @@
+{% extends "base.html.twig" %}
+
+{% use "generico/formulario.html.twig" %}
+
+{% block stylesheets %}  
+    {{ parent() }}    
+    {% block stylesheetsFormulario %}  
+        {{ parent() }} 
+        
+        
+    {% endblock %}
+    <style>
+    .img-circle.perfil_img {
+    height: 150px;
+}
+.perfil_informacion {
+    margin-top: 20px;
+    font-size: 18px;
+}
+    </style>  
+{% endblock %}
+
+
+{% block title %}{{info['pagina'].titulo}}{% endblock %}
+
+
+{% block body %}   
+    <div class="col-md-6 col-sm-6 col-xs-12"> 
+    
+    
+    
+     {% embed "generico/ventana.html.twig" %}
+                {% block tituloVentana %}{{info['formulario'].titulo}}{% endblock %} 
+                {% block subTituloVentana %}{{info['formulario'].subtitulo}}{% endblock %}
+                 {% block bodyLink %}
+                    <li><a  class="fa fa-pencil" href="{{ asset('/usuario/perfil/edit/') }}{{ app.user.id }}"> Editar Usurio</a></li> 
+                 {% endblock %}   
+                {% block bodyVentana %}  
+                    <div class="col-xs-12 col-md-4">                            
+                       <img src="{{ asset("images2/user.png")}}" alt="..." class="img-circle perfil_img">            
+                    </div>
+                    <div class="col-xs-12 col-md-8 perfil_informacion">
+                        <p><i class="fa fa-user"> <strong>Nombre de usuario: </strong>{{ app.user.username }}</i></p>
+                        <p><i class="fa fa-envelope-o"><strong> Email: </strong> {{ app.user.email }}</i></p>
+                        <p><i class="fa fa-clock-o"><strong> Ultima sesión: </strong> {{ app.user.lastLogin|date("d/m/y H:i")  }}</i></i></p>                    
+                    </div>
+                {% endblock %}
+                
+      {% endembed %}
+
+
+    </div> 
+{% endblock %}
+
+
+{% block body2 %} 
+{% endblock %}
+
+{% block body3 %}   
+    
+{% endblock %}
+
+   
+
+
+{% block javascripts %}  
+    {{ parent() }} 
+    {% block javascriptsFormulario %}   
+        {{ parent() }} 
+    {% endblock %}
+{% endblock %}
+
+
+
+
+
+
+
+

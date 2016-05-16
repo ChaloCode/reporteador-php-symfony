@@ -69,7 +69,7 @@
           <!-- menu prile quick info -->
           <div class="profile">
             <div class="profile_pic">
-              <img src='{{ asset("images2/img.jpg")}}' alt="..." class="img-circle profile_img">
+              <img src='{{ asset("images2/user.png")}}' alt="..." class="img-circle profile_img">
             </div>
             <div class="profile_info">
               <span>Bienvenido,</span>
@@ -171,7 +171,7 @@
                     </li>
                     <li><a href="contacts.html">Contacts</a>
                     </li>
-                    <li><a href="profile.html">Profile</a>
+                    <li><a href="{{ asset("usuario/perfil/")}}">Perfil</a>
                     </li>
                   </ul>
                 </li>
@@ -229,11 +229,11 @@
             <ul class="nav navbar-nav navbar-right">
               <li class="">              
                 <a href="javascript:;" class="user-profile dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
-                  <img src='{{ asset("images2/img.jpg")}}' alt="">{{ app.user.username }}
+                  <img src='{{ asset("images2/user.png")}}' alt="">{{ app.user.username }}
                   <span class=" fa fa-angle-down"></span>
                 </a>
-                <ul class="dropdown-menu dropdown-usermenu animated fadeInDown pull-right">
-                  <li><a href="javascript:;">  Profile</a>
+                <ul class="dropdown-menu dropdown-usermenu animated fadeInDown pull-right">                  
+                  <li><a href="{{ asset("usuario/perfil/")}}">Perfil</a>
                   </li>
                   <li>
                     <a href="javascript:;">
