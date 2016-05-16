@@ -2,6 +2,33 @@
 
 {% trans_default_domain 'FOSUserBundle' %}
 
+{% block title %}Activar Usuario{% endblock %}
+{% block stylesheets %}
+     {{ parent() }}   
+{% endblock %}
+
+
 {% block fos_user_content %}
-    <p>{{ 'registration.check_email'|trans({'%email%': user.email}) }}</p>
+<div>
+    <div id="wrapper">
+    <section class="login_content">
+	<form>
+       <h1>Activar Usuario</h1>
+        <div>
+            <p>{{ 'registration.check_email'|trans({'%email%': user.email}) }}</p>
+        </div>
+        <div class="clearfix"></div>
+        <div class="separator">
+            <p class="change_link">¿Tengo la contraseña?  
+            <a href="{{ asset('/login') }}"> Iniciar sesión  </a>
+            </p>
+            <div class="clearfix"></div>
+            <br />            
+            <h1><i ><img class="logo-colibrix" src="{{ asset('images2/img.png') }}" /></i> Colibrí Report</h1>
+            <p id="copyright"></p>
+        </div> 
+	</form>
+	</section>
+	</div>
+</div>          
 {% endblock fos_user_content %}

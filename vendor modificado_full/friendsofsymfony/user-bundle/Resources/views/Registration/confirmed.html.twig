@@ -2,9 +2,35 @@
 
 {% trans_default_domain 'FOSUserBundle' %}
 
+
+{% block stylesheets %}
+     {{ parent() }}   
+{% endblock %}
+
 {% block fos_user_content %}
-    <p>{{ 'registration.confirmed'|trans({'%username%': user.username}) }}</p>
-    {% if targetUrl %}
-    <p><a href="{{ targetUrl }}">{{ 'registration.back'|trans }}</a></p>
-    {% endif %}
+<div>
+    <div id="wrapper">
+    <section class="login_content">
+	<form>
+       <h1>Usuario Activado</h1>
+        <div>
+            <p>{{ 'registration.confirmed'|trans({'%username%': user.username}) }}</p>
+            {% if targetUrl %}
+            <p><a href="{{ targetUrl }}">{{ 'registration.back'|trans }}</a></p>
+            {% endif %}
+          </div>
+        <div class="clearfix"></div>
+        <div class="separator">
+            <p class="change_link">Entrar Colibrí Report? 
+            <a href="{{ asset('/') }}"> <strong>Sí, entrar! </strong></a>
+            </p>
+            <div class="clearfix"></div>
+            <br />            
+            <h1><i ><img class="logo-colibrix" src="{{ asset('images2/img.png') }}" /></i> Colibrí Report</h1>
+            <p id="copyright"></p>
+        </div> 
+	</form>
+	</section>
+	</div>
+</div>          
 {% endblock fos_user_content %}
