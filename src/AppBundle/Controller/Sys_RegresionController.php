@@ -88,18 +88,56 @@ class Sys_RegresionController extends Controller
                                                                ));
     }   
   
-   
+    private function selectDataExterna($sql,$driver,$user,$port,$password,$host,$dbname)
+    {         
+        $conn = DriverManager::getConnection(array(
+            'wrapperClass' => 'Doctrine\DBAL\Connections\MasterSlaveConnection',
+            'driver' => $driver,
+            'master' => array('user' => $user, 'port'=>$port,'password' => $password, 'host' => $host, 'dbname' => $dbname),
+            'slaves' => array(
+                array('user' => 'slave1', 'password', 'host' => '', 'dbname' => '')
+            )
+        ));        
+        $conn->connect('master');        
+        $stmt = $conn->prepare($sql);     
+        $stmt->execute();
+        $filasx = $stmt->fetchAll();         
+        return $filasx;
+    }
    //Este metodo se volvera generico y se llamara cargarInfo
   private function newTabla($sql,$msm=true)
-    {
-        //Data de la consulta
+    {      
+         //Data de la consulta
         //Select filas
-        try {
+        try {  
+            $usuario = $this->get('security.token_storage')->getToken()->getUser();
+            $id_usuario=$usuario->getId();
+            
             $em = $this->getDoctrine()->getEntityManager();
             $connection = $em->getConnection();         
-            $statement = $connection->prepare($sql);  
+            $statement = $connection->prepare("SELECT
+                                                sys_conexion_bd.`Host`,
+                                                sys_conexion_bd.`Port`,
+                                                sys_conexion_bd.Nombre_BD,
+                                                sys_conexion_bd.Usuario,
+                                                sys_conexion_bd.`Password` ,
+                                                sys_tipo_conexion.Driver AS Driver
+                                                FROM `sys_conexion_bd`
+                                                INNER JOIN sys_tipo_conexion ON sys_tipo_conexion.id=sys_conexion_bd.id_Tipo_Conexion
+                                                WHERE sys_conexion_bd.id_Fos_user=:id");  
+            $statement->bindValue('id', $id_usuario);
             $statement->execute();
-            $filasx = $statement->fetchAll(); 
+            $dataConexion = $statement->fetchAll();  
+            $driver=$dataConexion['0']['Driver'];
+            $user=$dataConexion['0']['Usuario'];
+            $port=$dataConexion['0']['Port'];
+            $password=$dataConexion['0']['Password'];
+            $host=$dataConexion['0']['Host'];
+            $dbname=$dataConexion['0']['Nombre_BD'];
+            
+             
+            $filasx = $this->selectDataExterna($sql,$driver,$user,$port,$password,$host,$dbname);
+        
         } catch (\Exception $e) {
                 if($msm){
                         $this->addFlash(
