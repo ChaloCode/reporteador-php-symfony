@@ -187,7 +187,9 @@ class Sys_ConexionBDController extends Controller
                       'titulo' => '', 
                       'subtitulo' =>': '.$fecha
                     )
-        );   
+        ); 
+        $usuario = $this->get('security.token_storage')->getToken()->getUser();
+        $id_usuario=$usuario->getId();  
         $sql="SELECT
                 sys_conexion_bd.id,
                 sys_conexion_bd.Nombre_Conexion  AS 'Nombre de la conexión',
@@ -198,7 +200,8 @@ class Sys_ConexionBDController extends Controller
                 sys_conexion_bd.`Password` AS 'Contraseña', 
                 sys_tipo_conexion.Nombre AS 'Tipo conexión'
                 FROM sys_conexion_bd
-                INNER JOIN sys_tipo_conexion ON sys_conexion_bd.id_Tipo_Conexion=sys_tipo_conexion.id";  
+                INNER JOIN sys_tipo_conexion ON sys_conexion_bd.id_Tipo_Conexion=sys_tipo_conexion.id
+                WHERE sys_conexion_bd.id_Fos_user=$id_usuario";  
         $retorno=$this->newTabla($sql,false);   
         $infoTabla=$retorno['infoTabla'];   
          
