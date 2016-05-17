@@ -93,37 +93,37 @@ class Sys_ConexionBDController extends Controller
         $sysConexionBD=new Sys_ConexionBD();         
         $form = $this->createFormBuilder($sysConexionBD) 
              ->add('nombreConexion', TextType::class,array('label' => 'Nombre de la conexión *', 
-                                                'label_attr' => array('class' => 'control-label col-md-3 col-sm-3 col-xs-12'),
-                                                'attr' => array('class' => 'col-md-7 col-xs-12')))
+                                                'label_attr' => array('class' => 'control-label col-md-4 col-sm-4 col-xs-12'),
+                                                'attr' => array('class' => 'col-md-8 col-xs-12')))
                                                        
             ->add('host', TextType::class,array('label' => 'Host *', 
-                                                'label_attr' => array('class' => 'control-label col-md-3 col-sm-3 col-xs-12'),
-                                                'attr' => array('title'=>'Ejemplo: 127.0.0.1 o https://hostname','class' => 'col-md-7 col-xs-12','placeholder'=>'127.0.0.1')))
+                                                'label_attr' => array('class' => 'control-label col-md-4 col-sm-4 col-xs-12'),
+                                                'attr' => array('title'=>'Ejemplo: 127.0.0.1 o https://hostname','class' => 'col-md-8 col-xs-12','placeholder'=>'127.0.0.1')))
                                                 
             ->add('port', IntegerType::class,array('label' => 'Port', 
                                                     'required'=>false,
-                                                    'label_attr' => array('class' => 'control-label col-md-3 col-sm-3 col-xs-12'),
-                                                    'attr' => array('class' => 'col-md-7 col-xs-12','placeholder'=>'3306')))
+                                                    'label_attr' => array('class' => 'control-label col-md-4 col-sm-4 col-xs-12'),
+                                                    'attr' => array('class' => 'col-md-8 col-xs-12','placeholder'=>'3306')))
            
             ->add('nameBD', TextType::class,array('label' => 'Nombre de la BD *', 
-                                                'label_attr' => array('class' => 'control-label col-md-3 col-sm-3 col-xs-12'),
-                                                'attr' => array('class' => 'col-md-7 col-xs-12')))
+                                                'label_attr' => array('class' => 'control-label col-md-4 col-sm-4 col-xs-12'),
+                                                'attr' => array('class' => 'col-md-8 col-xs-12')))
       
             ->add('user', TextType::class,array('label' => 'Usuario de la BD *', 
-                                                'label_attr' => array('class' => 'control-label col-md-3 col-sm-3 col-xs-12'),
-                                                'attr' => array('placeholder'=>'root','class' => 'col-md-7 col-xs-12')))
+                                                'label_attr' => array('class' => 'control-label col-md-4 col-sm-4 col-xs-12'),
+                                                'attr' => array('placeholder'=>'root','class' => 'col-md-8 col-xs-12')))
       
             ->add('password', PasswordType::class,array('label' => 'Contraseña de la BD',
                                                         'required'=>false, 
-                                                        'label_attr' => array('class' => 'control-label col-md-3 col-sm-3 col-xs-12'),
-                                                        'attr' => array('class' => 'col-md-7 col-xs-12')))  
+                                                        'label_attr' => array('class' => 'control-label col-md-4 col-sm-4 col-xs-12'),
+                                                        'attr' => array('class' => 'col-md-8 col-xs-12')))  
        
              ->add('idTipoConexion', EntityType::class, array( 
                     'label'=>'Tipo conexión de la BD *',                  
                     'class' => 'AppBundle:Sys_TipoConexion',
                     'choice_label' => 'Nombre',  
-                    'label_attr' => array('class' => 'control-label col-md-3 col-sm-3 col-xs-12'),
-                    'attr' => array('class' => 'col-md-7 col-xs-12')                 
+                    'label_attr' => array('class' => 'control-label col-md-4 col-sm-4 col-xs-12'),
+                    'attr' => array('class' => 'col-md-8 col-xs-12')                 
                 ))             
             ->getForm();  
          $form->handleRequest($request);         
@@ -254,39 +254,39 @@ class Sys_ConexionBDController extends Controller
          
          $form = $this->createFormBuilder($sysConexionBD) 
              ->add('nombreConexion', TextType::class,array('label' => 'Nombre de la conexión *', 
-                                                'label_attr' => array('class' => 'control-label col-md-3 col-sm-3 col-xs-12'),
-                                                'attr' => array('class' => 'col-md-7 col-xs-12')))
+                                                'label_attr' => array('class' => 'control-label col-md-4 col-sm-4 col-xs-12'),
+                                                'attr' => array('class' => 'col-md-8 col-xs-12')))
                                                        
             ->add('host', TextType::class,array('label' => 'Host *', 
-                                                'label_attr' => array('class' => 'control-label col-md-3 col-sm-3 col-xs-12'),
-                                                'attr' => array('title'=>'Ejemplo: 127.0.0.1 o https://hostname','class' => 'col-md-7 col-xs-12','placeholder'=>'127.0.0.1')))
+                                                'label_attr' => array('class' => 'control-label col-md-4 col-sm-4 col-xs-12'),
+                                                'attr' => array('title'=>'Ejemplo: 127.0.0.1 o https://hostname','class' => 'col-md-8 col-xs-12','placeholder'=>'127.0.0.1')))
                                                 
             ->add('port', IntegerType::class,array('label' => 'Port', 
                                                     'required'=>false,
-                                                    'label_attr' => array('class' => 'control-label col-md-3 col-sm-3 col-xs-12'),
-                                                    'attr' => array('class' => 'col-md-7 col-xs-12','placeholder'=>'3306')))
+                                                    'label_attr' => array('class' => 'control-label col-md-4 col-sm-4 col-xs-12'),
+                                                    'attr' => array('class' => 'col-md-8 col-xs-12','placeholder'=>'3306')))
            
             ->add('nameBD', TextType::class,array('label' => 'Nombre de la BD *', 
-                                                'label_attr' => array('class' => 'control-label col-md-3 col-sm-3 col-xs-12'),
-                                                'attr' => array('class' => 'col-md-7 col-xs-12')))
+                                                'label_attr' => array('class' => 'control-label col-md-4 col-sm-4 col-xs-12'),
+                                                'attr' => array('class' => 'col-md-8 col-xs-12')))
       
             ->add('user', TextType::class,array('label' => 'Usuario de la BD *', 
-                                                'label_attr' => array('class' => 'control-label col-md-3 col-sm-3 col-xs-12'),
-                                                'attr' => array('placeholder'=>'root','class' => 'col-md-7 col-xs-12')))
+                                                'label_attr' => array('class' => 'control-label col-md-4 col-sm-4 col-xs-12'),
+                                                'attr' => array('placeholder'=>'root','class' => 'col-md-8 col-xs-12')))
       
             ->add('password', PasswordType::class,array('label' => 'Contraseña de la BD',
                                                         'required'=>false, 
-                                                        'label_attr' => array('class' => 'control-label col-md-3 col-sm-3 col-xs-12'),
-                                                        'attr' => array('class' => 'col-md-7 col-xs-12')))  
+                                                        'label_attr' => array('class' => 'control-label col-md-4 col-sm-4 col-xs-12'),
+                                                        'attr' => array('class' => 'col-md-8 col-xs-12')))  
        
              ->add('idTipoConexion', EntityType::class, array( 
                     'label'=>'Tipo conexión de la BD *',                  
                     'class' => 'AppBundle:Sys_TipoConexion',
                     'choice_label' => 'Nombre',  
-                    'label_attr' => array('class' => 'control-label col-md-3 col-sm-3 col-xs-12'),
-                    'attr' => array('class' => 'col-md-7 col-xs-12')                 
+                    'label_attr' => array('class' => 'control-label col-md-4 col-sm-4 col-xs-12'),
+                    'attr' => array('class' => 'col-md-8 col-xs-12')                 
                 ))             
-            ->getForm(); 
+            ->getForm();  
             
          $form->handleRequest($request);
          
