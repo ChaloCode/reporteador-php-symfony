@@ -37,6 +37,9 @@
     {% block javascriptsFormulario %}   
         {{ parent() }} 
     {% endblock %}
+    <scripts>
+        $('#form_password').val(' ');
+    </scripts>
 {% endblock %}
 
 

@@ -12,7 +12,7 @@ use Symfony\Component\Form\Extension\Core\Type\IntegerType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
-use Symfony\Component\Form\Extension\Core\Type\ResetType;
+use Symfony\Component\Form\Extension\Core\Type\PasswordType;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 
 
@@ -59,6 +59,7 @@ class UsuarioController extends Controller
     public function editAction(Request $request)
     {
         $perfil = $this->get('security.token_storage')->getToken()->getUser();
+        $old_password=$perfil->getPassword();
       //var_dump($user->getId());
       //die('fin');
      // $perfil=$this->getDoctrine()
@@ -74,6 +75,10 @@ class UsuarioController extends Controller
                       ->add('email', EmailType::class,array('label' => 'Email: ', 
                                                 'label_attr' => array('class' => 'control-label col-md-3 col-sm-3 col-xs-12'),
                                                 'attr' => array('class' => 'col-md-12 col-xs-12')))                           
+                      ->add('password', PasswordType::class,array('label' => 'Contraseña: ', 'required'=>false,
+                                                'label_attr' => array('class' => 'control-label col-md-3 col-sm-3 col-xs-12'),
+                                                'attr' => array('class' => 'col-md-12 col-xs-12','title'=>'* Utilice este campo para cambiar su clave actual.')))
+                   
                       ->getForm();       
 
         //Informacion de las paginas            
@@ -100,8 +105,15 @@ class UsuarioController extends Controller
 
         if ($form->isSubmitted() && $form->isValid()) 
         { 
-          
-           $perfil->setPlainPassword('123');
+            $new_password=$request->get('form')['password'];
+            if(empty($new_password ))
+            {
+              $perfil->setPassword($old_password);
+            }
+            else{
+              $perfil->setPlainPassword($new_password);
+            }
+           
             $em=$this->getDoctrine()->getManager();             
             $em->flush();  
             $this->addFlash(
@@ -111,6 +123,12 @@ class UsuarioController extends Controller
                         
             return $this->redirectToRoute('Usuario_Perfil');   
          
+        }
+        else{
+           $this->addFlash(
+                                'advertencia',
+                                'Contraseña\nUtilice este campo para cambiar su clave actual.'  
+                            ); 
         } 
 
         return $this->render('usuario/edit.html.twig', array(
