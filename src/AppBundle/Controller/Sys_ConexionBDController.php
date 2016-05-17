@@ -82,49 +82,7 @@ class Sys_ConexionBDController extends Controller
                     'control'=>5              
                     );
     
-    }
-            
-      /**
-     * @Route("/conexion/list/{id}", name="Detalle_Conexion")
-     */
-    public function listAction($id)
-    {
-        //Solucion temporar , solucionar modal mandando toda la informacion desde imagecolorsforindex
-        //Explorar solucion ajax
-        $em = $this->getDoctrine()->getEntityManager();
-        $connection = $em->getConnection();
-        $sql="  SELECT
-                sys_conexion_bd.id,
-                sys_conexion_bd.Nombre_Conexion AS 'Nombre Conexion ',                
-                sys_conexion_bd.`Host`,
-                sys_conexion_bd.`Port`,
-                sys_conexion_bd.Nombre_BD AS 'Nombre BD ',
-                sys_conexion_bd.Usuario,
-                sys_conexion_bd.`Password` AS Contraseña
-                FROM `sys_conexion_bd`
-                WHERE sys_conexion_bd.id=:id "; 
-        $statement = $connection->prepare($sql);            
-        $statement->bindValue('id', $id);
-        $statement->execute();
-        $conexion = $statement->fetchAll(); 
-        $a='';
-        foreach ($conexion[0] as $key => $value) {
-            if(empty($value))
-            {
-                $value='NULO';
-            }
-            if(empty($a))
-            {
-                $a=$key.': '.$value;
-            }
-            else{
-                $a=$a.'\n'.$key.': '.$value;
-            }
-            
-        }      
-        $this->addFlash('info',$a); 
-        return $this->redirectToRoute('Crear_Conexion_BD');  
-    }
+    }    
     
     /**
      * @Route("/conexion/", name="Crear_Conexion_BD")
@@ -140,7 +98,7 @@ class Sys_ConexionBDController extends Controller
                                                        
             ->add('host', TextType::class,array('label' => 'Host *', 
                                                 'label_attr' => array('class' => 'control-label col-md-3 col-sm-3 col-xs-12'),
-                                                'attr' => array('title'=>'Ejemplo: 127.0.0.1 o https://hostname','class' => 'col-md-7 col-xs-12','placeholder'=>'127.0.0.1','pattern'=>'\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}')))
+                                                'attr' => array('title'=>'Ejemplo: 127.0.0.1 o https://hostname','class' => 'col-md-7 col-xs-12','placeholder'=>'127.0.0.1')))
                                                 
             ->add('port', IntegerType::class,array('label' => 'Port', 
                                                     'required'=>false,
@@ -160,32 +118,36 @@ class Sys_ConexionBDController extends Controller
                                                         'label_attr' => array('class' => 'control-label col-md-3 col-sm-3 col-xs-12'),
                                                         'attr' => array('class' => 'col-md-7 col-xs-12')))  
        
-            ->add('driver', ChoiceType::class, array(
-                                                    'choices'  => array(
-                                                                        'MySQL' => 'pdo_mysql',
-                                                                        'SQLite' => 'pdo_sqlite',
-                                                                        'PostgreSQL' => 'pdo_pgsql',
-                                                                        'Oracle' => 'pdo_oci'                                                                       
-                                                                        ),    
-                                                 'label' => 'Tipo conexión de la BD *',                                                
-                                                 'label_attr' => array('class' => 'control-label col-md-3 col-sm-3 col-xs-12'),
-                                                 'attr' => array('class' => 'col-md-7 col-xs-12')
-                                                 )) 
-            
+             ->add('idTipoConexion', EntityType::class, array( 
+                    'label'=>'Tipo conexión de la BD *',                  
+                    'class' => 'AppBundle:Sys_TipoConexion',
+                    'choice_label' => 'Nombre',  
+                    'label_attr' => array('class' => 'control-label col-md-3 col-sm-3 col-xs-12'),
+                    'attr' => array('class' => 'col-md-7 col-xs-12')                 
+                ))             
             ->getForm();  
          $form->handleRequest($request);         
          if ($form->isSubmitted() && $form->isValid()) 
          {             
-             $driver=$request->get('form')['driver'];
+             $idTipoConexion=$request->get('form')['idTipoConexion'];
+             
+             $driver=$this->getDoctrine()
+                             ->getRepository('AppBundle:Sys_TipoConexion')
+                             ->find($idTipoConexion);  
+             
              $user=$request->get('form')['user'];
              $port=$request->get('form')['port'];
              $password=$request->get('form')['password'];
              $host=$request->get('form')['host'];
              $dbname=$request->get('form')['nameBD'];
-             $valConexion=$this->validarConexion($driver,$user,$port,$password,$host,$dbname);
+             $valConexion=$this->validarConexion($driver->getdriver(),$user,$port,$password,$host,$dbname);
              if( $valConexion)
              {
-                 //Insert 
+                //Seteamos
+                $sysConexionBD->setIdTipoConexion($idTipoConexion);
+                $usuario = $this->get('security.token_storage')->getToken()->getUser();                
+                $sysConexionBD->setIdFosUser($usuario->getId());
+                //Insert 
                 $em=$this->getDoctrine()->getManager();
                 $em->persist($sysConexionBD);
                 $em->flush();               
@@ -226,16 +188,17 @@ class Sys_ConexionBDController extends Controller
                       'subtitulo' =>': '.$fecha
                     )
         );   
-        $sql="  SELECT
-                sys_conexion_bd.id  ,
-                sys_conexion_bd.Nombre_Conexion AS 'Nombre Conexion ',                              
+        $sql="SELECT
+                sys_conexion_bd.id,
+                sys_conexion_bd.Nombre_Conexion  AS 'Nombre de la conexión',
                 sys_conexion_bd.`Host`,
                 sys_conexion_bd.`Port`,
-                sys_conexion_bd.Nombre_BD AS 'Nombre BD ',
+                sys_conexion_bd.Nombre_BD AS 'Nombre de la BD',
                 sys_conexion_bd.Usuario,
-                sys_conexion_bd.`Password` AS Contraseña,
-                sys_conexion_bd.Driver AS 'Tipo Conexion'
-                FROM `sys_conexion_bd`";  
+                sys_conexion_bd.`Password` AS 'Contraseña', 
+                sys_tipo_conexion.Nombre AS 'Tipo conexión'
+                FROM sys_conexion_bd
+                INNER JOIN sys_tipo_conexion ON sys_conexion_bd.id_Tipo_Conexion=sys_tipo_conexion.id";  
         $retorno=$this->newTabla($sql,false);   
         $infoTabla=$retorno['infoTabla'];   
          
@@ -256,8 +219,7 @@ class Sys_ConexionBDController extends Controller
     }
     
     private function validarConexion($driver,$user,$port,$password,$host,$dbname)
-    {
-        
+    {       
          try {
                 $conn = DriverManager::getConnection(array(
                     'wrapperClass' => 'Doctrine\DBAL\Connections\MasterSlaveConnection',
@@ -290,60 +252,63 @@ class Sys_ConexionBDController extends Controller
               ->getRepository('AppBundle:Sys_ConexionBD')
               ->find($id);            
          
-        $form = $this->createFormBuilder($sysConexionBD) 
-                ->add('nombreConexion', TextType::class,array('label' => 'Nombre de la conexión *', 
+         $form = $this->createFormBuilder($sysConexionBD) 
+             ->add('nombreConexion', TextType::class,array('label' => 'Nombre de la conexión *', 
+                                                'label_attr' => array('class' => 'control-label col-md-3 col-sm-3 col-xs-12'),
+                                                'attr' => array('class' => 'col-md-7 col-xs-12')))
+                                                       
+            ->add('host', TextType::class,array('label' => 'Host *', 
+                                                'label_attr' => array('class' => 'control-label col-md-3 col-sm-3 col-xs-12'),
+                                                'attr' => array('title'=>'Ejemplo: 127.0.0.1 o https://hostname','class' => 'col-md-7 col-xs-12','placeholder'=>'127.0.0.1')))
+                                                
+            ->add('port', IntegerType::class,array('label' => 'Port', 
+                                                    'required'=>false,
                                                     'label_attr' => array('class' => 'control-label col-md-3 col-sm-3 col-xs-12'),
-                                                    'attr' => array('class' => 'col-md-7 col-xs-12')))
-                                                        
-                ->add('host', TextType::class,array('label' => 'Host *', 
-                                                    'label_attr' => array('class' => 'control-label col-md-3 col-sm-3 col-xs-12'),
-                                                    'attr' => array('title'=>'Ejemplo: 127.0.0.1 o https://hostname','class' => 'col-md-7 col-xs-12','placeholder'=>'127.0.0.1','pattern'=>'\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}')))
-                                                    
-                ->add('port', IntegerType::class,array('label' => 'Port', 
-                                                        'required'=>false,
+                                                    'attr' => array('class' => 'col-md-7 col-xs-12','placeholder'=>'3306')))
+           
+            ->add('nameBD', TextType::class,array('label' => 'Nombre de la BD *', 
+                                                'label_attr' => array('class' => 'control-label col-md-3 col-sm-3 col-xs-12'),
+                                                'attr' => array('class' => 'col-md-7 col-xs-12')))
+      
+            ->add('user', TextType::class,array('label' => 'Usuario de la BD *', 
+                                                'label_attr' => array('class' => 'control-label col-md-3 col-sm-3 col-xs-12'),
+                                                'attr' => array('placeholder'=>'root','class' => 'col-md-7 col-xs-12')))
+      
+            ->add('password', PasswordType::class,array('label' => 'Contraseña de la BD',
+                                                        'required'=>false, 
                                                         'label_attr' => array('class' => 'control-label col-md-3 col-sm-3 col-xs-12'),
-                                                        'attr' => array('class' => 'col-md-7 col-xs-12','placeholder'=>'3306')))
-            
-                ->add('nameBD', TextType::class,array('label' => 'Nombre de la BD *', 
-                                                    'label_attr' => array('class' => 'control-label col-md-3 col-sm-3 col-xs-12'),
-                                                    'attr' => array('class' => 'col-md-7 col-xs-12')))
-        
-                ->add('user', TextType::class,array('label' => 'Usuario de la BD *', 
-                                                    'label_attr' => array('class' => 'control-label col-md-3 col-sm-3 col-xs-12'),
-                                                    'attr' => array('placeholder'=>'root','class' => 'col-md-7 col-xs-12')))
-        
-                ->add('password', PasswordType::class,array('label' => 'Contraseña de la BD',
-                                                            'required'=>false, 
-                                                            'label_attr' => array('class' => 'control-label col-md-3 col-sm-3 col-xs-12'),
-                                                            'attr' => array('class' => 'col-md-7 col-xs-12')))  
-        
-                ->add('driver', ChoiceType::class, array(
-                                                        'choices'  => array(
-                                                                            'MySQL' => 'pdo_mysql',
-                                                                            'SQLite' => 'pdo_sqlite',
-                                                                            'PostgreSQL' => 'pdo_pgsql',
-                                                                            'Oracle' => 'pdo_oci'                                                                       
-                                                                            ),    
-                                                    'label' => 'Tipo conexión de la BD *',                                                
-                                                    'label_attr' => array('class' => 'control-label col-md-3 col-sm-3 col-xs-12'),
-                                                    'attr' => array('class' => 'col-md-7 col-xs-12')
-                                                    )) 
-                
-                ->getForm();
+                                                        'attr' => array('class' => 'col-md-7 col-xs-12')))  
+       
+             ->add('idTipoConexion', EntityType::class, array( 
+                    'label'=>'Tipo conexión de la BD *',                  
+                    'class' => 'AppBundle:Sys_TipoConexion',
+                    'choice_label' => 'Nombre',  
+                    'label_attr' => array('class' => 'control-label col-md-3 col-sm-3 col-xs-12'),
+                    'attr' => array('class' => 'col-md-7 col-xs-12')                 
+                ))             
+            ->getForm(); 
             
          $form->handleRequest($request);
          
          if ($form->isSubmitted() && $form->isValid()) 
          {    
-             $driver=$request->get('form')['driver'];
+             $idTipoConexion=$request->get('form')['idTipoConexion'];
+             
+             $driver=$this->getDoctrine()
+                             ->getRepository('AppBundle:Sys_TipoConexion')
+                             ->find($idTipoConexion);              
+                             
              $user=$request->get('form')['user'];
              $port=$request->get('form')['port'];
              $password=$request->get('form')['password'];
              $host=$request->get('form')['host'];
              $dbname=$request->get('form')['nameBD'];
-             $valConexion=$this->validarConexion($driver,$user,$port,$password,$host,$dbname);
+             $valConexion=$this->validarConexion($driver->getdriver(),$user,$port,$password,$host,$dbname);
              if( $valConexion)
-             {       
+             { 
+                 //Seteamos
+                $sysConexionBD->setIdTipoConexion($idTipoConexion);
+                //Update 
                 $em=$this->getDoctrine()->getManager();             
                 $em->flush();              
                 

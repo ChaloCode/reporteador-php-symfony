@@ -22,18 +22,25 @@ class Sys_ConexionBD
     private $id;
     
     /**
+     * @var int
+     *
+     * @ORM\Column(name="id_Fos_user", type="integer")
+     */
+    private $idFosUser;    
+
+    /**
+     * @var int
+     *
+     * @ORM\Column(name="id_Tipo_Conexion", type="integer")
+     */
+    private $idTipoConexion;
+    
+    /**
      * @var string
      *
      * @ORM\Column(name="Nombre_Conexion", type="string", length=255)
      */
-    private $nombreConexion;    
-
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="Driver", type="string", length=255)
-     */
-    private $driver;
+    private $nombreConexion;
 
     /**
      * @var string
@@ -84,25 +91,49 @@ class Sys_ConexionBD
     /**
      * Set driver
      *
-     * @param string $driver
+     * @param int $idTipoConexion
      *
      * @return Sys_ConexionBD
      */
-    public function setDriver($driver)
+    public function setIdTipoConexion($idTipoConexion)
     {
-        $this->driver = $driver;
+        $this->idTipoConexion = $idTipoConexion;
     
         return $this;
     }
 
     /**
-     * Get driver
+     * Get idTipoConexion
+     *
+     * @return int
+     */
+    public function getIdTipoConexion()
+    {
+        return $this->idTipoConexion;
+    }
+    
+      /**
+     * Set nombreConexion
+     *
+     * @param string $nombreConexion
+     *
+     * @return Sys_ConexionBD
+     */
+    public function setNombreConexion($nombreConexion)
+    {
+        $this->nombreConexion = $nombreConexion;
+    
+        return $this;
+    }
+
+    /**
+     * Get nombreConexion
      *
      * @return string
      */
-    public function getDriver()
+    public function getNombreConexion()
     {
-        return $this->driver;
+        return $this->nombreConexion;
     }
 
     /**
@@ -157,25 +188,25 @@ class Sys_ConexionBD
     /**
      * Set nameBD
      *
-     * @param string $nombreConexion
+     * @param int $idFosUser
      *
      * @return Sys_ConexionBD
      */
-    public function setNombreConexion($nombreConexion)
+    public function setIdFosUser($idFosUser)
     {
-        $this->nombreConexion = $nombreConexion;
+        $this->idFosUser = $idFosUser;
     
         return $this;
     }
 
     /**
-     * Get nombreConexion
+     * Get idFosUser
      *
-     * @return string
+     * @return int
      */
-    public function getNombreConexion()
+    public function getIdFosUser()
     {
-        return $this->nombreConexion;
+        return $this->idFosUser;
     }
     
     /**
