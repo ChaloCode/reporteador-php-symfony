@@ -6,7 +6,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 
-use AppBundle\Entity\SysConexionBD;
+use AppBundle\Entity\Sys_ConexionBD;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\IntegerType;
@@ -22,7 +22,7 @@ use Doctrine\DBAL\DriverManager;
 
 
 
-class SysConexionBDController extends Controller
+class Sys_ConexionBDController extends Controller
 {   
     //Este metodo se volverar generico y se llamara cargarInfo
     private function newTabla($sql,$msm=true)
@@ -132,7 +132,7 @@ class SysConexionBDController extends Controller
     public function addAction(Request $request)
     {  
         
-        $sysConexionBD=new SysConexionBD();         
+        $sysConexionBD=new Sys_ConexionBD();         
         $form = $this->createFormBuilder($sysConexionBD) 
              ->add('nombreConexion', TextType::class,array('label' => 'Nombre de la conexión *', 
                                                 'label_attr' => array('class' => 'control-label col-md-3 col-sm-3 col-xs-12'),
@@ -246,7 +246,7 @@ class SysConexionBDController extends Controller
             $control=$retorno['control'];
         }
         
-        return $this->render('sysconexionbd/index.html.twig', array(
+        return $this->render('sys_conexionBD/index.html.twig', array(
                                                                     'form' => $form->createView(),
                                                                     'info'=>$info,
                                                                     'infoTabla'=>$infoTabla, 
@@ -287,7 +287,7 @@ class SysConexionBDController extends Controller
     public function updateAction($id,Request $request)
     {
         $sysConexionBD=$this->getDoctrine()
-              ->getRepository('AppBundle:SysConexionBD')
+              ->getRepository('AppBundle:Sys_ConexionBD')
               ->find($id);            
          
         $form = $this->createFormBuilder($sysConexionBD) 
@@ -382,7 +382,7 @@ class SysConexionBDController extends Controller
                       'subtitulo' =>': '.$fecha
                     )
         );       
-        return $this->render('sysconexionbd/update.html.twig', array(
+        return $this->render('sys_conexionBD/update.html.twig', array(
                                                                     'form' => $form->createView(),
                                                                     'info'=>$info
                                                                    ));
@@ -396,7 +396,7 @@ class SysConexionBDController extends Controller
     {
         try {
                 $em = $this->getDoctrine()->getManager();
-                $conexion = $em->getRepository('AppBundle:SysConexionBD')->find($id);
+                $conexion = $em->getRepository('AppBundle:Sys_ConexionBD')->find($id);
 
                 if (!$conexion) {
                     $this->addFlash(

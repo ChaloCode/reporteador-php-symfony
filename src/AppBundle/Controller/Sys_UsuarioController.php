@@ -19,7 +19,7 @@ use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use AppBundle\Entity\User;
 
 
-class UsuarioController extends Controller
+class Sys_UsuarioController extends Controller
 {
     /**
      * @Route("/usuario/perfil/", name="Usuario_Perfil")
@@ -45,7 +45,7 @@ class UsuarioController extends Controller
                       'subtitulo' =>'Genereda: '.$fecha
                     )
         ); 
-         return $this->render('usuario/perfil.html.twig',  array(
+         return $this->render('sys_usuario/perfil.html.twig',  array(
                                                                 'info'=>$info,
                                                                  ));
     }
@@ -131,7 +131,7 @@ class UsuarioController extends Controller
                             ); 
         } 
 
-        return $this->render('usuario/edit.html.twig', array(
+        return $this->render('sys_usuario/edit.html.twig', array(
                                                                 'form' => $form->createView(),
                                                                 'info'=>$info                                                                                                                      
                                                                ));

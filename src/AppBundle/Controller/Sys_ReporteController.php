@@ -15,7 +15,7 @@ use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\ResetType;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 
-class ReporteController extends Controller
+class Sys_ReporteController extends Controller
 {
     /**
      * @Route("/reporte/", name="Reporte")
@@ -64,7 +64,7 @@ class ReporteController extends Controller
            } 
            else if($retorno['control']>0)
            {
-               return $this->render('reporte/reporte.html.twig', array(
+               return $this->render('sys_reporte/reporte.html.twig', array(
                                                             'form' => $form->createView(),
                                                             'info'=> $info,
                                                             'infoTabla'=>$retorno['infoTabla'], 
@@ -73,7 +73,7 @@ class ReporteController extends Controller
            }
         } 
 
-        return $this->render('reporte/reporte.html.twig', array(
+        return $this->render('sys_reporte/reporte.html.twig', array(
                                                                 'form' => $form->createView(),
                                                                 'info'=>$info,
                                                                 'infoTabla'=>null, 

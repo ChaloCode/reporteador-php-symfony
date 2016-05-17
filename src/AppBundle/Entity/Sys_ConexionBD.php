@@ -5,12 +5,12 @@ namespace AppBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * SysConexionBD
+ * Sys_ConexionBD
  *
  * @ORM\Table(name="sys_conexion_bd")
- * @ORM\Entity(repositoryClass="AppBundle\Repository\SysConexionBDRepository")
+ * @ORM\Entity(repositoryClass="AppBundle\Repository\Sys_ConexionBDRepository")
  */
-class SysConexionBD
+class Sys_ConexionBD
 {
     /**
      * @var int
@@ -86,7 +86,7 @@ class SysConexionBD
      *
      * @param string $driver
      *
-     * @return SysConexionBD
+     * @return Sys_ConexionBD
      */
     public function setDriver($driver)
     {
@@ -110,7 +110,7 @@ class SysConexionBD
      *
      * @param string $host
      *
-     * @return SysConexionBD
+     * @return Sys_ConexionBD
      */
     public function setHost($host)
     {
@@ -134,7 +134,7 @@ class SysConexionBD
      *
      * @param string $port
      *
-     * @return SysConexionBD
+     * @return Sys_ConexionBD
      */
     public function setPort($port)
     {
@@ -159,7 +159,7 @@ class SysConexionBD
      *
      * @param string $nombreConexion
      *
-     * @return SysConexionBD
+     * @return Sys_ConexionBD
      */
     public function setNombreConexion($nombreConexion)
     {
@@ -183,7 +183,7 @@ class SysConexionBD
      *
      * @param string $nameBD
      *
-     * @return SysConexionBD
+     * @return Sys_ConexionBD
      */
     public function setNameBD($nameBD)
     {
@@ -207,7 +207,7 @@ class SysConexionBD
      *
      * @param string $user
      *
-     * @return SysConexionBD
+     * @return Sys_ConexionBD
      */
     public function setUser($user)
     {
@@ -231,7 +231,7 @@ class SysConexionBD
      *
      * @param string $password
      *
-     * @return SysConexionBD
+     * @return Sys_ConexionBD
      */
     public function setPassword($password)
     {
