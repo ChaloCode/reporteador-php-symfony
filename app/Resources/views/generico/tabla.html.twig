@@ -11,6 +11,7 @@
             {% block tituloVentana %}{{info['tabla'].titulo}}{% endblock %} 
             {% block subTituloVentana %}{{info['tabla'].subtitulo}}{% endblock %}
             {% block bodyVentana %}  
+             <div class="scroll"> 
                 <p class="text-muted font-13 m-b-30">
                      {{info['tabla'].descripcion}}
                 </p>
@@ -32,6 +33,7 @@
                     {% endfor %}     
                     </tbody>
                 </table>  
+            </div>
             {% endblock %}
         {% endembed %}
 {% endblock %}

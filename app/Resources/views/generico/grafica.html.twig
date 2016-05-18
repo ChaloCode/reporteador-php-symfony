@@ -17,7 +17,8 @@
                     <li><a  class="fa fa-area-chart" id="AreaLink" onclick="Area()"> Grafica, Area</a></li>                    
                     <li><a  class="fa fa-pie-chart" id="DonutLink" onclick="Donut()"> Grafica, Donut</a></li>
                  {% endblock %}                           
-                {% block bodyVentana %}                 
+                {% block bodyVentana %} 
+                             
                     <div class="row">
                         <div class="col-md-6">
                             <p>Seleccione valores para el <strong>eje horizontal</strong></p>
@@ -35,7 +36,7 @@
                         </div>
                         <div id='divSeries' class="col-md-6">
                             <p>Seleccione valores para agregar una <strong>nueva serie</strong></p>
-                            <select id='grafica-serie' class="margen">
+                            <select id='grafica-serie' class="margen ">
                                 {% for i in infoTabla['columnas'] %}
                                     <option value="{{ loop.index0 }}">{{i}}</option>               
                                 {% endfor %}
@@ -44,10 +45,11 @@
                         </div>
                         </div> 
                         <div class="ln_solid"></div>                
-                        <div id="tap-grafica" >                              
+                        <div id="tap-grafica" class="scroll" >                              
                             <div id="Graficar" >
                         </div>
                     </div>
+                    
                {% endblock %}
         {% endembed %}          
 {% endblock %}

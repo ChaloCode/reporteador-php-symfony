@@ -4,12 +4,14 @@
   <link href='{{ asset("css2/select/select2.min.css")}}' rel="stylesheet">
   <!-- datepicker -->
   <link href='{{ asset("css2/datepicker/iconos.min.css")}}' rel="stylesheet">
+ 
 {% endblock %}
 {% block bodyFormulario %}     
         {% embed "generico/ventana.html.twig" %}
                 {% block tituloVentana %}{{info['formulario'].titulo}}{% endblock %} 
                 {% block subTituloVentana %}{{info['formulario'].subtitulo}}{% endblock %}
-                {% block bodyVentana %}  
+                {% block bodyVentana %} 
+               
                 {{ form_start(form, {'attr': {'class': 'form-horizontal form-label-left '}}) }}
                 
                 {% for child in form.children|keys %}
@@ -30,6 +32,7 @@
                     </div>
                     </div>                     
                 {{ form_end(form) }}
+                
             {% endblock %}
         {% endembed %}
 {% endblock %}
