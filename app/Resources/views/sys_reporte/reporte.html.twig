@@ -18,6 +18,12 @@
             {{ parent() }} 
         {% endblock %} 
     {% endif %}
+<style>
+.alerta_conexion_empy {   
+    font-size: 18px;
+    margin-left: 119px;
+}
+</style>  
 {% endblock %}
 
 
@@ -25,13 +31,11 @@
 
 
 {% block body %}   
-  <div class="col-md-6 col-sm-6 col-xs-12"> 
+  <div class="col-md-6 col-sm-6 col-xs-12">
     {% block bodyFormulario %}      
-        {{ parent() }} 
- 
+        {{ parent() }}  
     {% endblock %}
-    </div>
-    
+  </div>  
     {% if control>0 %}
         <div class="col-md-6 col-sm-6 col-xs-12">  
             {% block bodyGrafica %}               
@@ -71,6 +75,16 @@
             {{ parent() }} 
         {% endblock %}
     {% endif %}
+    <script>    
+    if($.isEmptyObject($('#form_idConexion').val()))
+    {   
+         Alerta('Advertencia','Para usar este modulo, debe crear primero una conexion a BD Externa.','success');  
+        $('#formulario-generico').remove();
+        $('#add-formulario-generico').html("<a href='{{ asset('conexion/')}}'><li class='alerta_conexion_empy fa fa-share btn btn-success btn-lg'> Cree su primera conexión a BD Externa.</li></a>");
+        
+      
+    }
+    </script>
 {% endblock %}
 
 

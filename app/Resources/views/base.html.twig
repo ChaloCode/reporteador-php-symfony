@@ -19,10 +19,13 @@
     <link href='{{ asset("css2/custom.css")}}'  rel="stylesheet">  
     <link href='{{ asset("css2/floatexamples.css")}}'  rel="stylesheet" type="text/css" />
     <link href='{{ asset("css2/icheck/flat/green.css")}}'  rel="stylesheet">    
+     
+    
   
   {% endblock %}
   <script src='{{ asset("js/jquery.min.js")}}'></script>
   <script src='{{ asset("js/nprogress.js")}}'></script>
+  <script type="text/javascript" src='{{ asset("js/jquery-fullscreen/jquery.fullscreen-min.js")}}'></script>
   
  
   
@@ -42,7 +45,9 @@
         overflow-y: hidden;
         overflow-x: auto;
       }
- 
+ .active{
+   color: #fff;
+ }
   </style>
 
   <!--[if lt IE 9]>
@@ -140,10 +145,10 @@
             <a data-toggle="tooltip" data-placement="top" title="Settings">
               <span class="glyphicon glyphicon-cog" aria-hidden="true"></span>
             </a>
-            <a data-toggle="tooltip" data-placement="top" title="FullScreen">
+            <a id="FullScreen" data-toggle="tooltip" data-placement="top" title="Pantalla Completa">
               <span class="glyphicon glyphicon-fullscreen" aria-hidden="true"></span>
             </a>
-            <a data-toggle="tooltip" data-placement="top" title="Lock">
+            <a href="#" class="menu_toggle" data-toggle="tooltip" data-placement="top" title="Ocultar">
               <span class="glyphicon glyphicon-eye-close" aria-hidden="true"></span>
             </a>
             <a href="{{ asset('/logout') }}" data-toggle="tooltip" data-placement="top" title="Cerrar sesión">
@@ -160,7 +165,7 @@
         <div class="nav_menu">
           <nav class="" role="navigation">
             <div class="nav toggle">
-              <a id="menu_toggle"><i class="fa fa-bars"></i></a>
+              <a href="#" class="menu_toggle"><i class="fa fa-bars"></i></a>
             </div>
 
             <ul class="nav navbar-nav navbar-right">
@@ -314,7 +319,19 @@
     <script type="text/javascript" src='{{ asset("js/notify/pnotify.buttons.js")}}'></script>
     <script type="text/javascript" src='{{ asset("js/notify/pnotify.nonblock.js")}}'></script>
 </html>
-<script>                 
+<script>
+    var full_screen=true;
+    $('#FullScreen').click(function () {
+      if(full_screen){   
+        full_screen=false;
+        $(document).fullScreen(true);       
+      }
+      else{ 
+        full_screen=true;
+        $(document).fullScreen(false);
+      }
+        
+    });           
     function Alerta(titulo,msm,tipo)
     {       
          new PNotify({
