@@ -10,4 +10,5 @@ namespace AppBundle\Repository;
  */
 class Sys_ConexionBDRepository extends \Doctrine\ORM\EntityRepository
 {
+ 
 }
