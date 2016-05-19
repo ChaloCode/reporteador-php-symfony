@@ -24,11 +24,7 @@
 {% block title %}{{info['pagina'].titulo}}{% endblock %}
 
 
-{% block body %}   
-    <div class="col-md-6 col-sm-6 col-xs-12"> 
-    
-    
-    
+{% block body %} 
      {% embed "generico/ventana.html.twig" %}
                 {% block tituloVentana %}{{info['formulario'].titulo}}{% endblock %} 
                 {% block subTituloVentana %}{{info['formulario'].subtitulo}}{% endblock %}
@@ -47,9 +43,6 @@
                 {% endblock %}
                 
       {% endembed %}
-
-
-    </div> 
 {% endblock %}
 
 
