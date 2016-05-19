@@ -1,0 +1,49 @@
+{% extends "base.html.twig" %}
+
+{% block stylesheets %}  
+    {{ parent() }}         
+{% endblock %}
+
+
+{% block title %}{{info['pagina'].titulo}}{% endblock %}
+
+
+{% block body %} 
+{% endblock %}
+
+
+{% block body2 %} 
+{% endblock %}
+
+{% block body3 %}  
+ {% embed "generico/ventana.html.twig" %}
+            {% block tituloVentana %}{{info['tabla'].titulo}}{% endblock %} 
+            {% block subTituloVentana %}{{info['tabla'].subtitulo}}{% endblock %}
+            {% block bodyVentana %}  
+             <div class="scroll">                  
+                   <p>Es un sistema de
+                        reportes planos, dinámicos , cubos y proyecciones.</p>
+                        <p>
+                        El funcionamiento del sistema no requiere una infraestructura robusta , solo basta que tenga una base de datos publicada</p>
+                   
+
+               
+              </div>
+            {% endblock %}
+  {% endembed %}   
+{% endblock %}
+
+   
+
+
+{% block javascripts %}  
+    {{ parent() }}  
+{% endblock %}
+
+
+
+
+
+
+
+

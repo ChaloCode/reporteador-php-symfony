@@ -1,0 +1,45 @@
+{% extends "base.html.twig" %}
+
+{% block stylesheets %}  
+    {{ parent() }}         
+{% endblock %}
+
+
+{% block title %}{{info['pagina'].titulo}}{% endblock %}
+
+
+{% block body %} 
+{% endblock %}
+
+
+{% block body2 %} 
+{% endblock %}
+
+{% block body3 %}  
+ {% embed "generico/ventana.html.twig" %}
+            {% block tituloVentana %}{{info['tabla'].titulo}}{% endblock %} 
+            {% block subTituloVentana %}{{info['tabla'].subtitulo}}{% endblock %}
+            {% block bodyVentana %}  
+             <div class="scroll">                  
+                   <p>1.0.1 Estable. </p>
+                   <h2>Recomendación. </h2>
+                   <p>Utilice como navegador <i class="fa fa-firefox"> Google Chrome </i> o <i class="fa fa-chrome"<i> Mozilla Firefox en su ultima versión</i></p>
+              </div>
+            {% endblock %}
+  {% endembed %}   
+{% endblock %}
+
+   
+
+
+{% block javascripts %}  
+    {{ parent() }}  
+{% endblock %}
+
+
+
+
+
+
+
+

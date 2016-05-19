@@ -127,11 +127,11 @@
               <ul class="nav side-menu">
                 <li><a><i class="fa fa-home"></i> Casa <span class="fa fa-chevron-down"></span></a>
                   <ul class="nav child_menu" style="display: none">
-                    <li><a href="#">¿Quienes somos?</a>
+                    <li><a href="{{ asset("info/quienes_somos")}}">¿Quienes somos?</a>
                     </li>
-                    <li><a href="#">Nota de versión</a>
+                    <li><a href="{{ asset("info/version")}}">Nota de versión</a>
                     </li>
-                    <li><a href="#">Contactar</a>
+                     <li><a href="{{ asset("info/contactar")}}">Contactar</a>
                     </li>
                   </ul>
                 </li>
@@ -156,8 +156,8 @@
               <ul class="nav side-menu">
                 <li><a><i class="fa fa-user"></i> Usuario <span class="fa fa-chevron-down"></span></a>
                   <ul class="nav child_menu" style="display: none">
-                    <li><a href="{{ asset("usuario/perfil/")}}">Perfil</a></li>
-                    <li><a href="{{ asset("usuario/perfil/edit")}}">Editar Perfil</a></li>                    
+                    <li><a href="{{ asset("/usuario/perfil/")}}">Perfil</a></li>
+                    <li><a href="{{ asset("/usuario/perfil/edit")}}">Editar Perfil</a></li>                    
                   </ul>
                 </li>                
                 <li><a><i class="fa fa-info"></i> Ayuda <span class="label label-success pull-right">LEARNING</span></a>
@@ -176,7 +176,7 @@
             <a id="FullScreen" data-toggle="tooltip" data-placement="top" title="Pantalla Completa">
               <span class="glyphicon glyphicon-fullscreen" aria-hidden="true"></span>
             </a>
-            <a href="#" class="menu_toggle" data-toggle="tooltip" data-placement="top" title="Ocultar">
+            <a class="menu_toggle" data-toggle="tooltip" data-placement="top" title="Ocultar">
               <span class="glyphicon glyphicon-eye-close" aria-hidden="true"></span>
             </a>
             <a href="{{ asset('/logout') }}" data-toggle="tooltip" data-placement="top" title="Cerrar sesión">
@@ -193,7 +193,7 @@
         <div class="nav_menu">
           <nav class="" role="navigation">
             <div class="nav toggle">
-              <a href="#" class="menu_toggle"><i class="fa fa-bars"></i></a>
+              <a class="menu_toggle"><i class="fa fa-bars"></i></a>
             </div>
 
             <ul class="nav navbar-nav navbar-right">
