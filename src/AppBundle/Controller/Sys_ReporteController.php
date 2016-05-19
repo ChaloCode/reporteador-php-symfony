@@ -73,7 +73,7 @@ class Sys_ReporteController extends Controller
                       'descripcion'=>'Generado: '.$fecha
                     ),
                       'grafica'=>array(
-                      'titulo' => 'Grafica', 
+                      'titulo' => 'Gráfica', 
                       'subtitulo' =>'Genereda: '.$fecha
                     )
         );    

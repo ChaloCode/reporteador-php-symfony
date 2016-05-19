@@ -3,8 +3,9 @@
 <style>
 .margen{
     margin-top: 2px;
-    margin-bottom: 8px;
+    margin-bottom: 8px;   
 }
+    
 </style>
 {% endblock %}
 {% block bodyGrafica %} 
@@ -22,13 +23,15 @@
                     <div class="row">
                         <div class="col-md-6">
                             <p>Seleccione valores para el <strong>eje horizontal</strong></p>
-                                <select id='grafica-x' class="margen">
+                                <select id='grafica-x' class="margen" required>
+                                    <option  value=""  selected>Seleccione una opción</option>   
                                     {% for i in infoTabla['columnas'] %}
                                         <option value="{{ loop.index0 }}">{{i}}</option>               
                                     {% endfor %}
                                 </select> 
                             <p>Seleccione valores para el <strong>eje vertical</strong></p>
                             <select id='grafica-y' class="margen">
+                                <option value=""  selected>Seleccione una opción</option>  
                                 {% for i in infoTabla['columnas'] %}
                                     <option value="{{ loop.index0 }}">{{i}}</option>               
                                 {% endfor %}
@@ -70,13 +73,25 @@
     {% endfor %}     
     };
   
+  
   $("#grafica-x").change(function() {
-      cargarGrafica(); 
+      $("#grafica-x").find("option[value='']").remove(); 
+      if(!$.isEmptyObject($('#grafica-y').val()) && !$.isEmptyObject($('#grafica-x').val())){ 
+          cargarGrafica();        
+        
+         
+      }
+      
   });
   
   $("#grafica-y").change(function() {
-        cargarGrafica();
+      $("#grafica-y").find("option[value='']").remove(); 
+        if(!$.isEmptyObject($('#grafica-y').val()) && !$.isEmptyObject($('#grafica-x').val())){
+            cargarGrafica();         
+      }
+        
   }); 
+  
   
   
   var ykeys_temp= ['valor']; 
@@ -348,6 +363,17 @@
         //Area();
       // Barra();
        // Donut();
-       cargarGrafica();
+      // cargarGrafica();
+      //Solo se ejecuta cuabdo la pagina es recargada
+       $("#divSeries").children().prop('disabled',true);
+       
+        if(!$.isEmptyObject($('#grafica-y').val()) && !$.isEmptyObject($('#grafica-x').val())){
+            $("#grafica-x").find("option[value='']").remove(); 
+            $("#grafica-y").find("option[value='']").remove(); 
+            $('#grafica-x').append('<option value="" selected="selected">Seleccione una opción</option>');   
+            $('#grafica-y').append('<option value="" selected="selected">Seleccione una opción</option>'); 
+        
+      }
+      
   </script>
 {% endblock %}
