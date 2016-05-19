@@ -30,33 +30,27 @@
 {% block title %}{{info['pagina'].titulo}}{% endblock %}
 
 
-{% block body %}   
-  <div class="col-md-6 col-sm-6 col-xs-12">
+{% block body %} 
     {% block bodyFormulario %}      
         {{ parent() }}  
-    {% endblock %}
-  </div>  
-    {% if control>0 %}
-        <div class="col-md-6 col-sm-6 col-xs-12">  
-            {% block bodyGrafica %}               
-                {{ parent() }}                  
-            {% endblock %}
-            
-        </div>
-   {% endif %}
+    {% endblock %}    
 {% endblock %}
 
 
 {% block body2 %} 
-    {% if control>0 %}    
+   {% if control>0 %}       
+        {% block bodyGrafica %}               
+            {{ parent() }}                  
+        {% endblock %}
+   {% endif %}
+{% endblock %}
+
+{% block body3 %}   
+     {% if control>0 %}    
         {% block bodyTabla %}
             {{ parent() }}  
         {% endblock %} 
     {% endif %} 
-{% endblock %}
-
-{% block body3 %}   
-    
 {% endblock %}
 
    

@@ -24,26 +24,19 @@
 {% block title %}{{info['pagina'].titulo}}{% endblock %}
 
 
-{% block body %}   
-  <div class="col-md-6 col-sm-6 col-xs-12"> 
+{% block body %}      
     {% block bodyFormulario %}      
-        {{ parent() }} 
- 
-    {% endblock %}
-    </div>
-    
-    {% if control>0 %}
-        <div class="col-md-6 col-sm-6 col-xs-12">  
-            {% block bodyGrafica %}               
-                {{ parent() }}                  
-            {% endblock %}
-            
-        </div>
-   {% endif %}
+        {{ parent() }}  
+    {% endblock %} 
 {% endblock %}
 
 
 {% block body2 %}  
+    {% if control>0 %}         
+        {% block bodyGrafica %}               
+            {{ parent() }}                  
+        {% endblock %}
+    {% endif %}
 {% endblock %}
 
 {% block body3 %}       
@@ -68,10 +61,9 @@
          Alerta('Advertencia','Para usar este modulo, debe crear primero una conexion a BD Externa.','success');  
         $('#formulario-generico').remove();
         $('#add-formulario-generico').html("<a href='{{ asset('conexion/')}}'><li class='alerta_conexion_empy fa fa-share btn btn-success btn-lg'> Cree su primera conexión a BD Externa.</li></a>");
-        
-      
-    }
-    </script>
+   }
+   </script>
+    
 {% endblock %}
 
 

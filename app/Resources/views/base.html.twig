@@ -29,26 +29,54 @@
   
  
   
-  <style>
-    img.logo-colibri {       
-        height: 27px;      
+<style>
+  img.logo-colibri {       
+      height: 27px;      
+  }
+  
+  .site_title i {
+      border: 1px solid transparent;
+      padding: 5px 6px;
+      border-radius: 50%;
+      background: #FFF;
+  }
+    
+  .scroll {
+      overflow-y: hidden;
+      overflow-x: auto;
+    }
+    .active{
+      color: #fff;
     }
     
-    .site_title i {
-        border: 1px solid transparent;
-        padding: 5px 6px;
-        border-radius: 50%;
-        background: #FFF;
-    }
-     
-    .scroll {
-        overflow-y: hidden;
-        overflow-x: auto;
-      }
- .active{
-   color: #fff;
- }
-  </style>
+   .column {
+    padding-bottom: 5px;
+  }
+  
+  .portlet {
+    margin: 0 1em 1em 0;
+    padding: 0.3em;
+  }
+  .portlet-header {
+    padding: 0.2em 0.3em;
+    margin-bottom: 0.5em;
+    position: relative;
+  }
+  .portlet-toggle {
+    position: absolute;
+    top: 50%;
+    right: 0;
+    margin-top: -8px;
+  }
+  .portlet-content {
+    padding: 0.4em;
+  }
+  .portlet-placeholder {
+    border: 1px dotted black;
+    margin: 0 1em 1em 0;
+    height: 450px;
+  }
+</style>
 
   <!--[if lt IE 9]>
         <script src="../assets/js/ie8-responsive-file-warning.js"></script>
@@ -273,16 +301,26 @@
 
 
       <!-- page content -->
-     <div class="right_col" role="main">
-        <div class="row">         
-			{% block body %}{% endblock %} 
-		</div>	
-        <div class="row">         
-			{% block body2 %}{% endblock %} 
+    <div class="right_col" role="main">
+     
+        <div class="row">
+          <div class="col-md-6 col-sm-6 col-xs-12 column"> 
+         
+                {% block body %}{% endblock %} 
+            	
+          </div>	
+          <div class="col-md-6 col-sm-6 col-xs-12 column"> 
+                   
+                 {% block body2 %}{% endblock %} 
+            	
+          </div>
+          <div class="col-xs-12 column">  
+                
+               {% block body3 %}{% endblock %} 
+            	   
+          </div>
         </div>
-         <div class="row">         
-			{% block body3 %}{% endblock %} 
-        </div>
+
         <br />
         <!-- footer content -->
         <footer>
@@ -303,7 +341,8 @@
     <div class="clearfix"></div>
     <div id="notif-group" class="tabbed_notifications"></div>
   </div>
-{% block javascripts %}    
+{% block javascripts %}  
+   <script src="//code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
     <!-- /footer content -->
     <script src='{{ asset("js/bootstrap.min.js")}}'></script>
     <!-- bootstrap progress js -->
@@ -352,6 +391,28 @@
      {% for msg in app.session.flashBag.get('noticia') %}
         Alerta('Noticia','{{msg}}','dark') 
      {% endfor %}
+     
+   $(function() {
+        $(".column").sortable({
+            connectWith: ".column",
+            handle: ".x_title",
+            cancel: ".portlet-toggle",
+            placeholder: "portlet-placeholder ui-corner-all"
+        });
+    
+        $(".portlet")       
+        .addClass( "ui-widget ui-widget-content ui-helper-clearfix ui-corner-all" )
+        .find( ".x_title" )
+        .addClass( "ui-widget-header ui-corner-all" )
+        .prepend( "<span class='ui-icon ui-icon-minusthick portlet-toggle'></span>");
+    
+    
+        $( ".portlet-toggle" ).click(function() {   
+            var icon = $(this);      
+            icon.toggleClass( "ui-icon-minusthick ui-icon-plusthick" );
+            icon.closest( ".portlet" ).find( ".x_content" ).toggle();
+        });    
+  });
 </script>
 {% endblock %}
 </body>
