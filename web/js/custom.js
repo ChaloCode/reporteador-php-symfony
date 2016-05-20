@@ -5,30 +5,52 @@
  */
 
 /** ******  left menu  *********************** **/
+
 $(function () {
     $('#sidebar-menu li ul').slideUp();
     $('#sidebar-menu li').removeClass('active');
-
-    $('#sidebar-menu li').on('click touchstart', function() {
-        var link = $('a', this).attr('href');
-
+ 
+ //Gonzalo J Perez
+ //20/05/2016
+ //Se Modifico para que se ejecute la funcion una vez , en modo movil.
+ //Machete afilado
+ var cont_slider_izq=0;
+ $('#sidebar-menu li').on('click touchstart', function() {
+    var link = $('a', this).attr('href');
+    if(cont_slider_izq==2)
+    {
+        cont_slider_izq=0;
+    } 
+   if(cont_slider_izq==0)     
+    {
         if(link) { 
             window.location.href = link;
-        } else {
-            if ($(this).is('.active')) {
+            cont_slider_izq=0;
+        } else {           
+            if ($(this).is('.active') ) {
                 $(this).removeClass('active');
-                $('ul', this).slideUp();
-            } else {
+                $('ul', this).slideUp();               
+            } else {              
                 $('#sidebar-menu li').removeClass('active');
-                $('#sidebar-menu li ul').slideUp();
-                
+                $('#sidebar-menu li ul').slideUp();  
                 $(this).addClass('active');
                 $('ul', this).slideDown();
             }
         }
-    });
+        
+    }
+    var device = navigator.userAgent
+    if (device.match(/Iphone/i)|| device.match(/Ipod/i)|| device.match(/Android/i)|| device.match(/J2ME/i)|| device.match(/BlackBerry/i)|| device.match(/iPhone|iPad|iPod/i)|| device.match(/Opera Mini/i)|| device.match(/IEMobile/i)|| device.match(/Mobile/i)|| device.match(/Windows Phone/i)|| device.match(/windows mobile/i)|| device.match(/windows ce/i)|| device.match(/webOS/i)|| device.match(/palm/i)|| device.match(/bada/i)|| device.match(/series60/i)|| device.match(/nokia/i)|| device.match(/symbian/i)|| device.match(/HTC/i))
+    { 
+    cont_slider_izq++;
+    }
+    else
+    {
+    cont_slider_izq=0;
+    }        
+});
 
-    $('.menu_toggle').click(function () {
+    $('.menu_toggle').click(function () {       
         if ($('body').hasClass('nav-md')) {
             $('body').removeClass('nav-md').addClass('nav-sm');
             $('.left_col').removeClass('scroll-view').removeAttr('style');
