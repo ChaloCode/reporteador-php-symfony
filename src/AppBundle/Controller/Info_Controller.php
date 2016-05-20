@@ -91,7 +91,8 @@ class Info_Controller extends Controller
      * @Route("/info/contactar", name="Info_Contactar")
      */
     public function contactarAction(Request $request)
-    {          
+    {
+              
          //Informacion de las paginas            
         $fecha=strftime("El día, %d del mes %m del %Y %H:%M");		
         $info = array('pagina'=>array(
@@ -115,25 +116,53 @@ class Info_Controller extends Controller
     //Se crea el formulario
         $form = $this->createFormBuilder()   
                       ->add('asunto', TextType::class,array('label' => ' ', 
-                                                'label_attr' => array('class' => 'fa fa-paper-plane-o control-label col-md-3 col-sm-3 col-xs-12'),                                                
-                                                'attr' => array('class' => 'col-md-12 col-xs-12','placeholder'=>'Asunto')))
-                      ->add('msm', TextareaType::class,array('label' => '  ', 'required'=>false,
-                                                'label_attr' => array('class' => 'fa fa-envelope control-label col-md-3 col-sm-3 col-xs-12'),                                                
-                                                'attr' => array('class' => 'col-md-12 col-xs-12','title'=>'* Utilice este campo para cambiar su clave actual.','placeholder'=>'Mensaje...')))
+                                                     'attr' => array('class' => 'col-xs-12','placeholder'=>'Asunto')))
+                      ->add('msm', TextareaType::class,array('label' => '  ', 
+                                                  'attr' => array('class' => 'col-xs-12','title'=>'* Utilice este campo para cambiar su clave actual.','placeholder'=>'Mensaje...')))
                    
                       ->getForm();    
+                      
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) 
+        { 
+           $usuario = $this->get('security.token_storage')->getToken()->getUser();
+           $usuario_email=$usuario->getEmail();   
+           $usuario_name=$usuario->getUsername();  
+           $asunto='Mensaje, Colibrí Report: '.$usuario_name;
+           $msm=$request->get('form')['msm'];
+           $send_email=$this->sendEmail($usuario_email,$asunto,$msm);
+           if($send_email){
+             $this->addFlash(
+                                'info',
+                                'Mensaje enviado correctamente.'  
+                            ); 
+           }
+           else{
+             $this->addFlash(
+                                'error',
+                                'Lo lamentamos NO se pudo enviar el mensaje.\nRevise su conexión a Internet y vuelva a intentarlo.'  
+                            ); 
+             
+           }
+            
+            
+                        
+            return $this->redirectToRoute('Info_Contactar');   
+         
+        }             
         return $this->render('info_/contactar.html.twig', array(
                                                                 'form' => $form->createView(),
                                                                 'info'=>$info                                                                                                                      
                                                                ));
     }
-    private function sendEmail()
+    private function sendEmail($usuario_email,$asunto,$msm)
     {
          $message = \Swift_Message::newInstance()
-        ->setSubject('Hello Email')
-        ->setFrom('send@example.com')
+        ->setSubject($asunto)
+        ->setFrom($usuario_email)
         ->setTo('gonzaloperezbarrios@hotmail.com')
-        ->setBody('hola')
+        ->setBody($msm)
         /*
          * If you also want to include a plaintext version of the message
         ->addPart(
@@ -144,7 +173,13 @@ class Info_Controller extends Controller
             'text/plain'
         )
         */
-    ;
-    $this->get('mailer')->send($message);
+        ;
+        try {  
+          $this->get('mailer')->send($message);
+        } 
+        catch (\Exception $e) {
+          return false;
+        }    
+        return true;
     }
 }

@@ -60,13 +60,7 @@ class Sys_UsuarioController extends Controller
     {
         $perfil = $this->get('security.token_storage')->getToken()->getUser();
         $old_password=$perfil->getPassword();
-      //var_dump($user->getId());
-      //die('fin');
-     // $perfil=$this->getDoctrine()
-            //  ->getRepository('AppBundle:User')
-            //  ->find($id); 
-         
-        
+              
         //Se crea el formulario
         $form = $this->createFormBuilder($perfil)   
                       ->add('username', TextType::class,array('label' => 'Usario: ', 
