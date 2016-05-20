@@ -64,14 +64,14 @@ class Sys_UsuarioController extends Controller
         //Se crea el formulario
         $form = $this->createFormBuilder($perfil)   
                       ->add('username', TextType::class,array('label' => 'Usario: ', 
-                                                'label_attr' => array('class' => 'control-label col-md-3 col-sm-3 col-xs-12'),
-                                                'attr' => array('class' => 'col-md-12 col-xs-12')))
+                                                'label_attr' => array('class' => 'control-label col-md-2 col-sm-3 col-xs-12'),
+                                                'attr' => array('class' => 'col-md-8 col-xs-12')))
                       ->add('email', EmailType::class,array('label' => 'Email: ', 
-                                                'label_attr' => array('class' => 'control-label col-md-3 col-sm-3 col-xs-12'),
-                                                'attr' => array('class' => 'col-md-12 col-xs-12')))                           
+                                                'label_attr' => array('class' => 'control-label col-md-2 col-sm-3 col-xs-12'),
+                                                'attr' => array('class' => 'col-md-8 col-xs-12')))                           
                       ->add('password', PasswordType::class,array('label' => 'Contraseña: ', 'required'=>false,
-                                                'label_attr' => array('class' => 'control-label col-md-3 col-sm-3 col-xs-12'),
-                                                'attr' => array('class' => 'col-md-12 col-xs-12','title'=>'* Utilice este campo para cambiar su clave actual.')))
+                                                'label_attr' => array('class' => 'control-label col-md-2 col-sm-3 col-xs-12'),
+                                                'attr' => array('class' => 'col-md-8 col-xs-12','title'=>'* Utilice este campo para cambiar su clave actual.')))
                    
                       ->getForm();       
 

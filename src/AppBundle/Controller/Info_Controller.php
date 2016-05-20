@@ -116,9 +116,9 @@ class Info_Controller extends Controller
     //Se crea el formulario
         $form = $this->createFormBuilder()   
                       ->add('asunto', TextType::class,array('label' => ' ', 
-                                                     'attr' => array('class' => 'col-xs-12','placeholder'=>'Asunto')))
+                                                     'attr' => array('class' => ' col-xs-12','placeholder'=>'Asunto')))
                       ->add('msm', TextareaType::class,array('label' => '  ', 
-                                                  'attr' => array('class' => 'col-xs-12','title'=>'* Utilice este campo para cambiar su clave actual.','placeholder'=>'Mensaje...')))
+                                                  'attr' => array('class' => ' col-xs-12','title'=>'* Utilice este campo para cambiar su clave actual.','placeholder'=>'Mensaje...')))
                    
                       ->getForm();    
                       

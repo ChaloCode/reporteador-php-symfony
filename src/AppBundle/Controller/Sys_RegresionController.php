@@ -53,14 +53,15 @@ class Sys_RegresionController extends Controller
                      ->add('idConexion', ChoiceType::class, array(
                                                  'choices'  =>$lisConexiones,    
                                                  'label' => 'Conexión a la BD externa *',                                                
-                                                 'label_attr' => array('class' => 'control-label col-md-4 col-sm-3 col-xs-12'),
-                                                 'attr' => array('class' => 'col-md-12 col-xs-12')
+                                                  'label_attr' => array('class' => 'control-label col-md-4 col-sm-4 col-xs-12'),
+                                                  'attr' => array('class' => 'col-md-7 col-xs-12') 
                                                  ))               
                       
                      ->add('TextAreaSQL', TextareaType::class,array('label' => 'Consulta SQL *', 
-                                                                    'label_attr' => array('class' => 'control-label col-md-4 col-sm-3 col-xs-12'),
-                                                                    'attr' => array('class' => 'col-md-12 col-xs-12')))         
-                     ->getForm();       
+                                                                     'label_attr' => array('class' => 'control-label col-md-4 col-sm-4 col-xs-12'),
+                                                                      'attr' => array('class' => 'col-md-7 col-xs-12')   
+                                                    ))    
+                     ->getForm();         
 
         //Informacion de las paginas            
         $fecha=strftime("El día, %d del mes %m del %Y %H:%M");		

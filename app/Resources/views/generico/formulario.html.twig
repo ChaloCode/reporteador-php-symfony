@@ -20,9 +20,9 @@
                         {% if 'token' not in form_label(attribute(form.children,child)) %}
                             {{form_label(attribute(form.children,child)) }}
                         {% endif %}
-                        <div class="col-md-6 col-sm-6 col-xs-12">
+                      
                             {{form_widget(attribute(form.children,child)) }}
-                        </div>
+                        
                     </div>                           
                 {% endfor %} 
                     <div class="ln_solid"></div>
