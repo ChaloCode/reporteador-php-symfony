@@ -11,7 +11,7 @@
             <!-- Custom styling plus plugins -->
             <link href='{{ asset("css2/custom.css")}}'  rel="stylesheet"> 
             <script src='{{ asset("js/jquery.min.js")}}'></script>
-            
+            <meta name="viewport" content="width=device-width, initial-scale=1.0">
             <style>
                 .logo-colibrix {    
                     width: 62px;
@@ -69,7 +69,7 @@
             {% endfor %}
         {% endif %}
 
-        <div>
+        <div >
             {% block fos_user_content %}
             {% endblock fos_user_content %}
             
