@@ -1,0 +1,238 @@
+
+{% block stylesheetsFormulario %}    
+   <!-- select2 -->
+  <link href='{{ asset("css2/select/select2.min.css")}}' rel="stylesheet">
+  <!-- datepicker -->
+  <link href='{{ asset("css2/datepicker/iconos.min.css")}}' rel="stylesheet">
+ <style>
+  .rojo{
+  color: red;
+  }
+ </style>
+{% endblock %}
+{% block bodyFormulario %}     
+        {% embed "generico/ventana.html.twig" %}
+                {% block tituloVentana %}{{info['formulario'].titulo}}{% endblock %} 
+                {% block subTituloVentana %}{{info['formulario'].subtitulo}}{% endblock %}
+                {% block bodyVentana %}  
+                <div id="add-formulario-generico">
+                <div id="formulario-generico">         
+                  <!-- Tabs -->
+                  <div id="wizard" class="form_wizard wizard_horizontal">
+                 
+                    <ul class="list-unstyled wizard_steps">
+                      <li>
+                        <a href="#step-11">
+                          <span class="step_no">1</span>
+                        </a>
+                      </li>
+                      <li>
+                        <a href="#step-22">
+                          <span class="step_no">2</span>
+                        </a>
+                      </li>
+                      <li>
+                        <a href="#step-33">
+                          <span class="step_no">3</span>
+                        </a>
+                      </li>
+                      <li>
+                        <a href="#step-44">
+                          <span class="step_no">4</span>
+                        </a>
+                      </li>
+                    </ul>
+					{{ form_start(form, {'attr': {'class': 'form-horizontal form-label-left '}}) }}
+					 {{ form_errors(form) }}
+
+  	
+                    <div id="step-11">
+                      <h2 class="StepTitle">Paso 1</h2>
+					 
+                        <span class="section"></span> 
+                        <div class="form-group">
+                          {{ form_label(form.idConexion) }}
+						  {{ form_errors(form.idConexion) }}
+                          <div class="col-md-6 col-sm-6">
+                           {{ form_widget(form.idConexion) }}
+                          </div>
+                        </div>                       
+                    </div>
+                    <div id="step-22">
+                      <h2 class="StepTitle">Paso 2</h2>
+					<div class="form-group">
+                      <label class="control-label col-md-3 col-sm-3 col-xs-12">Select Custom</label>
+                      <div class="col-md-6 col-sm-6 col-xs-12">
+                        <select id="combox" class="select2_single form-control" tabindex="-1">
+                          <option value="AK">Alaska</option>
+                          <option value="HI">Hawaii</option>
+                          <option value="CA">California</option>
+                          <option value="NV">Nevada</option>
+                          <option value="OR">Oregon</option>
+                          <option value="WA">Washington</option>
+                          <option value="AZ">Arizona</option>
+                          <option value="CO">Colorado</option>
+                          <option value="ID">Idaho</option>
+                          <option value="MT">Montana</option>
+                          <option value="NE">Nebraska</option>
+                          <option value="NM">New Mexico</option>
+                          <option value="ND">North Dakota</option>
+                          <option value="UT">Utah</option>
+                          <option value="WY">Wyoming</option>
+                          <option value="AR">Arkansas</option>
+                          <option value="IL">Illinois</option>
+                          <option value="IA">Iowa</option>
+                          <option value="KS">Kansas</option>
+                          <option value="KY">Kentucky</option>
+                          <option value="LA">Louisiana</option>
+                          <option value="MN">Minnesota</option>
+                          <option value="MS">Mississippi</option>
+                          <option value="MO">Missouri</option>
+                          <option value="OK">Oklahoma</option>
+                          <option value="SD">South Dakota</option>
+                          <option value="TX">Texas</option>
+                        </select>
+						
+                      </div>
+                      <div class="col-md-2 col-sm-2 col-xs-12"> 
+					
+						<a  id="add_tabla" class="btn btn-round btn-success"><i class="fa fa-plus" ></i></a>
+					  </div>      
+                    </div>
+					<div class="ln_solid"></div>   
+					<div class="form-group">
+                     <div class="col-xs-12"> 
+						<div  id="select_tabla"> </div>
+					  </div>      
+                    </div> 
+					
+                    </div>
+					
+                    <div id="step-33">
+                      <h2 class="StepTitle">Paso 3</h2>
+                      <p>Seleccione valores para el <strong>eje vertical</strong></p>
+                            <select id='grafica-y' class="margen flat">
+                                
+                                    <option value="0">a</option>  
+                                    <option value="1">b</option> 
+                                    <option value="2">c</option>              
+                                
+                            </select>
+                    </div>
+                    <div id="step-44">
+                      <h2 class="StepTitle">Paso 4</h2>
+                        <span class="section"></span> 
+                        <div class="form-group">
+                          {{ form_label(form.TextAreaSQL) }}
+                          {{ form_errors(form.TextAreaSQL) }} 
+						  <div class="col-md-6 col-sm-6">
+                          {{ form_widget(form.TextAreaSQL) }}
+						  </div>
+                        </div>  
+                    </div>
+                  {{ form_end(form) }}
+             
+
+                  <!-- End SmartWizard Content -->  
+				</div>
+                </div>
+				</div>
+               
+            {% endblock %}
+        {% endembed %}
+{% endblock %}
+{% block javascriptsFormulario %}  
+ <!-- form wizard -->
+  <script type="text/javascript" src='{{ asset("js/wizard/jquery.smartWizard.js")}}'></script>
+   <!-- select2 -->
+    <script src='{{ asset("js/select/select2.full.js")}}'></script>
+   
+  <script>
+  //   '<i class="fa fa-floppy-o" ></i>'
+     $(document).ready(function() {
+      // Smart Wizard
+      $('#wizard').smartWizard({          
+          labelNext:'<i class="fa fa-arrow-right"></i>', // label for Next button
+          labelPrevious:'<i class="fa fa-arrow-left"></i>', // label for Previous button
+          labelFinish:'<i class="rojo fa fa-ban" ></i>',  // label for Finish button  
+          onFinish:onFinishCallback ,
+           onLeaveStep:leaveAStepCallback,
+      });
+
+      function onFinishCallback() {
+        $('form').submit();
+      }
+    });
+    function leaveAStepCallback(obj, context){
+       // alert("Leaving step " + context.fromStep + " to go to step " + context.toStep);
+        return validateSteps(context.fromStep); // return false to stay on step and true to continue navigation 
+    }
+
+   // Your Step validation logic
+    function validateSteps(stepnumber){
+        var isStepValid = true;
+        // validate step 1
+        if(stepnumber == 1){
+          // alert('ajax y cargo');
+        //  return true;
+        }
+		else if(stepnumber == 2){
+			$("#select_tabla input").each(function (index) 
+			{ 
+			   console.log($(this).val());
+			   //recojemos los val de los input en un array 
+			   //Manadamos el ajax cargado
+			   
+			}) 
+		}
+        // ...  
+        return isStepValid;    
+    }
+    $(document).ready(function() {
+      // Smart Wizard
+      $('#wizard_verticle').smartWizard({
+        transitionEffect: 'slide'
+      });
+
+    });
+        
+    $(".select2_single").select2({
+        placeholder: "Seleccione una opción.",
+        allowClear: true
+      }); 
+	
+	$( "#add_tabla" ).click(function() {
+	  $('#select_tabla').append('<div class="alert alert-info alert-dismissible fade in" role="alert"><button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span></button><strong>'+$('#combox option:selected').text() +'</strong><input type="hidden" value="'+$('#combox option:selected').val() +'"></div>')
+	});
+	
+	function cargarTablas(array)
+	{
+		var cont=0;
+		$.ajax({
+				data: {id:$('#form_idConexion option:selected').val()},
+				url:   '/regresion/getvaluetable',
+				dataType: 'json',
+				type:  'post',
+				beforeSend: function () {
+						
+				},
+				success:  function (response) {
+				jQuery.each(response, function (indice, valor) {
+						var str1 = "table_name[";
+						var str2 = cont;
+						var str3 = "]";
+						var res = str1.concat(str2,str3);                    
+						$('#select_tabla').append('<input type="checkbox" class="flat" name='+res+' value="'+response[indice].id+'">'+response[indice].Descripcion +'<br>')
+						cont++;
+						});
+				},
+				error: function (request, status, error) {
+					request.error;
+				}, 
+				async: false
+		}); 
+	}
+	
+        	  
+   </script>
+{% endblock %}

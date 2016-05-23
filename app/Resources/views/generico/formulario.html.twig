@@ -4,7 +4,7 @@
   <link href='{{ asset("css2/select/select2.min.css")}}' rel="stylesheet">
   <!-- datepicker -->
   <link href='{{ asset("css2/datepicker/iconos.min.css")}}' rel="stylesheet">
- 
+
 {% endblock %}
 {% block bodyFormulario %}     
         {% embed "generico/ventana.html.twig" %}
@@ -28,8 +28,8 @@
                     <div class="ln_solid"></div>
                     <div class="form-group">
                     <div class="col-md-6 col-sm-6 col-xs-12 col-md-offset-3">
-                        <button type="reset" id="form_cancelar" name="form[cancelar]" class="btn btn-primary">Cancelar</button>
-                        <button type="submit" class="btn btn-success">Generar</button>
+                        <button type="reset" id="form_cancelar" name="form[cancelar]" class="btn btn-primary "><i class="fa fa-eraser"></i></button>
+                        <button type="submit" class="btn btn-success"><i class="fa fa-floppy-o" ></i></button>
                     </div>
                     </div>                     
                 {{ form_end(form) }}

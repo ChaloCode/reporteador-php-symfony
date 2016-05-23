@@ -17,7 +17,7 @@ use Symfony\Component\Form\Extension\Core\Type\PasswordType;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 
 use Doctrine\DBAL\DriverManager;
-
+use Symfony\Component\HttpFoundation\JsonResponse;
 
 
 
@@ -29,7 +29,7 @@ class Sys_RegresionController extends Controller
      */
     public function indexAction(Request $request)
     {
-         $usuario = $this->get('security.token_storage')->getToken()->getUser();
+        $usuario = $this->get('security.token_storage')->getToken()->getUser();
         $id_usuario=$usuario->getid();
         
         $em = $this->getDoctrine()->getEntityManager();
@@ -48,18 +48,20 @@ class Sys_RegresionController extends Controller
         foreach ($dataConexion as $key => $value) {            
            $lisConexiones[$value['Nombre_Conexion']]=$value['id'];
         }
+        
+       
         //Se crea el formulario
         $form = $this->createFormBuilder()
                      ->add('idConexion', ChoiceType::class, array(
                                                  'choices'  =>$lisConexiones,    
                                                  'label' => 'Conexión a la BD externa *',                                                
-                                                  'label_attr' => array('class' => 'control-label col-md-4 col-sm-4 col-xs-12'),
-                                                  'attr' => array('class' => 'col-md-7 col-xs-12') 
+                                                  'label_attr' => array('class' => 'control-label col-md-4 col-sm-4'),
+                                                  'attr' => array('class' => 'form-control col-xs-12') 
                                                  ))               
                       
                      ->add('TextAreaSQL', TextareaType::class,array('label' => 'Consulta SQL *', 
-                                                                     'label_attr' => array('class' => 'control-label col-md-4 col-sm-4 col-xs-12'),
-                                                                      'attr' => array('class' => 'col-md-7 col-xs-12')   
+                                                                     'label_attr' => array('class' => 'control-label col-md-3 col-sm-3'),
+                                                                      'attr' => array('class' => 'col-xs-12')   
                                                     ))    
                      ->getForm();         
 
@@ -216,6 +218,26 @@ class Sys_RegresionController extends Controller
                     'control'=>5              
                     );
     
+    }
+    
+     /**
+     *@Route("/regresion/getvaluetable", name="getValueTableAction")
+     */
+    public function getValueTableAction()
+    {
+       $tipogasto= $_POST['tipogasto'];
+        $operacion= $_POST['Operacion'];
+        $em = $this->getDoctrine()->getEntityManager();
+        $connection = $em->getConnection();
+        $statement = $connection->prepare("SELECT motivos__gastos.Descripcion,motivos__gastos.id FROM motivos__gastos where motivos__gastos.Estado='ACTIVO' and motivos__gastos.Operacion=:operacion and motivos__gastos.Tipo_Gasto=:tipogasto");            
+        $statement->bindValue('operacion',$operacion);
+        $statement->bindValue('tipogasto',$tipogasto);
+        $statement->execute();
+        $constante = $statement->fetchAll();   
+        //var_dump($constante);
+        // die;     
+        //return $constante;
+         return new JsonResponse($constante);
     }
    
 }

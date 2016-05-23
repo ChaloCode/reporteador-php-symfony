@@ -1,6 +1,6 @@
 {% extends "base.html.twig" %}
 
-{% use "generico/formulario.html.twig" %}
+{% use "generico/conexionBD.html.twig" %}
 {% use "generico/graficaRegresion.html.twig" %}
 
 
@@ -13,9 +13,8 @@
         {{ parent() }} 
     {% endblock %}
 <style>
-.alerta_conexion_empy {   
-    font-size: 18px;
-    margin-left: 119px;
+.alerta_conexion_empy {
+    white-space: normal;
 }
 </style> 
 {% endblock %}
@@ -25,7 +24,7 @@
 
 
 {% block body %}      
-    {% block bodyFormulario %}      
+    {% block bodyFormulario %}          
         {{ parent() }}  
     {% endblock %} 
 {% endblock %}
@@ -33,13 +32,15 @@
 
 {% block body2 %}  
     {% if control>0 %}         
-        {% block bodyGrafica %}               
+        {% block bodyGrafica %}    
+                   
             {{ parent() }}                  
         {% endblock %}
     {% endif %}
 {% endblock %}
 
-{% block body3 %}       
+{% block body3 %}  
+  
 {% endblock %}
 
    
@@ -58,10 +59,10 @@
     <script>    
     if($.isEmptyObject($('#form_idConexion').val()))
     {   
-         Alerta('Advertencia','Para usar este modulo, debe crear primero una conexion a BD Externa.','success');  
+        Alerta('Advertencia','Para usar este modulo, debe crear primero una conexion a BD Externa.','success');  
         $('#formulario-generico').remove();
-        $('#add-formulario-generico').html("<a href='{{ asset('conexion/')}}'><li class='alerta_conexion_empy fa fa-share btn btn-success btn-lg'> Cree su primera conexión a BD Externa.</li></a>");
-   }
+        $('#add-formulario-generico').html("<a class='alerta_conexion_empy btn btn-success btn-lg' href='{{ asset('conexion/')}}'><i class='fa fa-share'></i> Cree su primera conexión a BD Externa.</a>");
+     }
    </script>
     
 {% endblock %}
