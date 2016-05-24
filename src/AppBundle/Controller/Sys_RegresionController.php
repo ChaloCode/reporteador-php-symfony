@@ -223,21 +223,55 @@ class Sys_RegresionController extends Controller
      /**
      *@Route("/regresion/getvaluetable", name="getValueTableAction")
      */
-    public function getValueTableAction()
+    public function getValueTableAction(Request $request)
     {
-       $tipogasto= $_POST['tipogasto'];
-        $operacion= $_POST['Operacion'];
+        $id=$request->get('id'); 
+        
+        $bd=$this->getDoctrine()
+              ->getRepository('AppBundle:Sys_ConexionBD')
+              ->find($id);  
+        
         $em = $this->getDoctrine()->getEntityManager();
         $connection = $em->getConnection();
-        $statement = $connection->prepare("SELECT motivos__gastos.Descripcion,motivos__gastos.id FROM motivos__gastos where motivos__gastos.Estado='ACTIVO' and motivos__gastos.Operacion=:operacion and motivos__gastos.Tipo_Gasto=:tipogasto");            
-        $statement->bindValue('operacion',$operacion);
-        $statement->bindValue('tipogasto',$tipogasto);
+        $statement = $connection->prepare("SELECT TABLE_NAME 
+                                            FROM INFORMATION_SCHEMA.TABLES
+                                            WHERE TABLE_SCHEMA =:name");            
+        $statement->bindValue('name',$bd->getNameBD());        
         $statement->execute();
-        $constante = $statement->fetchAll();   
-        //var_dump($constante);
-        // die;     
-        //return $constante;
-         return new JsonResponse($constante);
+        $list = $statement->fetchAll();  
+     
+        return new JsonResponse($list);
+    }
+    
+      /**
+     *@Route("/regresion/getvaluerow", name="getvaluerow")
+     */
+    public function getvaluerowAction(Request $request)
+    {
+        $tables=$request->get('tables'); 
+        $id=$request->get('id'); 
+       
+        $bd=$this->getDoctrine()
+              ->getRepository('AppBundle:Sys_ConexionBD')
+              ->find($id);  
+        $list_new=array();
+        foreach ($tables as $key => $table) {
+            $em = $this->getDoctrine()->getEntityManager();
+            $connection = $em->getConnection();
+            $statement = $connection->prepare("SELECT * 
+                                                FROM $table
+                                                LIMIT 1");            
+           // $statement->bindValue('table',);   
+          //  $statement->bindValue('name',$bd->getNameBD());     
+            $statement->execute();
+            $list = $statement->fetchAll();  
+            
+           $list_new[$table]=$list[0];
+        }
+        //var_dump($list_new);
+       // die('fin');
+     
+        return new JsonResponse($list_new);
     }
    
 }
