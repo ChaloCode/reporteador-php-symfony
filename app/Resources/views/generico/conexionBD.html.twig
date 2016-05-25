@@ -46,8 +46,7 @@
 
   	
                     <div id="step-11">
-                      <h2 class="StepTitle">Paso 1</h2>
-					 
+                      <h2 class="StepTitle">Paso 1</h2>					 
                         <span class="section"></span> 
                         <div class="form-group">
                           {{ form_label(form.idConexion) }}
@@ -59,13 +58,13 @@
                     </div>
                     <div id="step-22">
                       <h2 class="StepTitle">Paso 2</h2>
-                      <div class="form-group">
-                      <label class="control-label col-md-5 col-sm-5 col-xs-12">Seleccione las tablas a usar</label>
-                      <div class="col-md-5 col-sm-5 col-xs-12">
-                        <select id="combox_tabla" class="select2_single form-control" tabindex="-1">                        
+                      <div class="form-group">					 
+					  <label class="control-label col-md-5 col-xs-5 ">Seleccione las tablas a usar</label>					 
+                      <div class="col-md-6 col-xs-6 ">
+                        <select id="combox_tabla" class="select2_single form-control " tabindex="-1">                        
                         </select>
                       </div>
-                      <div class="col-md-2 col-sm-2 col-xs-12"> 					
+                      <div class="col-md-1 col-xs-1 "> 					
                         <a  id="add_tabla" class="btn btn-round btn-success"><i class="fa fa-plus" ></i></a>
                       </div>      
                       </div>
@@ -79,18 +78,59 @@
 					
                     <div id="step-33">
                       <h2 class="StepTitle">Paso 3</h2>
-                      <div class="form-group">                      
-                        <div class="col-md-4 col-sm-4 col-xs-12">
-                          <select id="combox_tabla_a" class="select2_single form-control" tabindex="-1">                        
+                      <div class="col-xs-12">
+                      <h2 class="StepTitle">Seleccione las columnas a usar:</h2>
+                      </div> 
+                      <div class="form-group">                                         
+                        <div class="col-md-10 col-sm-10 col-xs-12">
+                          <select id="combox_tabla_a" class="col-xs-12 select2_single form-control" tabindex="-1">                        
                           </select>                            
                         </div>
-					    	      </div> 
-                        <div class="ln_solid"></div>  
-                        <div class="form-group">
+                        <div class="col-md-2 col-sm-2 col-xs-12"> 					
+                          <a  id="add_tabla_rows" class="btn btn-round btn-success"><i class="fa fa-plus" ></i></a>
+                        </div> 
+					    	      </div>                        
+                      <div class="form-group">
                         <div class="col-xs-12">
-                            <div  id="row_tabla"> </div>
+                            <div  id="row_tabla"></div>
                         </div>      
-                      </div>                      
+                      </div>
+                      <div class="ln_solid"></div>  
+                      <div class="form-group">
+                        <div class="col-xs-12">
+                            <div  id="columna_tabla_select"></div>
+                        </div>      
+                      </div>
+          					  <div id="ocultar_relacion_tabla">
+						          <div class="ln_solid"></div> 
+                      <div class="col-xs-12">
+                      <h2 class="StepTitle">Relacione las tablas:</h2>
+                      </div> 
+                        <div class="form-group">                        
+                        <div class="col-md-4 col-sm-4 col-xs-12">
+                          <select id="select_tabla_a" class="col-xs-12 select2_single form-control" tabindex="-1">                        
+                          </select>   
+                           <div  id="row_tabla_select_a">
+                           </div>                           
+                        </div> 
+                        <div class="col-md-3 col-sm-3 col-xs-12">
+                          <select id="union_select" class="form-control" > 
+                            <option>Unión</option>  
+                            <option>Unión por derecha</option>   
+                            <option>Unión por izquierda</option>                        
+                          </select>                            
+                        </div>
+                        <div class="col-md-4 col-sm-4 col-xs-12">
+                          <select id="select_tabla_b" class="col-xs-12 select2_single form-control" tabindex="-1">                        
+                          </select> 
+						              <div  id="row_tabla_select_b"> 
+                          </div>  						  
+                        </div> 
+                        <div class="col-md-1 col-sm-1 col-xs-12"> 					
+                          <a  id="add_tabla_rows" class="btn btn-round btn-success"><i class="fa fa-plus" ></i></a>
+                        </div>    
+                      </div> 
+					          </div>
                     </div>
                     <div id="step-44">
                       <h2 class="StepTitle">Paso 4</h2>
@@ -150,7 +190,7 @@
             $('#row_tabla').empty();       
           }  
        jQuery.each(filas_global[table], function (indice, valor) {	
-            $('#row_tabla').append('<div class=""><label><input type="checkbox" class="" > '+indice+'</label></div>')
+            $('#row_tabla').append('<div class=""><label><input type="checkbox" value="'+indice+'" > '+indice+'</label></div>')
        });
       
     });
@@ -185,13 +225,8 @@
                 $('#combox_tabla_a').append($('<option>', {
                       value: index,
                       text: $(this).val()
-                  }))	
-                  /*
-                  $('#combox_tabla_b').append($('<option>', {
-                      value: index,
-                      text: $(this).val()
-                  }))	
-                  */
+                  }))
+                 
               })
               console.log(array)
              isStepValid=cargarFilas(array) ;
@@ -219,7 +254,7 @@
         allowClear: true
       }); 
 	
-	$( "#add_tabla" ).click(function() {
+	$("#add_tabla").click(function() {
     if(!$.isEmptyObject($('#combox_tabla option:selected').text())){
       var control=true;
       $("#select_tabla input").each(function (index) 
@@ -240,7 +275,94 @@
     }
 	  
 	});
+  
+ 
+  
+  var ocultar_relacion_tabla=0;
+  $('#ocultar_relacion_tabla').hide();
+  var rows_select=new Object();
+  $("#add_tabla_rows").click(function() {    
+      var table=$('#combox_tabla_a option:selected').text();
+      if(table!='')
+      {
+          if($("#row_tabla input:checkbox:checked").length>0)
+          {
+              rows_select[table]=new Object()
+              $("#row_tabla input:checkbox:checked").each(function()
+              { 
+                rows_select[table][$(this).val()]=1
+             
+              }) 
+              //console.log(rows_select)     
+              ocultar_relacion_tabla++;          
+              if(ocultar_relacion_tabla==1){     
+                    $('#select_tabla_b').append($('<option>', {
+                                      value: '',
+                                      text: ''
+                                  }))
+                    $('#select_tabla_a').append($('<option>', {
+                                      value: '',
+                                      text: ''
+                                  })) 
+                    $('#select_tabla_b').append($('<option>', {
+                          value: ocultar_relacion_tabla,
+                          text: table
+                      }))
+                      
+                    $('#select_tabla_a').append($('<option>', {
+                        value: ocultar_relacion_tabla,
+                        text: table
+                    }))
+                    
+              }
+              else{
+                  $('#select_tabla_b').append($('<option>', {
+                      value:  ocultar_relacion_tabla ,
+                      text: table
+                  }))
+
+                  $('#select_tabla_a').append($('<option>', {
+                      value:  ocultar_relacion_tabla ,
+                      text: table
+                  }))          
+
+                  $('#ocultar_relacion_tabla').show();
+              }   
+              $('#row_tabla').empty();
+              
+               $('#columna_tabla_select').append('<div class="alert alert-info alert-dismissible fade in" role="alert"><button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span></button><strong>'+table+'</div>')
+  
+          }
+          else{
+            Alerta('Advertencia','Debe seleccionar almenos una columna para continuar','success')
+          }
+          
+      }
+      else{
+        Alerta('Advertencia','Debe seleccionar almenos una tabla para continuar','success')
+      }      
+	});
 	
+  $("#select_tabla_a").change(function() {
+       var table=$('#select_tabla_a option:selected').text();
+       if(!$.isEmptyObject($('#row_tabla_select_a'))){
+            $('#row_tabla_select_a').empty();       
+          }  
+       jQuery.each(rows_select[table], function (indice, valor) {	
+            $('#row_tabla_select_a').append('<div class=""><label><input type="radio" name="caja_a" value="'+indice+'" > '+indice+'</label></div>')
+       });
+  });
+    
+  $("#select_tabla_b").change(function() {
+    var table=$('#select_tabla_b option:selected').text();
+       if(!$.isEmptyObject($('#row_tabla_select_b'))){
+            $('#row_tabla_select_b').empty();       
+          }  
+       jQuery.each(rows_select[table], function (indice, valor) {	
+            $('#row_tabla_select_b').append('<div class=""><label><input type="radio" name="caja_b" value="'+indice+'" > '+indice+'</label></div>')
+       });
+  });
+  
 	function cargarTablas()
 	{
     var retornar=true;
