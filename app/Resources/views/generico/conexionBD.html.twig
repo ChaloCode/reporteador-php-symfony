@@ -300,6 +300,7 @@
       { 
         if ($('#combox_tabla option:selected').text()==$(this).val()){
           control=false;
+          return true;
         }
       }) 
       if(control){
@@ -320,15 +321,16 @@
       var table_b=$('#select_tabla_b option:selected').text();
       var val_select=$('#select_tabla_a option:selected').val()+'-'+$('#select_tabla_b option:selected').val();    
       var control=true;
+      console.log(val_select)
       $("#query_create input").each(function (index) 
       { 
-        console.log($(this).val())
-        console.log(val_select)
+        console.log($(this).val())       
         
           if($(this).val()==val_select)
           {
+            console.log('salir')
             control=false;
-            return false;
+            return true;
           }
       })
 
@@ -376,7 +378,7 @@
       { 
         if (table==$(this).val()){
           control=false;
-          return false;
+          return true;
         }
       }) 
       if(control){   
