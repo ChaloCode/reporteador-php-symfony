@@ -220,13 +220,16 @@
         // validate step 1
         if(stepnumber == 1 && control_select_combo){
           if(!$.isEmptyObject($('#combox_tabla'))){
-            $('#combox_tabla').empty();       
+              $('#combox_tabla').empty();       
           }         
           control_select_combo=false;     
           isStepValid=cargarTablas();
          
         }
-        else if(stepnumber == 2){
+        else if(stepnumber == 2){  
+           if(!$.isEmptyObject($('#combox_tabla_a'))){
+                $('#combox_tabla_a').empty();       
+          }        
           if($("#select_tabla input").length==0 ){
             isStepValid=false;
             Alerta('Advertencia','Debe seleccionar almenos una tabla para continuar.','success')
@@ -251,26 +254,27 @@
              isStepValid=cargarFilas(array) ;
           }          
         }
-        else if(stepnumber == 3){
-          var tabla=$('#combox_tabla_a option:selected').text();
-          
+        else if(stepnumber == 3){          
+          var tabla=$('#combox_tabla_a option:selected').text();          
           var div_tabla_select=Number($('#columna_tabla_select button').length);
           var div_tabla_relacion=Number($('#query_create button').length)+1;
+         
           console.log(div_tabla_select)
           console.log(div_tabla_relacion)
-          if(tabla!='' && div_tabla_select>0){         
+          
+            if(tabla!='' && div_tabla_select>0){         
              if(div_tabla_select!=div_tabla_relacion){               
                 Alerta('Advertencia','Debe relacionar todas las tablas para continuar.','success')
                 isStepValid=false;
              }           
-             //run
-             
-          }
-          else{
-            Alerta('Advertencia','Debe seleccionar almenos una tabla para continuar.','success')
-            isStepValid=false;
-          }
-        }
+             //run             
+            }
+            else{
+              Alerta('Advertencia','Debe seleccionar almenos una tabla para continuar.','success')
+              isStepValid=false;
+            }
+          }          
+       
         // ...  
         return isStepValid;    
     }
@@ -314,26 +318,48 @@
   $("#add_tb_relacion_rows").click(function() {    
       var table=$('#select_tabla_a option:selected').text(); 
       var table_b=$('#select_tabla_b option:selected').text();
-      if(table!='' && table_b!='')
-      {
-        if(table!=table_b)
-        {     
-            if($("#row_tabla_select_b input:radio:checked").length>0 && $("#row_tabla_select_a input:radio:checked").length>0)
+      var val_select=$('#select_tabla_a option:selected').val()+'-'+$('#select_tabla_b option:selected').val();    
+      var control=true;
+      $("#query_create input").each(function (index) 
+      { 
+        console.log($(this).val())
+        console.log(val_select)
+        
+          if($(this).val()==val_select)
+          {
+            control=false;
+            return false;
+          }
+      })
+
+        if(control)
+        {
+            if(table!='' && table_b!='')
             {
-                $('#query_create').append('<div class="alert alert-info alert-dismissible fade in" role="alert"><button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span></button><strong> '+table+'</strong> relacionada con <strong>'+table_b+'</strong></div>')
-      
+              if(table!=table_b)
+              {     
+                  if($("#row_tabla_select_b input:radio:checked").length>0 && $("#row_tabla_select_a input:radio:checked").length>0)
+                  {
+                      $('#query_create').append('<div class="alert alert-info alert-dismissible fade in" role="alert"><button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span></button><strong> '+table+'</strong> relacionada con <strong>'+table_b+'</strong><input type="hidden" value="'+val_select +'"></div>')
+
+                  }
+                  else{
+                          Alerta('Advertencia','Debe seleccionar una columna en ambas tabla para continuar.','success')
+                    }
+              }
+              else{
+                Alerta('Advertencia','La misma tabla no se puede relacionar entre sí.\nRelacione dos tablas diferentes, para continuar. ','success')
+              } 
             }
             else{
-                   Alerta('Advertencia','Debe seleccionar una columna en ambas tabla para continuar.','success')
-             }
+              Alerta('Advertencia','Debe seleccionar ambas tabla para continuar.','success')
+            }
         }
         else{
-          Alerta('Advertencia','La misma tabla no se puede relacionar entre sí.\nRelacione dos tablas diferentes, para continuar. ','success')
-        } 
-      }
-      else{
-        Alerta('Advertencia','Debe seleccionar ambas tabla para continuar.','success')
-      }
+          isStepValid=false;
+          Alerta('Advertencia','Esta relación ya fue seleccionada.\nSeleccione otra relación.','success')
+        }
+    
       
       
   });   
@@ -342,8 +368,19 @@
   var ocultar_relacion_tabla=0;
   $('#ocultar_relacion_tabla').hide();
   var rows_select=new Object();
-  $("#add_tabla_rows").click(function() {    
-      var table=$('#combox_tabla_a option:selected').text();      
+  $("#add_tabla_rows").click(function() {
+    
+    var table=$('#combox_tabla_a option:selected').text();    
+    var control=true;
+      $("#columna_tabla_select input").each(function (index) 
+      { 
+        if (table==$(this).val()){
+          control=false;
+          return false;
+        }
+      }) 
+      if(control){   
+        
         if(table!='')
         {
             if($("#row_tabla input:checkbox:checked").length>0)
@@ -391,7 +428,7 @@
                 }   
                 $('#row_tabla').empty();
                 
-                $('#columna_tabla_select').append('<div class="alert alert-info alert-dismissible fade in" role="alert"><button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span></button><strong>'+table+'</div>')
+                $('#columna_tabla_select').append('<div class="alert alert-info alert-dismissible fade in" role="alert"><button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span></button><strong>'+table+'<input type="hidden" value="'+table +'"</div>')
       
             }
             else{
@@ -401,7 +438,11 @@
         }
         else{
           Alerta('Advertencia','Debe seleccionar almenos una tabla para continuar.','success')
-        }           
+        }   
+         }
+      else{
+        Alerta('Advertencia','Esta tabla ('+table+') ya fue agregada.\nSeleccione otra tabla para continuar.','success')  
+      }        
 	});
 	
   $("#select_tabla_a").change(function() {
@@ -466,7 +507,7 @@
 	
   var filas_global;
   function cargarFilas(array)
-	{
+	{    
     var retornar=true;
 		var cont=0;
 		$.ajax({
