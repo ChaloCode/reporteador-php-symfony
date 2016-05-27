@@ -270,7 +270,7 @@
              //run     
              //Select
              //Cuado el value sea diferente de 1, indica que el value es la comuna y clave renombracion
-             //console.log(rows_select)        
+             console.log(rows_select)        
             }
             else{
               Alerta('Advertencia','Debe seleccionar almenos una tabla y columna, para continuar.','success')
@@ -413,10 +413,8 @@ var select_old;
                 rows_select[table]=new Object()
                 $("#row_tabla input:checkbox:checked").each(function()
                 { 
-                  var padre=$(this).parent().text().split(" "); 
-                  padre=padre[1];
-                  //console.log('Padre: '+padre)
-                 //console.log($(this).val())
+                  var padre=$(this).parent().text().split("¿"); 
+                  padre=$.trim(padre[0]);                
                   if(padre==$(this).val()){
                     rows_select[table][$(this).val()]=1;
                   }
@@ -426,43 +424,52 @@ var select_old;
                   
               
                 }) 
-                //console.log(rows_select)     
-                ocultar_relacion_tabla++;          
-                if(ocultar_relacion_tabla==1){     
-                      $('#select_tabla_b').append($('<option>', {
-                                        value: '',
-                                        text: ''
-                                    }))
-                      $('#select_tabla_a').append($('<option>', {
-                                        value: '',
-                                        text: ''
-                                    })) 
-                      $('#select_tabla_b').append($('<option>', {
-                            value: ocultar_relacion_tabla,
+                 
+               var exists = false;                   
+                $('#select_tabla_b option').each(function(){                 
+                  if ($(this).text()== table) {
+                    exists = true;
+                    return true;
+                  }
+                });                
+                if(exists==false)
+                {                 
+                    ocultar_relacion_tabla++;          
+                    if(ocultar_relacion_tabla==1){     
+                          $('#select_tabla_b').append($('<option>', {
+                                            value: '',
+                                            text: ''
+                                        }))
+                          $('#select_tabla_a').append($('<option>', {
+                                            value: '',
+                                            text: ''
+                                        })) 
+                          $('#select_tabla_b').append($('<option>', {
+                                value: ocultar_relacion_tabla,
+                                text: table
+                            }))
+                            
+                          $('#select_tabla_a').append($('<option>', {
+                              value: ocultar_relacion_tabla,
+                              text: table
+                          }))
+                          
+                    }
+                    else{
+                        $('#select_tabla_b').append($('<option>', {
+                            value:  ocultar_relacion_tabla ,
                             text: table
                         }))
-                        
-                      $('#select_tabla_a').append($('<option>', {
-                          value: ocultar_relacion_tabla,
-                          text: table
-                      }))
-                      
-                }
-                else{
-                    $('#select_tabla_b').append($('<option>', {
-                        value:  ocultar_relacion_tabla ,
-                        text: table
-                    }))
 
-                    $('#select_tabla_a').append($('<option>', {
-                        value:  ocultar_relacion_tabla ,
-                        text: table
-                    }))          
+                        $('#select_tabla_a').append($('<option>', {
+                            value:  ocultar_relacion_tabla ,
+                            text: table
+                        }))          
 
-                    $('#ocultar_relacion_tabla').show();
-                }   
-                $('#row_tabla').empty();
-                
+                        $('#ocultar_relacion_tabla').show();
+                    }
+                }                 
+                $('#row_tabla').empty();                
                 $('#columna_tabla_select').append('<div class="alert alert-info alert-dismissible fade in" role="alert"><button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span></button><strong>'+table+'<input type="hidden" value="'+table +'"</div>')
       
             }
