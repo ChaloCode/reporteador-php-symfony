@@ -257,12 +257,11 @@
              isStepValid=cargarFilas(array) ;
           }          
         }
-        else if(stepnumber == 3){          
-          var tabla=$('#combox_tabla_a option:selected').text();          
+        else if(stepnumber == 3){ 
           var div_tabla_select=Number($('#columna_tabla_select button').length);
           var div_tabla_relacion=Number($('#query_create button').length)+1;
           
-            if(tabla!='' && div_tabla_select>0){         
+            if(div_tabla_select>0){         
              if(div_tabla_select!=div_tabla_relacion){               
                 Alerta('Advertencia','Debe relacionar todas las tablas para continuar.','success')
                 isStepValid=false;
