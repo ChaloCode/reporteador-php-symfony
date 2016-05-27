@@ -182,8 +182,7 @@
  <!-- select2 -->
  <script src='{{ asset("js/select/select2.full.js")}}'></script>
    
-  <script>
-  //   '<i class="fa fa-floppy-o" ></i>'
+  <script>  
      $(document).ready(function() {
       // Smart Wizard
       $('#wizard').smartWizard({          
@@ -254,8 +253,7 @@
                       text: $(this).val()
                   }))
                  
-              })
-              console.log(array)
+              })              
              isStepValid=cargarFilas(array) ;
           }          
         }
@@ -263,9 +261,6 @@
           var tabla=$('#combox_tabla_a option:selected').text();          
           var div_tabla_select=Number($('#columna_tabla_select button').length);
           var div_tabla_relacion=Number($('#query_create button').length)+1;
-         
-          console.log(div_tabla_select)
-          console.log(div_tabla_relacion)
           
             if(tabla!='' && div_tabla_select>0){         
              if(div_tabla_select!=div_tabla_relacion){               
@@ -299,16 +294,18 @@
       }); 
 	
 
+var select_old;
  $( "#row_tabla" ).on( "click", "a", function() { 
       
-      var val=$(this).parent().children('input').val(); 
+      var val=$(this).parent().children('input').text(); 
+      select_old=$(this).parent().children('input').val(); 
       $(this).parent().html('<input type="text" value="'+val+'">  <button class="btn btn-round btn-success" type="button"><i class="fa fa-floppy-o" ></i> Renombrar</button>');
  });
  
   $( "#row_tabla" ).on( "click", "button", function() { 
       
-      var val=$(this).parent().children('input').val();    
-      $(this).parent().html('<input type="checkbox" value="'+val+'" > '+val+' <a class="small btn">¿renombrar? </a>')
+      var val=$(this).parent().children('input').val();
+      $(this).parent().html('<input type="checkbox" value="'+select_old+'" > '+val+' <a class="small btn">¿renombrar? </a>')
      
  });
 
@@ -413,7 +410,17 @@
                 rows_select[table]=new Object()
                 $("#row_tabla input:checkbox:checked").each(function()
                 { 
-                  rows_select[table][$(this).val()]=1
+                  var padre=$(this).parent().text().split(" "); 
+                  padre=padre[1];
+                  //console.log('Padre: '+padre)
+                 //console.log($(this).val())
+                  if(padre==$(this).val()){
+                    rows_select[table][$(this).val()]=1;
+                  }
+                  else{
+                    rows_select[table][padre]=$(this).val();
+                  }
+                  
               
                 }) 
                 //console.log(rows_select)     
@@ -499,10 +506,13 @@
 				url: '{{ asset("app_dev.php/regresion/getvaluetable")}}'  ,
 				dataType: 'json',
 				type:  'post',
-				beforeSend: function () {						
+				beforeSend: function () {	  
+          NProgress.set(0.4);           
+          NProgress.start();	          
 				},
 				success:  function (response) {
-				jQuery.each(response, function (indice, valor) {	
+				jQuery.each(response, function (indice, valor) { 
+                    	
           if(indice==0){
             $('#combox_tabla').append($('<option>', {
                   value: '',
@@ -515,6 +525,7 @@
                   text: valor.TABLE_NAME
               }))	
               cont++;
+             
           }			                    
            
 				});
@@ -523,10 +534,11 @@
 					//request.error;
           retornar=false;
           Alerta('Error','Lo lamentamos no fue posible cargar las tablas.\nValide:\n*La conexión a Internet\n*La conexión de la BD externa. ','error')   
+          NProgress.done();
 				}, 
 				async: false
 		}); 
-   
+   NProgress.done();
    return retornar;
 	}
 	
@@ -540,7 +552,10 @@
 				url: '{{ asset("app_dev.php/regresion/getvaluerow")}}'  ,
 				dataType: 'json',
 				type:  'post',
-				beforeSend: function () {						
+				beforeSend: function () {		
+           NProgress.set(0.4);
+           NProgress.start();		
+           	
 				},
 				success:  function (response) {
 				  filas_global=response
@@ -548,13 +563,14 @@
 				error: function (request, status, error) {
 					//request.error;
           retornar=false;
-          Alerta('Error','Lo lamentamos no fue posible cargar la informacion de la(s) tabla(s) seleccionada.\nValide:\n*La conexión a Internet\n*La conexión de la BD externa. ','error')   
+          Alerta('Error','Lo lamentamos no fue posible cargar la informacion de la(s) tabla(s) seleccionada.\nValide:\n*La conexión a Internet\n*La conexión de la BD externa. ','error')  
+          NProgress.done(); 
 				}, 
 				async: false
 		}); 
-   
+   NProgress.done();   
    return retornar;
 	}
-        	  
+     	  
    </script>
 {% endblock %}
