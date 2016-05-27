@@ -275,7 +275,14 @@
               Alerta('Advertencia','Debe seleccionar almenos una tabla y columna, para continuar.','success')
               isStepValid=false;
             }
-          }          
+            
+              console.log('cambiando boton')
+              
+            $( ".actionBar a" ).first().text('');
+            $( ".actionBar a" ).first().append('<i class="fa fa-rocket" ></i> Generar');
+           // $( ".actionBar i" ).first().removeClass( "fa fa-rocket");
+          }
+                  
        
         // ...  
         return isStepValid;    
