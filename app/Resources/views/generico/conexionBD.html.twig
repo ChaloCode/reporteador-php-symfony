@@ -318,7 +318,7 @@
                   
                   console.log('From:')
                   inner=$(this).val().split("-"); 
-                  console.log(inner.length)
+                  console.log(inner)
                   if(inner.length>0){
                     if(inner[0].split(" ").length>1) {
                       a='"'+inner[0]+'"';
@@ -356,16 +356,24 @@
                   }
                   
                 }) 
-               
+               console.log(query)
              }             
              var text_query='';
+            
               jQuery.each(query, function (indice, valor) {	                  
-                  if(valor.toString().search("RIGHT")>=0){ 
-                      text_query+=valor.toString().replace("RIGHT", "RIGHT JOIN");                     
-                  }
-                  else if(valor.toString().search("LEFT")>=0 ){
-                    text_query+=valor.toString().replace("LEFT", "LEFT JOIN");                      
-                  }
+                  if(indice=='INNER'){
+                    jQuery.each(query.INNER, function (indice2, valor2) {	
+                      if(valor2.toString().search("RIGHT")>=0){ 
+                        text_query+=valor2.toString().replace("RIGHT", "RIGHT JOIN");                     
+                      }
+                      else if(valor2.toString().search("LEFT")>=0){
+                        text_query+=valor2.toString().replace("LEFT", "LEFT JOIN");                      
+                      }
+                      else{
+                        text_query+=indice.toString()+'\n'+valor2.toString()+'\n';
+                      }
+                    })                    
+                  }                  
                   else{
                     text_query+=indice.toString()+'\n'+valor.toString()+'\n';
                   }      
