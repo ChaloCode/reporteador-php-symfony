@@ -268,19 +268,28 @@
              }           
              //run     
              //Select
-             //Cuado el value sea diferente de 1, indica que el value es la comuna y clave renombracion
-             console.log(rows_select)        
+             //Cuado el value sea diferente de 1, indica que el value es la columna y clave renombracion
+             console.log('Select:')
+             console.log(rows_select) 
+             //from
+              $("#query_create input").each(function (index) 
+              { 
+                console.log('From:')
+                console.log($(this).val())
+                
+              }) 
+             //inner
+             //logica 
+             //where
+             //logica       
             }
             else{
               Alerta('Advertencia','Debe seleccionar almenos una tabla y columna, para continuar.','success')
               isStepValid=false;
-            }
-            
-              console.log('cambiando boton')
-              
+            }            
+             //Cambiamos text del boton y habiltamos              
             $( ".actionBar a" ).first().text('');
-            $( ".actionBar a" ).first().append('<i class="fa fa-rocket" ></i> Generar');
-           // $( ".actionBar i" ).first().removeClass( "fa fa-rocket");
+            $( ".actionBar a" ).first().append('<i class="fa fa-rocket" ></i> Generar');           
           }
                   
        
@@ -349,15 +358,12 @@ var select_old;
       var table_b=$('#select_tabla_b option:selected').text();
       var val_select=$('#select_tabla_a option:selected').val()+'-'+$('#select_tabla_b option:selected').val();   
       var val_select_rev=$('#select_tabla_b option:selected').val()+'-'+$('#select_tabla_a option:selected').val();   
-      var control=true;
-      console.log(val_select)
+      var control=true;    
       $("#query_create input").each(function (index) 
-      { 
-        console.log($(this).val())       
+      {             
        
           if($(this).val()==val_select || $(this).val()==val_select_rev )
-          {
-            console.log('salir')
+          {            
             control=false;
             return true;
           }
