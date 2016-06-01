@@ -133,9 +133,9 @@
                         </div> 
                         <div class="col-md-2 col-sm-2 col-xs-12">
                           <select id="union_select" class="form-control margen_4px_bot margen_4px_top" > 
-                            <option>unir</option>  
-                            <option>unir por derecha</option>   
-                            <option>unir por izquierda</option>                        
+                            <option value="JOIN">unir</option>  
+                            <option value="RIGHT">unir por derecha</option>   
+                            <option value="LEFT">unir por izquierda</option>                        
                           </select>                            
                         </div>
                         <div class="col-md-4 col-sm-4 col-xs-12">
@@ -269,28 +269,118 @@
              //run     
              //Select
              //Cuado el value sea diferente de 1, indica que el value es la columna y clave renombracion
-             console.log('Select:')
-             console.log(rows_select) 
-             //from
-              $("#query_create input").each(function (index) 
-              { 
-                console.log('From:')
-                console.log($(this).val())
-                
-              }) 
-             //inner
-             //logica 
-             //where
-             //logica       
+             var query = {SELECT:[], FROM:[]}; 
+             var tabla='';
+             if(div_tabla_select==1){
+               tabla=$('#combox_tabla_a option:selected').text();
+               query.FROM=tabla;
+                jQuery.each(rows_select[tabla], function (indice, valor) {
+                  if(indice.toString().split(" ").length>1) {
+                          indice='"'+indice+'"';
+                        }                        
+                  if(valor.toString().split(" ").length>1) {
+                    valor='"'+valor+'"';
+                  }  	
+                  if(valor==1){
+                    query.SELECT.push(tabla+'.'+indice)
+                  }else{
+                    query.SELECT.push(tabla+'.'+valor+' AS '+indice)
+                  }                  
+                });
+             }
+             else{
+                //Select
+                query = {SELECT:[], FROM:[], INNER:[]}; 
+                 $("#columna_tabla_select input").each(function (index) 
+                 { 
+                      tabla=$(this).val();
+                                          
+                      jQuery.each(rows_select[tabla], function (indice, valor) {	
+                        if(indice.toString().split(" ").length>1) {
+                          indice='"'+indice+'"';
+                        }                        
+                        if(valor.toString().split(" ").length>1) {
+                          valor='"'+valor+'"';
+                        }                      
+                        if(valor==1){
+                          query.SELECT.push(tabla+'.'+indice)
+                        }else{
+                          query.SELECT.push(tabla+'.'+valor+' AS '+indice)
+                        }                  
+                      });
+                      
+                  })                 
+               //inner join
+                var inner=[];
+                var a,b,c,d;
+                $("#query_create input").each(function (index) 
+                { 
+                  
+                  console.log('From:')
+                  inner=$(this).val().split("-"); 
+                  console.log(inner.length)
+                  if(inner.length>0){
+                    if(inner[0].split(" ").length>1) {
+                      a='"'+inner[0]+'"';
+                    }
+                    else{
+                      a=inner[0];
+                    }
+                    
+                    if(inner[1].split(" ").length>1) {
+                      b='"'+inner[1]+'"';
+                    }
+                    else{
+                      b=inner[1];
+                    }
+                    console.log(inner[2].split(" ").length)
+                    if(inner[2].split(" ").length>1) {
+                      c='"'+inner[2]+'"';
+                    }
+                    else{
+                      c=inner[2];
+                    }
+                    
+                    if(inner[3].split(" ").length>1) {
+                      d='"'+inner[3]+'"';
+                    }
+                    else{
+                      d=inner[3];
+                    }
+                 
+                    query.INNER.push(inner[4]+' '+a+' ON '+a+'.'+c+'='+b+'.'+d) 
+                    if(index==0){
+                      query.FROM=inner[1];                        
+                    }  
+                                     
+                  }
+                  
+                }) 
+               
+             }             
+             var text_query='';
+              jQuery.each(query, function (indice, valor) {	                  
+                  if(valor.toString().search("RIGHT")>=0){ 
+                      text_query+=valor.toString().replace("RIGHT", "RIGHT JOIN");                     
+                  }
+                  else if(valor.toString().search("LEFT")>=0 ){
+                    text_query+=valor.toString().replace("LEFT", "LEFT JOIN");                      
+                  }
+                  else{
+                    text_query+=indice.toString()+'\n'+valor.toString()+'\n';
+                  }      
+              });
+            $('#form_TextAreaSQL').val(text_query)
+             //Cambiamos text del boton y habiltamos              
+            $( ".actionBar a" ).first().text('');
+            $( ".actionBar a" ).first().append('<i class="fa fa-rocket" ></i> Generar');           
+     
             }
             else{
               Alerta('Advertencia','Debe seleccionar almenos una tabla y columna, para continuar.','success')
               isStepValid=false;
-            }            
-             //Cambiamos text del boton y habiltamos              
-            $( ".actionBar a" ).first().text('');
-            $( ".actionBar a" ).first().append('<i class="fa fa-rocket" ></i> Generar');           
-          }
+        }                    
+      }
                   
        
         // ...  
@@ -314,10 +404,8 @@
 
 var select_old;
  $( "#row_tabla" ).on( "click", "a", function() { 
-      
-      var val=$(this).parent().children('input').text(); 
-      select_old=$(this).parent().children('input').val(); 
-      $(this).parent().html('<input type="text" value="'+val+'">  <button class="btn btn-round btn-success" type="button"><i class="fa fa-floppy-o" ></i> Renombrar</button>');
+      select_old=$(this).parent().children('input').val();
+      $(this).parent().html('<input type="text" value="'+select_old+'">  <button class="btn btn-round btn-success" type="button"><i class="fa fa-floppy-o" ></i> Renombrar</button>');
  });
  
   $( "#row_tabla" ).on( "click", "button", function() { 
@@ -356,8 +444,10 @@ var select_old;
   $("#add_tb_relacion_rows").click(function() {    
       var table=$('#select_tabla_a option:selected').text(); 
       var table_b=$('#select_tabla_b option:selected').text();
-      var val_select=$('#select_tabla_a option:selected').val()+'-'+$('#select_tabla_b option:selected').val();   
-      var val_select_rev=$('#select_tabla_b option:selected').val()+'-'+$('#select_tabla_a option:selected').val();   
+      var val_select=table+'-'+table_b;   
+      var val_select_rev=table_b+'-'+table;   
+      var on_inner=$("#row_tabla_select_a input:radio:checked").val()+'-'+$("#row_tabla_select_b input:radio:checked").val(); 
+      console.log(on_inner)
       var control=true;    
       $("#query_create input").each(function (index) 
       {             
@@ -377,6 +467,7 @@ var select_old;
               {     
                   if($("#row_tabla_select_b input:radio:checked").length>0 && $("#row_tabla_select_a input:radio:checked").length>0)
                   {
+                      val_select=val_select+'-'+on_inner+'-'+$('#union_select option:selected').val();
                       $('#query_create').append('<div class="alert alert-info alert-dismissible fade in" role="alert"><button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span></button><strong> '+table+'</strong> relacionada con <strong>'+table_b+'</strong><input type="hidden" value="'+val_select +'"></div>')
 
                   }
@@ -540,15 +631,18 @@ var select_old;
                   value: '',
                   text: ''
               }))	
+            $('#combox_tabla').append($('<option>', {
+                value: cont,
+                text: valor.TABLE_NAME
+            }))	
           }	
           else{
              $('#combox_tabla').append($('<option>', {
                   value: cont,
                   text: valor.TABLE_NAME
               }))	
-              cont++;
-             
-          }			                    
+          }
+          cont++;			                    
            
 				});
 				},
