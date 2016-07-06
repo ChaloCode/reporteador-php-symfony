@@ -1,14 +1,16 @@
 # This file is auto-generated during the composer install
 parameters:
-    database_host: 127.0.0.1
+    database_host: localhost
     database_port: null
-    database_name: colibri
-    database_user: root
-    database_password: null
+    database_name: gonzaloj_colibri
+    database_user: gonzaloj_colibri
+    database_password: Elefante056.*
     mailer_transport: gmail
     mailer_host: smtp.gmail.com
     mailer_user: gjskateb@gmail.com
     mailer_password: Elefante056.*
-    secret: d0edfd718340ad7a3293353d622230e53d89279f
+    secret: d0edfd718340ad7a3293353d622230e53d89279f 
+ 
+
     
  
