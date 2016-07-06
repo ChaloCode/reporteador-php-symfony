@@ -276,10 +276,10 @@
                query.FROM=tabla;
                 jQuery.each(rows_select[tabla], function (indice, valor) {
                   if(indice.toString().split(" ").length>1) {
-                          indice='"'+indice+'"';
+                          indice='`'+indice+'`';
                         }                        
                   if(valor.toString().split(" ").length>1) {
-                    valor='"'+valor+'"';
+                    valor='`'+valor+'`';
                   }  	
                   if(valor==1){
                     query.SELECT.push(tabla+'.'+indice)
@@ -297,10 +297,10 @@
                                           
                       jQuery.each(rows_select[tabla], function (indice, valor) {	
                         if(indice.toString().split(" ").length>1) {
-                          indice='"'+indice+'"';
+                          indice='`'+indice+'`';
                         }                        
                         if(valor.toString().split(" ").length>1) {
-                          valor='"'+valor+'"';
+                          valor='`'+valor+'`';
                         }                      
                         if(valor==1){
                           query.SELECT.push(tabla+'.'+indice)
@@ -624,7 +624,8 @@ var select_old;
 		var cont=0;
 		$.ajax({
 				data: {id:$('#form_idConexion option:selected').val()},
-				url: '{{ asset("app_dev.php/regresion/getvaluetable")}}'  ,
+				//url: '{{ asset("app_dev.php/regresion/getvaluetable")}}'  ,
+        url: '{{ asset("/regresion/getvaluetable")}}', 
 				dataType: 'json',
 				type:  'post',
 				beforeSend: function () {	  
@@ -673,7 +674,8 @@ var select_old;
 		var cont=0;
 		$.ajax({
 				data: {id:$('#form_idConexion option:selected').val(),tables:array},
-				url: '{{ asset("app_dev.php/regresion/getvaluerow")}}'  ,
+			//	url: '{{ asset("app_dev.php/regresion/getvaluerow")}}'  ,
+       	url: '{{ asset("/regresion/getvaluerow")}}'  ,
 				dataType: 'json',
 				type:  'post',
 				beforeSend: function () {		

@@ -5,6 +5,18 @@
     margin-top: 2px;
     margin-bottom: 8px;   
 }
+
+.lista {
+    display: flex;
+    margin-bottom: 15px;
+}
+
+
+.lista a {
+    flex-grow: 1;
+    text-align: center;
+}
+  
     
 </style>
 {% endblock %}
@@ -13,14 +25,23 @@
                 {% block tituloVentana %}{{info['grafica'].titulo}}{% endblock %} 
                 {% block subTituloVentana %}{{info['grafica'].subtitulo}}{% endblock %}
                  {% block bodyLink %}
-                    <li><a  class="fa fa-bar-chart" id="BarraLink" onclick="Barra()"> Grafica, Barra</a></li>  
-                    <li><a  class="fa fa-line-chart" id="LineaLink" onclick="Linea()"> Grafica, Linea</a></li>                    
-                    <li><a  class="fa fa-area-chart" id="AreaLink" onclick="Area()"> Grafica, Area</a></li>                    
-                    <li><a  class="fa fa-pie-chart" id="DonutLink" onclick="Donut()"> Grafica, Donut</a></li>
+                 <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><i class="fa fa-wrench"></i></a>
+                    <ul class="dropdown-menu" role="menu">
+                    <li><a href="#" class="fa fa-bar-chart fa-lg" id="BarraLink" onclick="Barra()"> Grafica, Barra</a></li>  
+                    <li><a href="#" class="fa fa-line-chart fa-lg" id="LineaLink" onclick="Linea()"> Grafica, Linea</a></li>                    
+                    <li><a href="#" class="fa fa-area-chart fa-lg" id="AreaLink" onclick="Area()"> Grafica, Area</a></li>                    
+                    <li><a href="#" class="fa fa-pie-chart fa-lg" id="DonutLink" onclick="Donut()"> Grafica, Donut</a></li>
+                  </ul>
                  {% endblock %}                           
                 {% block bodyVentana %} 
-                             
-                    <div class="row">
+                     <div class="row">
+                        <div class="col-md-12 lista">
+                            <a href="#" class="fa fa-bar-chart fa-3x " id="BarraLink" onclick="Barra()"></a>
+                            <a href="#" class="fa fa-line-chart fa-3x " id="LineaLink" onclick="Linea()"></a>                  
+                            <a href="#" class="fa fa-area-chart fa-3x " id="AreaLink" onclick="Area()"></a>                 
+                            <a href="#" class="fa fa-pie-chart fa-3x " id="DonutLink" onclick="Donut()"></a>
+                        </div>
+                    
                         <div class="col-md-6">
                             <p>Seleccione valores para el <strong>eje horizontal</strong></p>
                                 <select id='grafica-x' class="margen" required>
