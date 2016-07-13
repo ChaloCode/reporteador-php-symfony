@@ -5,9 +5,9 @@ parameters:
     database_name: gonzaloj_colibri
     database_user: gonzaloj_colibri
     database_password: Elefante056.*
-    mailer_transport: gmail
-    mailer_host: smtp.gmail.com
-    mailer_user: gjskateb@gmail.com
+    mailer_transport: box1002.bluehost.com
+    mailer_host: box1002.bluehost.com
+    mailer_user: reporte@colibri.gonzalojperez.co
     mailer_password: Elefante056.*
     secret: d0edfd718340ad7a3293353d622230e53d89279f 
  
