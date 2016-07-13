@@ -624,8 +624,8 @@ var select_old;
 		var cont=0;
 		$.ajax({
 				data: {id:$('#form_idConexion option:selected').val()},
-				//url: '{{ asset("app_dev.php/regresion/getvaluetable")}}'  ,
-        url: '{{ asset("/regresion/getvaluetable")}}', 
+				url: '{{ asset("app_dev.php/regresion/getvaluetable")}}'  ,
+       // url: '{{ asset("/regresion/getvaluetable")}}', 
 				dataType: 'json',
 				type:  'post',
 				beforeSend: function () {	  
@@ -674,8 +674,8 @@ var select_old;
 		var cont=0;
 		$.ajax({
 				data: {id:$('#form_idConexion option:selected').val(),tables:array},
-			//	url: '{{ asset("app_dev.php/regresion/getvaluerow")}}'  ,
-       	url: '{{ asset("/regresion/getvaluerow")}}'  ,
+				url: '{{ asset("app_dev.php/regresion/getvaluerow")}}'  ,
+       	//url: '{{ asset("/regresion/getvaluerow")}}'  ,
 				dataType: 'json',
 				type:  'post',
 				beforeSend: function () {		
