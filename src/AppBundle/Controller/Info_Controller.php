@@ -130,7 +130,7 @@ class Info_Controller extends Controller
            $usuario_email=$usuario->getEmail();   
            $usuario_name=$usuario->getUsername();  
            $asunto='Mensaje, Colibrí Report: '.$usuario_name;
-           $msm=$request->get('form')['msm'];
+           $msm=$request->get('form')['msm'].' Fecha: '.$fecha;
            $send_email=$this->sendEmail($usuario_email,$asunto,$msm);
            if($send_email){
              $this->addFlash(
