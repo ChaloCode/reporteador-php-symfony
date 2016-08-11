@@ -123,7 +123,7 @@ class Sys_ConexionBDController extends Controller
                     'class' => 'AppBundle:Sys_TipoConexion',
                     'choice_label' => 'Nombre',  
                     'label_attr' => array('class' => 'control-label col-md-4 col-sm-4 col-xs-12'),
-                    'attr' => array('class' => 'col-md-7 col-xs-10')                 
+                    'attr' => array('class' => 'height25px col-md-7 col-xs-10')                 
                 ))             
             ->getForm();  
          $form->handleRequest($request);         
@@ -178,7 +178,7 @@ class Sys_ConexionBDController extends Controller
                       'titulo' => 'Nueva Fuente de Datos', 
                       'subtitulo' =>'Base de datos externa'
                     ),
-                      'tabla'=>array(
+                      'tabla_crud'=>array(
                       'titulo' => 'Conexiones', 
                       'subtitulo' =>'Base de datos externas',
                       'descripcion'=>'Generado: '.$fecha                      
@@ -215,7 +215,7 @@ class Sys_ConexionBDController extends Controller
         return $this->render('sys_conexionBD/index.html.twig', array(
                                                                     'form' => $form->createView(),
                                                                     'info'=>$info,
-                                                                    'infoTabla'=>$infoTabla, 
+                                                                    'infoTabla_crud'=>$infoTabla, 
                                                                     'control'=> $control                                                          
                                                         
                                                                 ));
@@ -287,7 +287,7 @@ class Sys_ConexionBDController extends Controller
                     'class' => 'AppBundle:Sys_TipoConexion',
                     'choice_label' => 'Nombre',  
                     'label_attr' => array('class' => 'control-label col-md-4 col-sm-4 col-xs-12'),
-                    'attr' => array('class' => 'col-md-8 col-xs-12')                 
+                    'attr' => array('class' => 'height25px col-md-8 col-xs-12')                 
                 ))             
             ->getForm();  
             

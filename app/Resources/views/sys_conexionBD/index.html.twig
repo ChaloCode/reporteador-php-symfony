@@ -10,7 +10,7 @@
         {{ parent() }} 
     {% endblock %}   
     {% if control>0 %}
-        {% block stylesheetsTabla %} 
+        {% block stylesheetsTabla_crud %} 
             {{ parent() }} 
         {% endblock %} 
     {% endif %}
@@ -33,7 +33,7 @@
 
 {% block body3 %}
     {% if control>0 %}    
-        {% block bodyTabla %}
+        {% block bodyTabla_crud %}
             {{ parent() }}  
         {% endblock %} 
     {% endif %} 
@@ -48,7 +48,7 @@
         {{ parent() }} 
     {% endblock %}  
     {% if control>0 %}
-        {% block javascriptsTabla %}     
+        {% block javascriptsTabla_crud %}     
             {{ parent() }} 
         {% endblock %} 
     {% endif %}
