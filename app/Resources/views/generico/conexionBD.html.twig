@@ -164,10 +164,33 @@
                     <div id="step-44">
                       <h2 class="StepTitle">Paso 4</h2>
                         <span class="section"></span> 
+						
+						 <div class="form-group">                          
+                            <label class="control-label col-md-5  col-xs-12">Nombre de la consulta *</label>					 
+                            <div class="col-md-5 ">
+                              <input type="text" id="name_consulta" name="name_consulta" class="margen_4px_bot col-xs-12" required="true">
+                            </div>
+                        </div>
+
+                        <div class="form-group">  
+                            <label class="control-label col-md-5  col-xs-12">¿Activo? *</label>					 
+                            <div class="col-md-5 ">
+                                <input type="radio" name="is_activo" value="1" checked class="margen_4px_bot"> SI 
+                              <input type="radio" name="is_activo" value="0" class="margen_4px_bot"> NO                       
+                            </div>
+                        </div>   
+						
+						<div class="form-group">  
+                            <label class="control-label col-md-5  col-xs-12">Descripción</label>					 
+                            <div class="col-md-5 ">
+                              <textarea name="descripcion" class="col-xs-12"> </textarea>                   
+                            </div>
+                        </div> 
+						
                         <div class="form-group">
                           {{ form_label(form.TextAreaSQL) }}
                           {{ form_errors(form.TextAreaSQL) }} 
-                          <div class="col-md-6 col-sm-6">
+                          <div class="col-md-5 col-sm-5">
                           {{ form_widget(form.TextAreaSQL) }}
                           </div>
                         </div>  
@@ -198,10 +221,17 @@
            onLeaveStep:leaveAStepCallback,
       });
 
-      function onFinishCallback() {
-        $('form').submit();
-      }
+      
     });
+	
+	function onFinishCallback() {
+          if($('#name_consulta').val()!='' && $('#form_TextAreaSQL').val()!=''){
+			$('form').submit();
+		  }
+		  else{
+			Alerta('Advertencia','Todos los campos * son obligatorios.','error')
+		  }
+    }
     function leaveAStepCallback(obj, context){
        // alert("Leaving step " + context.fromStep + " to go to step " + context.toStep);
         return validateSteps(context.fromStep); // return false to stay on step and true to continue navigation 

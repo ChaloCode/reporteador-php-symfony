@@ -1,0 +1,85 @@
+{% extends "base.html.twig" %}
+
+{% use "generico/conexionBD.html.twig" %}
+{% use "generico/tabla.html.twig" %}
+{% use "generico/tablaCRUD.html.twig"  %}
+
+
+
+{% block stylesheets %}  
+    {{ parent() }}    
+
+    {% block stylesheetsFormulario %}  
+        {{ parent() }} 
+    {% endblock %}      
+
+  
+
+    {% block stylesheetsTabla_crud %} 
+        {{ parent() }} 
+    {% endblock %}
+  
+<style>
+.alerta_conexion_empy {
+    white-space: normal;
+}
+</style>  
+{% endblock %}
+
+
+{% block title %}{{info['pagina'].titulo}}{% endblock %}
+
+
+{% block body %} 
+    {% block bodyFormulario %}      
+        {{ parent() }}  
+    {% endblock %}    
+{% endblock %}
+
+
+{% block body2 %}
+    {% if control>0 %}    
+        {% block bodyTabla %}
+            {{ parent() }}  
+        {% endblock %} 
+    {% endif %} 
+{% endblock %}
+
+{% block body3 %} 
+    {% if infoTabla_crud['lengthFilas']>-1 %}
+        {% block bodyTabla_crud %}
+                    {{ parent() }}  
+        {% endblock %}  
+    {% endif %} 
+{% endblock %}
+
+   
+
+
+{% block javascripts %}  
+
+    {{ parent() }} 
+
+    {% block javascriptsFormulario %}   
+        {{ parent() }} 
+    {% endblock %}
+
+    {% block javascriptsTabla %}     
+            {{ parent() }} 
+    {% endblock %}  
+       
+    {% block javascriptsTabla_crud %}     
+            {{ parent() }} 
+    {% endblock %}  
+  
+    <script>    
+    if($.isEmptyObject($('#form_idConexion').val()))
+    {   
+         Alerta('Advertencia','Para usar este modulo, debe crear primero una conexion a BD Externa.','success');  
+        $('#formulario-generico').remove();
+        $('#add-formulario-generico').html("<a class='alerta_conexion_empy btn btn-success btn-lg' href='{{ asset('conexion/')}}'><i class='fa fa-share'></i> Cree su primera conexión a BD Externa.</a>");
+        
+      
+    }
+    </script>
+{% endblock %}

@@ -1,6 +1,6 @@
 {% extends "base.html.twig" %}
 
-{% use "generico/conexionBD.html.twig" %}
+{% use "generico/formulario.html.twig" %}
 {% use "generico/graficaRegresion.html.twig" %}
 
 
@@ -56,13 +56,15 @@
             {{ parent() }} 
         {% endblock %}
     {% endif %}
-    <script>    
+    <script> 
+    /*   
     if($.isEmptyObject($('#form_idConexion').val()))
     {   
         Alerta('Advertencia','Para usar este modulo, debe crear primero una conexion a BD Externa.','success');  
         $('#formulario-generico').remove();
         $('#add-formulario-generico').html("<a class='alerta_conexion_empy btn btn-success btn-lg' href='{{ asset('conexion/')}}'><i class='fa fa-share'></i> Cree su primera conexión a BD Externa.</a>");
      }
+     */
    </script>
     
 {% endblock %}

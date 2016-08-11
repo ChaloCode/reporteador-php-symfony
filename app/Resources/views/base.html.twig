@@ -75,6 +75,10 @@
     margin: 0 1em 1em 0;
     height: 450px;
   }
+
+  .height25px {
+    height: 25px;
+}
 </style>
 
   <!--[if lt IE 9]>
@@ -124,6 +128,7 @@
             <div class="menu_section">
               <h3>General</h3>
               <ul class="nav side-menu">
+
                 <li><a><i class="fa fa-home"></i> Casa <span class="fa fa-chevron-down"></span></a>
                   <ul class="nav child_menu" style="display: none">
                     <li><a href="{{ asset("info/quienes_somos")}}">¿Quienes somos?</a>
@@ -134,21 +139,26 @@
                     </li>
                   </ul>
                 </li>
-                <li><a><i class="fa fa-database"></i> BD Externas <span class="fa fa-chevron-down"></span></a>
+
+                <li><a><i class="fa fa-wrench"></i> Configuración <span class="fa fa-chevron-down"></span></a>
                   <ul class="nav child_menu" style="display: none">                                   
-                    <li><a href="{{ asset("conexion/")}}">Administrar</a></li>                    
+                    <li><a href="{{ asset("conexion/")}}">BD Externa</a></li>   
+                    <li><a href="{{ asset("consulta/")}}">Consulta SQL</a></li>                 
                   </ul>
-                </li>
+                </li>      
+                         
                 <li><a><i class="fa fa-bar-chart-o"></i> Reportes <span class="fa fa-chevron-down"></span></a>
                   <ul class="nav child_menu" style="display: none">
                     <li><a href="{{ asset("reporte/")}}">Nuevo Reporte</a></li>
                   </ul>
                 </li>
+
                 <li><a><i class="fa fa-line-chart"></i> Predicciones <span class="fa fa-chevron-down"></span></a>
                   <ul class="nav child_menu" style="display: none">
                     <li><a href="{{ asset("regresion/")}}">Nueva Predición</a></li>
                   </ul>
                 </li>
+
             </div>
             <div class="menu_section">
               <h3>Mi cuenta</h3>

@@ -23,41 +23,25 @@ class Sys_ReporteController extends Controller
      * @Route("/reporte/", name="Reporte")
      */
     public function indexAction(Request $request)
-    {
+    {     
         $usuario = $this->get('security.token_storage')->getToken()->getUser();
-        $id_usuario=$usuario->getid();
-        
-        $em = $this->getDoctrine()->getEntityManager();
-            $connection = $em->getConnection();         
-            $statement = $connection->prepare("SELECT
-                                            sys_conexion_bd.id,
-                                            sys_conexion_bd.Nombre_Conexion
-                                            FROM `sys_conexion_bd`
-                                            WHERE sys_conexion_bd.id_Fos_user=:id");  
-            $statement->bindValue('id', $id_usuario);
-            $statement->execute();
-            $dataConexion = $statement->fetchAll(); 
-
-       
-        $lisConexiones=array();
-        foreach ($dataConexion as $key => $value) {            
-           $lisConexiones[$value['Nombre_Conexion']]=$value['id'];
-        }
+        $id_usuario=$usuario->getid();  
      
         //Se crea el formulario
         $form = $this->createFormBuilder()   
-                    ->add('idConexion', ChoiceType::class, array(
-                                                 'choices'  =>$lisConexiones,    
-                                                 'label' => 'Conexión a la BD externa *',                                                
-                                                  'label_attr' => array('class' => 'control-label col-md-4 col-sm-4 col-xs-12'),
-                                                  'attr' => array('class' => 'col-md-7 col-xs-12') 
-                                                 ))               
-                      
-                     ->add('TextAreaSQL', TextareaType::class,array('label' => 'Consulta SQL *', 
-                                                                     'label_attr' => array('class' => 'control-label col-md-4 col-sm-4 col-xs-12'),
-                                                                      'attr' => array('class' => 'col-md-7 col-xs-12')   
-                                                    ))    
-                     ->getForm();            
+                ->add('idConsulta', EntityType::class, array( 
+                    'label'=>'Nombre Consulta *',                  
+                    'class' => 'AppBundle:Sys_ConsultaSQL',
+                    'query_builder' => function (\AppBundle\Repository\Sys_ConsultaSQLRepository $er) use($id_usuario) {
+                                            return $er->createQueryBuilder('p') 
+                                                    ->where('p.idUsuario = :id')
+                                                    ->setParameter('id', $id_usuario) ;
+                                        },
+                    'choice_label' => 'nombre',  
+                    'label_attr' => array('class' => 'control-label col-md-4 col-sm-4 col-xs-12'),
+                    'attr' => array('class' => 'height25px col-md-8 col-xs-12')  
+                ))   
+                ->getForm();            
 
         //Informacion de las paginas            
         $fecha=strftime("El día, %d del mes %m del %Y %H:%M");		
@@ -65,8 +49,8 @@ class Sys_ReporteController extends Controller
                       'titulo' => 'Reporte SQL',
                     ),                    
                       'formulario'=>array(
-                      'titulo' => 'Diseñador de Informes', 
-                      'subtitulo' =>'Consulta SQL'
+                      'titulo' => 'Diseñador Informe', 
+                      'subtitulo' =>'Tabla Dinamica y Graficador'
                     ),
                       'tabla'=>array(
                       'titulo' => 'Detalle', 
@@ -82,9 +66,13 @@ class Sys_ReporteController extends Controller
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) 
-        {             
-           $idConexion=$request->get('form')['idConexion'];
-           $sql=$request->get('form')['TextAreaSQL'];             
+        {      
+            
+           $em = $this->getDoctrine()->getManager();
+           $consulta = $em->getRepository('AppBundle:Sys_ConsultaSQL')->find($request->get('form')['idConsulta']);
+
+           $idConexion=$consulta->getIdConexion();
+           $sql=$consulta->getStringQuery();           
            $retorno=$this->reporte($sql,$idConexion );
            if(empty($retorno['infoTabla']['filas']))
            {
