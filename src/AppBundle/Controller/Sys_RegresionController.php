@@ -258,16 +258,32 @@ class Sys_RegresionController extends Controller
               ->getRepository('AppBundle:Sys_ConexionBD')
               ->find($id);  
         $list_new=array();
-        foreach ($tables as $key => $table) {
-            $em = $this->getDoctrine()->getEntityManager();
-            $connection = $em->getConnection();
-            $statement = $connection->prepare("SELECT * 
-                                                FROM $table
-                                                LIMIT 1");            
-           // $statement->bindValue('table',);   
-          //  $statement->bindValue('name',$bd->getNameBD());     
+          $em = $this->getDoctrine()->getEntityManager();
+            $connection = $em->getConnection();         
+            $statement = $connection->prepare("SELECT
+                                                sys_conexion_bd.`Host`,
+                                                sys_conexion_bd.`Port`,
+                                                sys_conexion_bd.Nombre_BD,
+                                                sys_conexion_bd.Usuario,
+                                                sys_conexion_bd.`Password` ,
+                                                sys_tipo_conexion.Driver AS Driver
+                                                FROM `sys_conexion_bd`
+                                                INNER JOIN sys_tipo_conexion ON sys_tipo_conexion.id=sys_conexion_bd.id_Tipo_Conexion
+                                                WHERE sys_conexion_bd.id=:id
+                                                ");  
+                                                
+            $statement->bindValue('id', $id);           
             $statement->execute();
-            $list = $statement->fetchAll();  
+            $dataConexion = $statement->fetchAll();  
+            $driver=$dataConexion['0']['Driver'];
+            $user=$dataConexion['0']['Usuario'];
+            $port=$dataConexion['0']['Port'];
+            $password=$dataConexion['0']['Password'];
+            $host=$dataConexion['0']['Host'];
+            $dbname=$dataConexion['0']['Nombre_BD'];
+        foreach ($tables as $key => $table) {   
+            $sql="SELECT *  FROM $table LIMIT 1";
+            $list  = $this->selectDataExterna($sql,$driver,$user,$port,$password,$host,$dbname); 
             
            $list_new[$table]=$list[0];
         }
