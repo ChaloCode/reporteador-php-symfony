@@ -254,10 +254,8 @@ class Sys_RegresionController extends Controller
         $tables=$request->get('tables'); 
         $id=$request->get('id'); 
        
-        $bd=$this->getDoctrine()
-              ->getRepository('AppBundle:Sys_ConexionBD')
-              ->find($id);  
-        $list_new=array();
+        
+          $list_new=array();
           $em = $this->getDoctrine()->getEntityManager();
             $connection = $em->getConnection();         
             $statement = $connection->prepare("SELECT
@@ -286,9 +284,7 @@ class Sys_RegresionController extends Controller
             $list  = $this->selectDataExterna($sql,$driver,$user,$port,$password,$host,$dbname); 
             
            $list_new[$table]=$list[0];
-        }
-        //var_dump($list_new);
-       // die('fin');
+        }      
      
         return new JsonResponse($list_new);
     }
