@@ -218,7 +218,7 @@ class Sys_ConsultaSQLController extends Controller
                                                                 'infoTabla_crud'=>$this->getSys_consulta_sql($id_usuario)                                                        
                                                                ));
     }   
-  
+  //pasar a la cada de reglas: siguiente version
    private function selectDataExterna($sql,$driver,$user,$port,$password,$host,$dbname)
     {         
         $conn = DriverManager::getConnection(array(

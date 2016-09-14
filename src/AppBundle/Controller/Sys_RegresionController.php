@@ -206,26 +206,42 @@ class Sys_RegresionController extends Controller
                     );
     
     }
-    
+   
      /**
      *@Route("/regresion/getvaluetable", name="getValueTableAction")
      */
     public function getValueTableAction(Request $request)
     {
         $id=$request->get('id'); 
-        
-        $bd=$this->getDoctrine()
-              ->getRepository('AppBundle:Sys_ConexionBD')
-              ->find($id);  
-        
         $em = $this->getDoctrine()->getEntityManager();
-        $connection = $em->getConnection();
-        $statement = $connection->prepare("SELECT TABLE_NAME 
-                                            FROM INFORMATION_SCHEMA.TABLES
-                                            WHERE TABLE_SCHEMA =:name");            
-        $statement->bindValue('name',$bd->getNameBD());        
-        $statement->execute();
-        $list = $statement->fetchAll();  
+            $connection = $em->getConnection();         
+            $statement = $connection->prepare("SELECT
+                                                sys_conexion_bd.`Host`,
+                                                sys_conexion_bd.`Port`,
+                                                sys_conexion_bd.Nombre_BD,
+                                                sys_conexion_bd.Usuario,
+                                                sys_conexion_bd.`Password` ,
+                                                sys_tipo_conexion.Driver AS Driver
+                                                FROM `sys_conexion_bd`
+                                                INNER JOIN sys_tipo_conexion ON sys_tipo_conexion.id=sys_conexion_bd.id_Tipo_Conexion
+                                                WHERE sys_conexion_bd.id=:id
+                                                ");  
+                                                
+            $statement->bindValue('id', $id);           
+            $statement->execute();
+            $dataConexion = $statement->fetchAll();  
+            $driver=$dataConexion['0']['Driver'];
+            $user=$dataConexion['0']['Usuario'];
+            $port=$dataConexion['0']['Port'];
+            $password=$dataConexion['0']['Password'];
+            $host=$dataConexion['0']['Host'];
+            $dbname=$dataConexion['0']['Nombre_BD'];
+            
+            $sql="SELECT TABLE_NAME FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_SCHEMA ='$dbname'";
+            $list  = $this->selectDataExterna($sql,$driver,$user,$port,$password,$host,$dbname);
+        
+       
+         
      
         return new JsonResponse($list);
     }
