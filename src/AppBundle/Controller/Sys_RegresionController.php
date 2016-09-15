@@ -35,7 +35,7 @@ class Sys_RegresionController extends Controller
         //Se crea el formulario
         $form = $this->createFormBuilder()   
                 ->add('idConsulta', EntityType::class, array( 
-                    'label'=>'Nombre Consulta *',                  
+                    'label'=>'*Utilice consultas que mustre el comportamiento de un unico producto/servicio',                  
                     'class' => 'AppBundle:Sys_ConsultaSQL',
                     'query_builder' => function (\AppBundle\Repository\Sys_ConsultaSQLRepository $er) use($id_usuario) {
                                             return $er->createQueryBuilder('p') 
@@ -43,8 +43,8 @@ class Sys_RegresionController extends Controller
                                                     ->setParameter('id', $id_usuario) ;
                                         },
                     'choice_label' => 'nombre',  
-                    'label_attr' => array('class' => 'control-label col-md-4 col-sm-4 col-xs-12'),
-                    'attr' => array('class' => 'height25px col-md-8 col-xs-12')  
+                    'label_attr' => array('class' => ''),
+                    'attr' => array('class' => 'height25px col-md-6 col-xs-12')  
                 ))   
                 ->getForm();          
 
@@ -54,8 +54,8 @@ class Sys_RegresionController extends Controller
                       'titulo' => 'Regresión',
                     ),                    
                       'formulario'=>array(
-                      'titulo' => 'Regresión', 
-                      'subtitulo' =>'Calculo predicción'
+                      'titulo' => 'Predicciones', 
+                      'subtitulo' =>'Mercado'
                     ),
                       'tabla'=>array(
                       'titulo' => '', 
@@ -206,7 +206,7 @@ class Sys_RegresionController extends Controller
                     );
     
     }
-    
+   
      /**
      *@Route("/regresion/getvaluetable", name="getValueTableAction")
      */
