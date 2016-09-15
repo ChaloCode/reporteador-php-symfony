@@ -7,6 +7,11 @@
 }
 
 #graficar {height:350px; width:98%;overflow-y: hidden;overflow-x: auto;}
+ .rojo {
+    color: red;
+    font-size: smaller;
+    font-style: italic;
+} 
 </style>
 {% endblock %}
 {% block bodyGrafica %} 
@@ -18,13 +23,15 @@
                 {% block bodyVentana %}  
 					<div class="row">
                         <div class="col-md-6">
-                            <p>Seleccione valores para el <strong>eje horizontal</strong></p>
+                            <p>Seleccione columna: <strong>eje de periodos</strong></p>
+                            <p class='rojo'>*Solo seleccione columna númerica.</p>
                                 <select id='grafica-x' class="margen">
                                     {% for i in infoTabla['columnas'] %}
                                         <option value="{{ loop.index0 }}">{{i}}</option>               
                                     {% endfor %}
                                 </select> 
-                            <p>Seleccione valores para el <strong>eje vertical</strong></p>
+                            <p>Seleccione columna: <strong>eje a predecir</strong></p>
+                            <p class='rojo'>*Solo seleccione columna númerica.</p>
                             <select id='grafica-y' class="margen">
                                 {% for i in infoTabla['columnas'] %}
                                     <option value="{{ loop.index0 }}">{{i}}</option>               
@@ -32,7 +39,8 @@
                             </select>
                         </div>
                         <div class="col-md-6">
-                            <p>Seleccione tipo de regresión <strong>a calcular</strong></p>
+                            <p>Seleccione tipo de regresión <strong>a usar</strong></p>
+                            
                             <select id='tipo-regresion' class="margen">
                                     <option value='lineal'>Regresión Lineal</option> 
                                     <option value='cuadrada'>Regresión Cuadratica</option> 
@@ -40,9 +48,9 @@
                                     <option value='logaritmica'>Regresión Logarítmica</option> 
                                     
                             </select> 
-                            <p>Digite valor <strong>a predecir</strong></p>
+                            <p>Digite el periodo <strong>a predecir</strong></p>
                             <input id="valorFuturo" placeholder="1.5">
-                            <button  id="calRegresion" class="btn btn-success">Calcular</button>
+                            <button  id="calRegresion" class="btn btn-success">Predecir</button>
                         </div>
                      </div>   
                      

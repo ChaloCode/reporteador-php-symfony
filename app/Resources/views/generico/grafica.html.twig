@@ -17,7 +17,11 @@
     text-align: center;
 }
   
-    
+ .rojo {
+    color: red;
+    font-size: smaller;
+    font-style: italic;
+} 
 </style>
 {% endblock %}
 {% block bodyGrafica %} 
@@ -60,6 +64,7 @@
                         </div>
                         <div id='divSeries' class="col-md-6">
                             <p>Seleccione valores para agregar una <strong>nueva serie</strong></p>
+                            <p class='rojo'>*Solo se puede agregar una nueva serie, cuando los ejes son valores númericos.</p>
                             <select id='grafica-serie' class="margen ">
                                 {% for i in infoTabla['columnas'] %}
                                     <option value="{{ loop.index0 }}">{{i}}</option>               
