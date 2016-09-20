@@ -22,6 +22,16 @@ class Sys_TipoConexion
     private $id;
 
     /**
+     * @ORM\OneToMany(targetEntity="Sys_ConexionBD", mappedBy="consulta")
+     */
+    private $conexiones;
+
+    public function __construct()
+    {
+        $this->conexiones = new ArrayCollection();
+    }
+
+    /**
      * @var string
      *
      * @ORM\Column(name="Driver", type="string", length=255)
@@ -94,4 +104,3 @@ class Sys_TipoConexion
         return $this->nombre;
     }
 }
-

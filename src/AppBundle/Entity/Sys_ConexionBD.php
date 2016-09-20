@@ -21,6 +21,7 @@ class Sys_ConexionBD
      */
     private $id;
     
+    
     /**
      * @var int
      *
@@ -28,12 +29,15 @@ class Sys_ConexionBD
      */
     private $idFosUser;    
 
-    /**
-     * @var int
-     *
-     * @ORM\Column(name="id_Tipo_Conexion", type="integer")
+   
+
+     /**
+     * @ORM\ManyToOne(targetEntity="Sys_TipoConexion", inversedBy="Sys_ConexionBD")
+     * @ORM\JoinColumn(name="id_Tipo_Conexion", referencedColumnName="id")
      */
-    private $idTipoConexion;
+    private $consulta;
+
+   
     
     /**
      * @var string
@@ -280,5 +284,62 @@ class Sys_ConexionBD
     {
         return $this->password;
     }
-}
 
+    /**
+     * Add consulta
+     *
+     * @param \AppBundle\Entity\Sys_ConsultaSQL $consulta
+     *
+     * @return Sys_ConexionBD
+     */
+    public function addConsulta(\AppBundle\Entity\Sys_ConsultaSQL $consulta)
+    {
+        $this->consultas[] = $consulta;
+    
+        return $this;
+    }
+
+    /**
+     * Remove consulta
+     *
+     * @param \AppBundle\Entity\Sys_ConsultaSQL $consulta
+     */
+    public function removeConsulta(\AppBundle\Entity\Sys_ConsultaSQL $consulta)
+    {
+        $this->consultas->removeElement($consulta);
+    }
+
+    /**
+     * Get consultas
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getConsultas()
+    {
+        return $this->consultas;
+    }
+
+    /**
+     * Set consulta
+     *
+     * @param \AppBundle\Entity\Sys_ConsultaSQL $consulta
+     *
+     * @return Sys_ConexionBD
+     */
+    public function setConsulta(\AppBundle\Entity\Sys_ConsultaSQL $consulta = null)
+    {
+        $this->consulta = $consulta;
+    
+        return $this;
+    }
+
+    /**
+     * Get consulta
+     *
+     * @return \AppBundle\Entity\Sys_ConsultaSQL
+     */
+    public function getConsulta()
+    {
+        return $this->consulta;
+    }
+}

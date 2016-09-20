@@ -19,10 +19,15 @@ use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Doctrine\DBAL\DriverManager;
 use Symfony\Component\HttpFoundation\JsonResponse;
 
-
+use  AppBundle\Regla\ConsultasRegla;
 
 class Sys_RegresionController extends Controller
 {   
+
+    function __construct()
+    {       
+       $this->regla = new ConsultasRegla();
+    }  
     
    /**
      * @Route("/regresion/", name="Regresion")
@@ -105,22 +110,7 @@ class Sys_RegresionController extends Controller
                                                                ));
     }   
   
-    private function selectDataExterna($sql,$driver,$user,$port,$password,$host,$dbname)
-    {         
-        $conn = DriverManager::getConnection(array(
-            'wrapperClass' => 'Doctrine\DBAL\Connections\MasterSlaveConnection',
-            'driver' => $driver,
-            'master' => array('user' => $user, 'port'=>$port,'password' => $password, 'host' => $host, 'dbname' => $dbname),
-            'slaves' => array(
-                array('user' => 'slave1', 'password', 'host' => '', 'dbname' => '')
-            )
-        ));        
-        $conn->connect('master');        
-        $stmt = $conn->prepare($sql);     
-        $stmt->execute();
-        $filasx = $stmt->fetchAll();         
-        return $filasx;
-    }
+  
    //Este metodo se volvera generico y se llamara cargarInfo
   private function newTabla($sql,$idConexion,$msm=true)
     {      
@@ -130,33 +120,18 @@ class Sys_RegresionController extends Controller
             $usuario = $this->get('security.token_storage')->getToken()->getUser();
             $id_usuario=$usuario->getId();
             
-            $em = $this->getDoctrine()->getEntityManager();
-            $connection = $em->getConnection();         
-            $statement = $connection->prepare("SELECT
-                                                sys_conexion_bd.`Host`,
-                                                sys_conexion_bd.`Port`,
-                                                sys_conexion_bd.Nombre_BD,
-                                                sys_conexion_bd.Usuario,
-                                                sys_conexion_bd.`Password` ,
-                                                sys_tipo_conexion.Driver AS Driver
-                                                FROM `sys_conexion_bd`
-                                                INNER JOIN sys_tipo_conexion ON sys_tipo_conexion.id=sys_conexion_bd.id_Tipo_Conexion
-                                                WHERE sys_conexion_bd.id_Fos_user=:id
-                                                 AND sys_conexion_bd.id=:id_conexion");  
-                                                
-            $statement->bindValue('id', $id_usuario);
-            $statement->bindValue('id_conexion', $idConexion);
-            $statement->execute();
-            $dataConexion = $statement->fetchAll();  
-            $driver=$dataConexion['0']['Driver'];
-            $user=$dataConexion['0']['Usuario'];
-            $port=$dataConexion['0']['Port'];
-            $password=$dataConexion['0']['Password'];
-            $host=$dataConexion['0']['Host'];
-            $dbname=$dataConexion['0']['Nombre_BD'];
+            $em = $this->getDoctrine()->getManager();
+            $dataConexion = $em->getRepository('AppBundle:Sys_ConexionBD')->getConexionBD($id_usuario,$idConexion);   
+
+            $driver=$dataConexion['0']['driver'];
+            $user=$dataConexion['0']['user'];
+            $port=$dataConexion['0']['port'];
+            $password=$dataConexion['0']['password'];
+            $host=$dataConexion['0']['host'];
+            $dbname=$dataConexion['0']['nameBD'];
             
              
-            $filasx = $this->selectDataExterna($sql,$driver,$user,$port,$password,$host,$dbname);
+            $filasx = $this->regla->selectDataExterna($sql,$driver,$user,$port,$password,$host,$dbname);
         
         } catch (\Exception $e) {
                 if($msm){
@@ -212,36 +187,24 @@ class Sys_RegresionController extends Controller
      */
     public function getValueTableAction(Request $request)
     {
-        $id=$request->get('id'); 
-        $em = $this->getDoctrine()->getEntityManager();
-            $connection = $em->getConnection();         
-            $statement = $connection->prepare("SELECT
-                                                sys_conexion_bd.`Host`,
-                                                sys_conexion_bd.`Port`,
-                                                sys_conexion_bd.Nombre_BD,
-                                                sys_conexion_bd.Usuario,
-                                                sys_conexion_bd.`Password` ,
-                                                sys_tipo_conexion.Driver AS Driver
-                                                FROM `sys_conexion_bd`
-                                                INNER JOIN sys_tipo_conexion ON sys_tipo_conexion.id=sys_conexion_bd.id_Tipo_Conexion
-                                                WHERE sys_conexion_bd.id=:id
-                                                ");  
-                                                
-            $statement->bindValue('id', $id);           
-            $statement->execute();
-            $dataConexion = $statement->fetchAll();  
-            $driver=$dataConexion['0']['Driver'];
-            $user=$dataConexion['0']['Usuario'];
-            $port=$dataConexion['0']['Port'];
-            $password=$dataConexion['0']['Password'];
-            $host=$dataConexion['0']['Host'];
-            $dbname=$dataConexion['0']['Nombre_BD'];
-            
-            $sql="SELECT TABLE_NAME FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_SCHEMA ='$dbname'";
-            $list  = $this->selectDataExterna($sql,$driver,$user,$port,$password,$host,$dbname);
+
+        $id=$request->get('id');   
+        $em = $this->getDoctrine()->getManager();
+        $dataConexion = $em->getRepository('AppBundle:Sys_ConexionBD')->getConexionBD_id($id);   
+ 
+        $driver=$dataConexion['0']['driver'];
+        $user=$dataConexion['0']['user'];
+        $port=$dataConexion['0']['port'];
+        $password=$dataConexion['0']['password'];
+        $host=$dataConexion['0']['host'];
+        $dbname=$dataConexion['0']['nameBD'];
         
-       
-         
+
+        //SQL es una sentencia que se debe pasar dql, para que aplique todos los motores
+        //Mysql, oracle , sql server
+        //Trae los nombres de las tablas
+        $sql="SELECT TABLE_NAME FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_SCHEMA ='$dbname'";
+        $list  =  $this->regla->selectDataExterna($sql,$driver,$user,$port,$password,$host,$dbname); 
      
         return new JsonResponse($list);
     }
@@ -253,36 +216,23 @@ class Sys_RegresionController extends Controller
     {
         $tables=$request->get('tables'); 
         $id=$request->get('id'); 
-       
-        
-          $list_new=array();
-          $em = $this->getDoctrine()->getEntityManager();
-            $connection = $em->getConnection();         
-            $statement = $connection->prepare("SELECT
-                                                sys_conexion_bd.`Host`,
-                                                sys_conexion_bd.`Port`,
-                                                sys_conexion_bd.Nombre_BD,
-                                                sys_conexion_bd.Usuario,
-                                                sys_conexion_bd.`Password` ,
-                                                sys_tipo_conexion.Driver AS Driver
-                                                FROM `sys_conexion_bd`
-                                                INNER JOIN sys_tipo_conexion ON sys_tipo_conexion.id=sys_conexion_bd.id_Tipo_Conexion
-                                                WHERE sys_conexion_bd.id=:id
-                                                ");  
-                                                
-            $statement->bindValue('id', $id);           
-            $statement->execute();
-            $dataConexion = $statement->fetchAll();  
-            $driver=$dataConexion['0']['Driver'];
-            $user=$dataConexion['0']['Usuario'];
-            $port=$dataConexion['0']['Port'];
-            $password=$dataConexion['0']['Password'];
-            $host=$dataConexion['0']['Host'];
-            $dbname=$dataConexion['0']['Nombre_BD'];
-        foreach ($tables as $key => $table) {   
-            $sql="SELECT *  FROM $table LIMIT 1";
-            $list  = $this->selectDataExterna($sql,$driver,$user,$port,$password,$host,$dbname); 
-            
+
+        $list_new=array();
+        $em = $this->getDoctrine()->getEntityManager();
+        $dataConexion = $em->getRepository('AppBundle:Sys_ConexionBD')->getConexionBD_id($id);   
+
+        $driver=$dataConexion['0']['driver'];
+        $user=$dataConexion['0']['user'];
+        $port=$dataConexion['0']['port'];
+        $password=$dataConexion['0']['password'];
+        $host=$dataConexion['0']['host'];
+        $dbname=$dataConexion['0']['nameBD'];
+
+        //Se requiere pasar a sentecia dql para que se puede aplicar a cualquier motor de bd
+       //Trae los nombres de las columnas.
+        $sql="SELECT *  FROM $table LIMIT 1";
+        foreach ($tables as $key => $table) { 
+           $list  = $this->regla->selectDataExterna($sql,$driver,$user,$port,$password,$host,$dbname);             
            $list_new[$table]=$list[0];
         }      
      

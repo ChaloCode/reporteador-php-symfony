@@ -10,5 +10,43 @@ namespace AppBundle\Repository;
  */
 class Sys_ConexionBDRepository extends \Doctrine\ORM\EntityRepository
 {
- 
+   public function getConexionBD_id($id)
+   {       
+      //QUERY ESTA EN SENTECIA DQL
+     return $this->getEntityManager()                
+                  ->createQuery("SELECT p.host,
+                                        p.port,
+                                        p.nameBD,
+                                        p.user,
+                                        p.password,
+                                        c.driver                   
+                                 FROM AppBundle:Sys_ConexionBD p                                 
+                                 INNER JOIN AppBundle:Sys_TipoConexion c WITH c.id=p.consulta
+                                 WHERE p.id=:id"
+                               )
+                  ->setParameter('id', $id)
+                  ->getResult();
+
+   }
+
+   public function getConexionBD($id_usuario,$idConexion)
+   {       
+      //QUERY ESTA EN SENTECIA DQL
+     return $this->getEntityManager()                
+                  ->createQuery("SELECT p.host,
+                                        p.port,
+                                        p.nameBD,
+                                        p.user,
+                                        p.password,
+                                        c.driver                   
+                                 FROM AppBundle:Sys_ConexionBD p                                 
+                                 INNER JOIN AppBundle:Sys_TipoConexion c WITH c.id=p.consulta
+                                 WHERE p.id_Fos_user=:id
+                                 AND p.id=:id_conexion")
+                               
+                  ->setParameter('id', $id_usuario)
+                  ->setParameter('id_conexion', $idConexion)
+                  ->getResult();
+
+   }
 }

@@ -10,4 +10,7 @@ namespace AppBundle\Repository;
  */
 class Sys_ConsultaSQLRepository extends \Doctrine\ORM\EntityRepository
 {
+
+ 
+
 }
