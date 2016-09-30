@@ -83,5 +83,7 @@ fos_user:
     registration:
         confirmation:
             enabled: true
+    group:
+        group_class: AppBundle\Entity\Group
             
   

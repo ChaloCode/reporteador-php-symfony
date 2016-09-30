@@ -17,13 +17,15 @@ use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 
 use Doctrine\DBAL\DriverManager;
 
+
 class Sys_ReporteController extends Controller
 {
+
     /**
      * @Route("/reporte/", name="Reporte")
      */
     public function indexAction(Request $request)
-    {     
+    {   
         $usuario = $this->get('security.token_storage')->getToken()->getUser();
         $id_usuario=$usuario->getid();  
      

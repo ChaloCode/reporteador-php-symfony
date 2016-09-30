@@ -31,6 +31,15 @@
 
 
 {% block body %} 
+{% if is_granted('ROLE_SUPER_ADMIN') %}
+    <h1>Hola super</h1>
+{% endif %}
+{% if is_granted('ROLE_ADMIN') %}
+    <h1>Hola admin</h1>
+{% endif %}
+{% if is_granted('ROLE_TOA') %}
+    <h1>SOY TOTA</h1>
+{% endif %}
     {% block bodyFormulario %}      
         {{ parent() }}  
     {% endblock %}    

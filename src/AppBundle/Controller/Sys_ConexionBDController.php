@@ -118,7 +118,7 @@ class Sys_ConexionBDController extends Controller
                                                         'label_attr' => array('class' => 'control-label col-md-4 col-sm-4 col-xs-12'),
                                                         'attr' => array('class' => 'col-md-7 col-xs-10')))  
        
-             ->add('idTipoConexion', EntityType::class, array( 
+             ->add('consulta', EntityType::class, array( 
                     'label'=>'Tipo conexión de la BD *',                  
                     'class' => 'AppBundle:Sys_TipoConexion',
                     'choice_label' => 'Nombre',  
