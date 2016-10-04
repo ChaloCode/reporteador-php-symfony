@@ -1,0 +1,63 @@
+{% extends "base.html.twig" %}
+
+{% use "generico/formulario.html.twig" %}
+{% use "generico/tabla.html.twig" %}
+
+{% block stylesheets %}  
+    {{ parent() }}    
+    {% block stylesheetsFormulario %}  
+        {{ parent() }} 
+    {% endblock %}   
+     {% block stylesheetsTabla %} 
+        {{ parent() }} 
+    {% endblock %}
+     <style>
+    .cajaLabel {
+        border: none;
+        top: 7px;
+        background: none;
+    }
+    </style>
+{% endblock %}
+
+
+{% block title %}{{info['pagina'].titulo}}{% endblock %}
+
+
+{% block body %} 
+    {% block bodyFormulario %}      
+        {{ parent() }}  
+    {% endblock %}
+{% endblock %}
+
+{% block body2 %} 
+    {% block bodyTabla %}
+        {{ parent() }}  
+    {% endblock %} 
+{% endblock %}
+
+{% block body3 %}{% endblock %}
+
+   
+
+
+{% block javascripts %}  
+    {{ parent() }} 
+    {% block javascriptsFormulario %}   
+        {{ parent() }} 
+    {% endblock %}   
+    <script>
+    var a='{{userOld}}';
+    $('#form_idUsuario').val(a);
+    a='{{rolOld}}';
+    $('#form_idGroup').val(a);
+    </script>
+{% endblock %}
+
+
+
+
+
+
+
+

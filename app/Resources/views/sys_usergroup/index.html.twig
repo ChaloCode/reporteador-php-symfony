@@ -1,0 +1,73 @@
+{% extends "base.html.twig" %}
+
+{% use "generico/formulario.html.twig" %}
+{% use "generico/tablaCRUD.html.twig" %}   
+{% use "generico/tabla.html.twig" %}
+
+
+{% block stylesheets %}  
+    {{ parent() }} 
+     {% block stylesheetsFormulario %}  
+        {{ parent() }} 
+    {% endblock %}   
+    {% if control>0 %}
+        {% block stylesheetsTabla_crud %} 
+            {{ parent() }} 
+        {% endblock %} 
+    {% endif %}
+    {% block stylesheetsTabla %} 
+        {{ parent() }} 
+    {% endblock %}
+   
+{% endblock %}
+
+
+{% block title %}{{info['pagina'].titulo}}{% endblock %}
+
+
+{% block body %}
+    {% block bodyFormulario %}      
+        {{ parent() }}  
+    {% endblock %}
+{% endblock %}
+
+
+{% block body2 %} 
+    {% block bodyTabla %}
+        {{ parent() }}  
+    {% endblock %} 
+{% endblock %}
+
+{% block body3 %}
+    {% if control>0 %}    
+        {% block bodyTabla_crud %}
+            {{ parent() }}  
+        {% endblock %} 
+    {% endif %} 
+{% endblock %}
+
+   
+
+
+{% block javascripts %}  
+    {{ parent() }}
+    {% block javascriptsFormulario %}   
+        {{ parent() }} 
+    {% endblock %}  
+    {% if control>0 %}
+        {% block javascriptsTabla_crud %}     
+            {{ parent() }} 
+        {% endblock %} 
+    {% endif %}
+    {% block javascriptsTabla %}     
+        {{ parent() }} 
+    {% endblock %}       
+{% endblock %}
+
+
+
+
+
+
+
+

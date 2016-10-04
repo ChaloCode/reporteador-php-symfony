@@ -153,8 +153,7 @@ class Sys_GroupController extends Controller
                       'subtitulo' =>': '.$fecha
                     )
         ); 
-        $usuario = $this->get('security.token_storage')->getToken()->getUser();
-        $id_usuario=$usuario->getId();  
+       
         $sql="SELECT id, name AS 'Rol', roles AS 'Permiso' FROM fos_group";  
         $retorno=$this->newTabla($sql,false);   
         $infoTabla=$retorno['infoTabla'];  
@@ -274,43 +273,25 @@ class Sys_GroupController extends Controller
          
          if ($form->isSubmitted() && $form->isValid()) 
          {    
-             $usuario = $this->get('security.token_storage')->getToken();
-             var_dump( $usuario);
-             die(' update...');
-             $idTipoConexion=$request->get('form')['idTipoConexion'];
-             
-             $driver=$this->getDoctrine()
-                             ->getRepository('AppBundle:Sys_TipoConexion')
-                             ->find($idTipoConexion);              
-                             
-             $user=$request->get('form')['user'];
-             $port=$request->get('form')['port'];
-             $password=$request->get('form')['password'];
-             $host=$request->get('form')['host'];
-             $dbname=$request->get('form')['nameBD'];
-             $valConexion=$this->validarConexion($driver->getdriver(),$user,$port,$password,$host,$dbname);
-             if( $valConexion)
-             { 
-                 //Seteamos
-                $sysConexionBD->setIdTipoConexion($idTipoConexion);
-                //Update 
-                $em=$this->getDoctrine()->getManager();             
-                $em->flush();              
-                
-                $this->addFlash(
-                                    'info',
-                                    'Conexión de la BD externa, actualizada correctamente.'  
-                                ); 
-                            
-                return $this->redirectToRoute('Crear_Conexion_BD');   
-             }
-             else {
-                   $this->addFlash(
-                                'error',
-                                'No se pudo establecer conexión, con la base de datos externa.\nRevise los datos de conexión y vuelva a intentarlo.'  
-                                ); 
-                
-             }
+                      
+             $grupoNamePost=$request->get('form')['name'];
+             $arrayRolesPost=$request->get('form')['nombre'];  
+             $arrayRoles=array();
+             foreach ($arrayRolesPost as $key => $id) {                 
+                 $em = $this->getDoctrine()->getManager();
+                 $a = $em->getRepository('AppBundle:Sys_Rol')->find($id);
+                 array_push($arrayRoles,$a->getNombre());
+             }  
+            $grupo->setName($grupoNamePost);
+            $grupo->setRoles($arrayRoles);
+            $em=$this->getDoctrine()->getManager();             
+            $em->flush();  
+            $this->addFlash(
+                                'info',
+                                'Rol se ha actualizado correctamente.'  
+                            ); 
+            return $this->redirectToRoute('adminrol');   
+            
         } 
         
         //Informacion de las paginas            
