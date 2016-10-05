@@ -28,7 +28,7 @@ class Sys_ConexionBDController extends Controller
     /**
      * @Route("/conexion/", name="Crear_Conexion_BD")
      */
-    public function addAction(Request $request)
+    public function indexAction(Request $request)
     {  
         
         $sysConexionBD=new Sys_ConexionBD();         
@@ -84,11 +84,13 @@ class Sys_ConexionBDController extends Controller
              $password=$request->get('form')['password'];
              $host=$request->get('form')['host'];
              $dbname=$request->get('form')['nameBD'];
+             $nombreConexion=$request->get('form')['nombreConexion'];            
              $valConexion=$this->validarConexion($driver->getdriver(),$user,$port,$password,$host,$dbname);
              if( $valConexion)
              {
                 //Seteamos
-                $sysConexionBD->addConsulta($driver->getId());
+                $sysConexionBD->setNombreConexion($nombreConexion);
+                $sysConexionBD->setConsulta($driver);
                 $sysConexionBD->setUser($user);
                 $sysConexionBD->setPort($port);
                 $sysConexionBD->setPassword($password);
@@ -261,7 +263,7 @@ class Sys_ConexionBDController extends Controller
              if( $valConexion)
              { 
                  //Seteamos
-                $sysConexionBD->setIdTipoConexion($idTipoConexion);
+                $sysConexionBD->setConsulta($driver);
                 //Update 
                 $em=$this->getDoctrine()->getManager();             
                 $em->flush();              

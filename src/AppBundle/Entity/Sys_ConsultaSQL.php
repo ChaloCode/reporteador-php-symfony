@@ -21,8 +21,7 @@ class Sys_ConsultaSQL
      */
     private $id;
 
-   
-
+    
     /**
      * @var int
      *
@@ -218,63 +217,5 @@ class Sys_ConsultaSQL
     public function getIdConexion()
     {
         return $this->idConexion;
-    }
-
-    /**
-     * Set conexion
-     *
-     * @param \AppBundle\Entity\Sys_ConexionBD $conexion
-     *
-     * @return Sys_ConsultaSQL
-     */
-    public function setConexion(\AppBundle\Entity\Sys_ConexionBD $conexion = null)
-    {
-        $this->conexion = $conexion;
-    
-        return $this;
-    }
-
-    /**
-     * Get conexion
-     *
-     * @return \AppBundle\Entity\Sys_ConexionBD
-     */
-    public function getConexion()
-    {
-        return $this->conexion;
-    }
-
-    /**
-     * Add conexione
-     *
-     * @param \AppBundle\Entity\Sys_ConexionBD $conexione
-     *
-     * @return Sys_ConsultaSQL
-     */
-    public function addConexione(\AppBundle\Entity\Sys_ConexionBD $conexione)
-    {
-        $this->conexiones[] = $conexione;
-    
-        return $this;
-    }
-
-    /**
-     * Remove conexione
-     *
-     * @param \AppBundle\Entity\Sys_ConexionBD $conexione
-     */
-    public function removeConexione(\AppBundle\Entity\Sys_ConexionBD $conexione)
-    {
-        $this->conexiones->removeElement($conexione);
-    }
-
-    /**
-     * Get conexiones
-     *
-     * @return \Doctrine\Common\Collections\Collection
-     */
-    public function getConexiones()
-    {
-        return $this->conexiones;
     }
 }

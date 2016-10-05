@@ -3,3 +3,6 @@ php bin/console doctrine:generate:entity
 	AppBundle:Name_Entidad
 php bin/console doctrine:schema:update --force
 php bin/console server:start
+
+# generates all entities in the AppBundle
+php bin/console doctrine:generate:entities AppBundl

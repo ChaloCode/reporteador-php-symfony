@@ -92,30 +92,7 @@ class Sys_ConexionBD
     {
         return $this->id;
     }
-
-    /**
-     * Set driver
-     *
-     * @param int $idTipoConexion
-     *
-     * @return Sys_ConexionBD
-     */
-    public function setIdTipoConexion($idTipoConexion)
-    {
-        $this->consulta = $idTipoConexion;
-    
-        return $this;
-    }
-
-    /**
-     * Get idTipoConexion
-     *
-     * @return int
-     */
-    public function getIdTipoConexion()
-    {
-        return $this->consulta;
-    }
+  
     
       /**
      * Set nombreConexion
@@ -286,48 +263,16 @@ class Sys_ConexionBD
         return $this->password;
     }
 
-    /**
-     * Add consulta
-     *
-     * @param \AppBundle\Entity\Sys_ConsultaSQL $consulta
-     *
-     * @return Sys_ConexionBD
-     */
-    public function addConsulta(\AppBundle\Entity\Sys_ConsultaSQL $consulta)
-    {
-        $this->consultas[] = $consulta;
-    
-        return $this;
-    }
-
-    /**
-     * Remove consulta
-     *
-     * @param \AppBundle\Entity\Sys_ConsultaSQL $consulta
-     */
-    public function removeConsulta(\AppBundle\Entity\Sys_ConsultaSQL $consulta)
-    {
-        $this->consultas->removeElement($consulta);
-    }
-
-    /**
-     * Get consultas
-     *
-     * @return \Doctrine\Common\Collections\Collection
-     */
-    public function getConsultas()
-    {
-        return $this->consultas;
-    }
+   
 
     /**
      * Set consulta
      *
-     * @param \AppBundle\Entity\Sys_ConsultaSQL $consulta
+     * @param \AppBundle\Entity\Sys_TipoConexion $consulta
      *
      * @return Sys_ConexionBD
      */
-    public function setConsulta(\AppBundle\Entity\Sys_ConsultaSQL $consulta = null)
+    public function setConsulta(\AppBundle\Entity\Sys_TipoConexion $consulta = null)
     {
         $this->consulta = $consulta;
     
@@ -337,7 +282,7 @@ class Sys_ConexionBD
     /**
      * Get consulta
      *
-     * @return \AppBundle\Entity\Sys_ConsultaSQL
+     * @return \AppBundle\Entity\Sys_TipoConexion
      */
     public function getConsulta()
     {

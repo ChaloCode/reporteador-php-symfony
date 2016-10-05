@@ -127,4 +127,3 @@ class Sys_Rol
         return $this->descripcion;
     }
 }
-

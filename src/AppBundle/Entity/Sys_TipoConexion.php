@@ -103,4 +103,38 @@ class Sys_TipoConexion
     {
         return $this->nombre;
     }
+
+    /**
+     * Add conexione
+     *
+     * @param \AppBundle\Entity\Sys_ConexionBD $conexione
+     *
+     * @return Sys_TipoConexion
+     */
+    public function addConexione(\AppBundle\Entity\Sys_ConexionBD $conexione)
+    {
+        $this->conexiones[] = $conexione;
+    
+        return $this;
+    }
+
+    /**
+     * Remove conexione
+     *
+     * @param \AppBundle\Entity\Sys_ConexionBD $conexione
+     */
+    public function removeConexione(\AppBundle\Entity\Sys_ConexionBD $conexione)
+    {
+        $this->conexiones->removeElement($conexione);
+    }
+
+    /**
+     * Get conexiones
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getConexiones()
+    {
+        return $this->conexiones;
+    }
 }
