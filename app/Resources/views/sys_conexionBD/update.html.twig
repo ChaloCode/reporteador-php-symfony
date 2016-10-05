@@ -31,7 +31,13 @@
     {{ parent() }} 
     {% block javascriptsFormulario %}   
         {{ parent() }} 
-    {% endblock %}    
+    {% endblock %}   
+    <script>
+        if($('#form_port').val()==0)
+        {
+            $('#form_port').val('');
+        }
+    </script> 
 {% endblock %}
 
 

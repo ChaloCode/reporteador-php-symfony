@@ -53,10 +53,11 @@ class Sys_ConexionBD
      */
     private $host;
 
-    /**
-     * @var string
+   
+     /**
+     * @var int
      *
-     * @ORM\Column(name="Port", type="string", length=255, nullable=true)
+     * @ORM\Column(name="Port", type="integer")
      */
     private $port;
 
@@ -101,7 +102,7 @@ class Sys_ConexionBD
      */
     public function setIdTipoConexion($idTipoConexion)
     {
-        $this->idTipoConexion = $idTipoConexion;
+        $this->consulta = $idTipoConexion;
     
         return $this;
     }
@@ -113,7 +114,7 @@ class Sys_ConexionBD
      */
     public function getIdTipoConexion()
     {
-        return $this->idTipoConexion;
+        return $this->consulta;
     }
     
       /**
@@ -167,7 +168,7 @@ class Sys_ConexionBD
     /**
      * Set port
      *
-     * @param string $port
+     * @param int $port
      *
      * @return Sys_ConexionBD
      */
@@ -181,7 +182,7 @@ class Sys_ConexionBD
     /**
      * Get port
      *
-     * @return string
+     * @return int
      */
     public function getPort()
     {
