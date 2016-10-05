@@ -21,68 +21,7 @@ use AppBundle\Entity\Group;
 
 class Sys_GroupController extends Controller
 {
-     //Este metodo se volverar generico 
-     //carga la informacion y la muestra en un array asociativo
-    private function newTabla($sql,$msm=true)
-    {
-        //Data de la consulta
-        //Select filas
-        try {
-            $em = $this->getDoctrine()->getEntityManager();
-            $connection = $em->getConnection();         
-            $statement = $connection->prepare($sql);  
-            $statement->execute();
-            $filasx = $statement->fetchAll(); 
-        } catch (\Exception $e) {
-                if($msm){
-                        $this->addFlash(
-                        'error',
-                        'Su sentencia SQL,no es correcta. Revísela y vuelva a intentarlo.'  
-                        ); 
-                }
-                return array(  
-                            'control'=>0              
-                           );
-        }        
-        $filas=array();
-        $columnas=array();
-        //Renombra las filas y columnas
-        for($i=0;$i<count($filasx);$i++)
-        {
-            $j=0;
-            foreach ($filasx[$i] as $clave => $valor) {    
-                    $valor=strtolower($valor);                 
-                    $filas[$i][$j]=$valor;                    
-                    //Renombra las columnas
-                    if($i==0)
-                    {
-                        $columnas[$j]=$clave;
-                    }
-                    $j++;
-                
-            } 
-        }      
-
-        //informacion de la data de la tabla
-        $infoTabla=array('filas'=>$filas,
-                            'columnas'=>$columnas,
-                            'lengthColumnas'=>count($columnas)-1,   
-                            'lengthFilas'=>count($filas)-1           
-        );      
-
-        if($msm){
-            $this->addFlash(
-                'info',
-                'Reporte creado correctamente.'  
-                );
-        }    
-        return array(                                                                      
-                    'infoTabla'=>$infoTabla ,      
-                    'control'=>5              
-                    );
-    
-    }    
-
+     
      /**
      * @Route("/grupo/", name="adminrol")
      */
@@ -155,7 +94,8 @@ class Sys_GroupController extends Controller
         ); 
        
         $sql="SELECT id, name AS 'Rol', roles AS 'Permiso' FROM fos_group";  
-        $retorno=$this->newTabla($sql,false);   
+        $getTabla = $this->get('service_generico');  
+        $retorno=$getTabla->newTabla($sql,false); 
         $infoTabla=$retorno['infoTabla'];  
          
         foreach ($infoTabla['filas'] as $key => $value) {
@@ -173,7 +113,7 @@ class Sys_GroupController extends Controller
         }     
 
         $sql="SELECT Permiso,Descripcion AS Descripción FROM sys_rol";  
-        $r=$this->newTabla($sql,false);   
+        $r=$getTabla->newTabla($sql,false);   
         $infoTabla2=$r['infoTabla'];   
          
         if(empty($infoTabla['filas'])){
@@ -322,9 +262,10 @@ class Sys_GroupController extends Controller
             }
        }  
 
-       $sql="SELECT Permiso,Descripcion AS Descripción FROM sys_rol";  
-        $r=$this->newTabla($sql,false);   
-        $infoTabla2=$r['infoTabla'];   
+       $sql="SELECT Permiso,Descripcion AS Descripción FROM sys_rol"; 
+       $getTabla = $this->get('service_generico');  
+       $r=$getTabla->newTabla($sql,false); 
+       $infoTabla2=$r['infoTabla'];   
            
            
                     
