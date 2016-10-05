@@ -52,4 +52,24 @@ class QuerysRegla extends Controller
         return $filasx = $statement->fetchAll(); 
     }
 
+    public function getConexionExterna($id_usuario,$idConexion)
+    {         
+        $connection = $this->em->getConnection();         
+        $statement = $connection->prepare("SELECT
+                                            sys_conexion_bd.`Host`,
+                                            sys_conexion_bd.`Port`,
+                                            sys_conexion_bd.Nombre_BD,
+                                            sys_conexion_bd.Usuario,
+                                            sys_conexion_bd.`Password` ,
+                                            sys_tipo_conexion.Driver AS Driver
+                                            FROM `sys_conexion_bd`
+                                            INNER JOIN sys_tipo_conexion ON sys_tipo_conexion.id=sys_conexion_bd.id_Tipo_Conexion
+                                            WHERE sys_conexion_bd.id_Fos_user=:id
+                                            AND sys_conexion_bd.id=:id_conexion");  
+        $statement->bindValue('id', $id_usuario);
+        $statement->bindValue('id_conexion', $idConexion);
+        $statement->execute();
+        return $dataConexion = $statement->fetchAll();  
+    }
+
 }

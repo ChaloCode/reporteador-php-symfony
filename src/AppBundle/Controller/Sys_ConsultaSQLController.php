@@ -17,8 +17,6 @@ use Symfony\Component\Form\Extension\Core\Type\ResetType;
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 
-
-use Doctrine\DBAL\DriverManager;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use  AppBundle\Regla\ConsultasRegla;
 
@@ -39,7 +37,7 @@ class Sys_ConsultaSQLController extends Controller
         $tablaCRUD=$this->regla->newTablaNoSQL($filasx);      
         return $tablaCRUD['infoTabla'];
     }
-    
+
     /**
      * @Route("/consulta/", name="consultaSQL")
      */
@@ -175,24 +173,8 @@ class Sys_ConsultaSQLController extends Controller
         try {  
             $usuario = $this->get('security.token_storage')->getToken()->getUser();
             $id_usuario=$usuario->getId();
-            
-            $em = $this->getDoctrine()->getEntityManager();
-            $connection = $em->getConnection();         
-            $statement = $connection->prepare("SELECT
-                                                sys_conexion_bd.`Host`,
-                                                sys_conexion_bd.`Port`,
-                                                sys_conexion_bd.Nombre_BD,
-                                                sys_conexion_bd.Usuario,
-                                                sys_conexion_bd.`Password` ,
-                                                sys_tipo_conexion.Driver AS Driver
-                                                FROM `sys_conexion_bd`
-                                                INNER JOIN sys_tipo_conexion ON sys_tipo_conexion.id=sys_conexion_bd.id_Tipo_Conexion
-                                                WHERE sys_conexion_bd.id_Fos_user=:id
-                                                AND sys_conexion_bd.id=:id_conexion");  
-            $statement->bindValue('id', $id_usuario);
-            $statement->bindValue('id_conexion', $idConexion);
-            $statement->execute();
-            $dataConexion = $statement->fetchAll();  
+            $query = $this->get('service_query');  
+            $dataConexion=$query->getConexionExterna($id_usuario,$idConexion);            
             $driver=$dataConexion['0']['Driver'];
             $user=$dataConexion['0']['Usuario'];
             $port=$dataConexion['0']['Port'];
@@ -392,11 +374,10 @@ class Sys_ConsultaSQLController extends Controller
         $password=$dataConexion['0']['password'];
         $host=$dataConexion['0']['host'];
         $dbname=$dataConexion['0']['nameBD'];
-
-        //Se requiere pasar a sentecia dql para que se puede aplicar a cualquier motor de bd
-       //Trae los nombres de las columnas.
       
         foreach ($tables as $key => $table) { 
+            //Se requiere pasar a sentecia dql para que se puede aplicar a cualquier motor de bd
+            //Trae los nombres de las columnas.
            $sql="SELECT *  FROM $table LIMIT 1";
            $list  = $this->regla->selectDataExterna($sql,$driver,$user,$port,$password,$host,$dbname);             
            $list_new[$table]=$list[0];
