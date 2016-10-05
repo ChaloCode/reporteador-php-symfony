@@ -1,6 +1,6 @@
 <?php
 
-namespace AppBundle\Controller;
+namespace AppBundle\Regla;
 
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -8,7 +8,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Doctrine\ORM\EntityManager;
 
 
-class GenericoController extends Controller
+class GenericoRegla extends Controller
 {
     private $em;
 

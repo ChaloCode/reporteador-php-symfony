@@ -2,13 +2,10 @@
 namespace AppBundle\Regla;
 
 use Doctrine\DBAL\DriverManager;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 
 
 class ConsultasRegla 
 {
-
-    
     //Ejecuta consulta conectadonse a una BD externa.   
     public function selectDataExterna($sql,$driver,$user,$port,$password,$host,$dbname)
     {         
@@ -27,7 +24,7 @@ class ConsultasRegla
         return $filasx;
     }   
 
-      //carga la informacion y la muestra en un array asociativo
+    //carga la informacion y la muestra en un array asociativo
     public function newTablaNoSQL($filasx)
     {             
         $filas=array();

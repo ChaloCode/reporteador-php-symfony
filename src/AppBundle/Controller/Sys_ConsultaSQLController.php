@@ -34,29 +34,12 @@ class Sys_ConsultaSQLController extends Controller
 
     private function getSys_consulta_sql($id_usuario)
     {
-        $em = $this->getDoctrine()->getEntityManager();
-        $connection = $em->getConnection();         
-        $statement = $connection->prepare("SELECT
-                                                sys_consulta_sql.id,
-                                                sys_consulta_sql.nombre AS 'Nombre',
-                                                sys_consulta_sql.string_query AS 'Query',
-                                                sys_consulta_sql.descripcion AS 'Descripción',
-                                                sys_conexion_bd.Nombre_Conexion AS 'Nombre Conexión',
-                                                CASE sys_consulta_sql.is_active 
-                                                    WHEN 1 THEN 'SI'
-                                                    WHEN 0 THEN 'NO'
-                                                    ELSE 0
-                                                    END AS 'Activo'
-                                        FROM sys_consulta_sql
-                                        INNER JOIN sys_conexion_bd ON sys_conexion_bd.id= sys_consulta_sql.id_conexion
-                                        WHERE sys_consulta_sql.id_usuario=:id");  
-        $statement->bindValue('id', $id_usuario);
-        $statement->execute();
-        $filasx = $statement->fetchAll(); 
+        $query = $this->get('service_query');  
+        $filasx=$query->getConsulta($id_usuario); 
         $tablaCRUD=$this->regla->newTablaNoSQL($filasx);      
         return $tablaCRUD['infoTabla'];
-
     }
+    
     /**
      * @Route("/consulta/", name="consultaSQL")
      */
@@ -64,17 +47,8 @@ class Sys_ConsultaSQLController extends Controller
     {
         $usuario = $this->get('security.token_storage')->getToken()->getUser();
         $id_usuario=$usuario->getid();
-        
-        $em = $this->getDoctrine()->getEntityManager();
-        $connection = $em->getConnection();         
-        $statement = $connection->prepare("SELECT
-                                        sys_conexion_bd.id,
-                                        sys_conexion_bd.Nombre_Conexion
-                                        FROM `sys_conexion_bd`
-                                        WHERE sys_conexion_bd.id_Fos_user=:id");  
-        $statement->bindValue('id', $id_usuario);
-        $statement->execute();
-        $dataConexion = $statement->fetchAll();
+        $query = $this->get('service_query');  
+        $dataConexion=$query->getConexion($id_usuario);  
         $lisConexiones=array();
         foreach ($dataConexion as $key => $value) {            
            $lisConexiones[$value['Nombre_Conexion']]=$value['id'];
@@ -191,23 +165,7 @@ class Sys_ConsultaSQLController extends Controller
                                                                 'infoTabla_crud'=>$this->getSys_consulta_sql($id_usuario)                                                        
                                                                ));
     }   
-  //pasar a la cada de reglas: siguiente version
-   private function selectDataExterna($sql,$driver,$user,$port,$password,$host,$dbname)
-    {         
-        $conn = DriverManager::getConnection(array(
-            'wrapperClass' => 'Doctrine\DBAL\Connections\MasterSlaveConnection',
-            'driver' => $driver,
-            'master' => array('user' => $user, 'port'=>$port,'password' => $password, 'host' => $host, 'dbname' => $dbname),
-            'slaves' => array(
-                array('user' => 'slave1', 'password', 'host' => '', 'dbname' => '')
-            )
-        ));        
-        $conn->connect('master');        
-        $stmt = $conn->prepare($sql);     
-        $stmt->execute();
-        $filasx = $stmt->fetchAll();         
-        return $filasx;
-    }
+ 
    //Este metodo se volverar generico y se llamara cargarInfo
     private function reporte($sql,$idConexion)
     { 
@@ -243,7 +201,7 @@ class Sys_ConsultaSQLController extends Controller
             $dbname=$dataConexion['0']['Nombre_BD'];
             
              
-            $filasx = $this->selectDataExterna($sql,$driver,$user,$port,$password,$host,$dbname);
+            $filasx = $this->regla->selectDataExterna($sql,$driver,$user,$port,$password,$host,$dbname);
         } catch (\Exception $e) {
                 $this->addFlash(
                 'error',
