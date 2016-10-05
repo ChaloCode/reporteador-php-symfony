@@ -17,7 +17,7 @@ use Symfony\Component\Form\Extension\Core\Type\PasswordType;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 
 use Doctrine\DBAL\DriverManager;
-use Symfony\Component\HttpFoundation\JsonResponse;
+
 
 use  AppBundle\Regla\ConsultasRegla;
 
@@ -180,63 +180,6 @@ class Sys_RegresionController extends Controller
                     'control'=>5              
                     );
     
-    }
-   
-     /**
-     *@Route("/regresion/getvaluetable", name="getValueTableAction")
-     */
-    public function getValueTableAction(Request $request)
-    {
-
-        $id=$request->get('id');   
-        $em = $this->getDoctrine()->getManager();
-        $dataConexion = $em->getRepository('AppBundle:Sys_ConexionBD')->getConexionBD_id($id);   
- 
-        $driver=$dataConexion['0']['driver'];
-        $user=$dataConexion['0']['user'];
-        $port=$dataConexion['0']['port'];
-        $password=$dataConexion['0']['password'];
-        $host=$dataConexion['0']['host'];
-        $dbname=$dataConexion['0']['nameBD'];
-        
-
-        //SQL es una sentencia que se debe pasar dql, para que aplique todos los motores
-        //Mysql, oracle , sql server
-        //Trae los nombres de las tablas
-        $sql="SELECT TABLE_NAME FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_SCHEMA ='$dbname'";
-        $list  =  $this->regla->selectDataExterna($sql,$driver,$user,$port,$password,$host,$dbname); 
-     
-        return new JsonResponse($list);
-    }
-    
-      /**
-     *@Route("/regresion/getvaluerow", name="getvaluerow")
-     */
-    public function getvaluerowAction(Request $request)
-    {
-        $tables=$request->get('tables'); 
-        $id=$request->get('id'); 
-
-        $list_new=array();
-        $em = $this->getDoctrine()->getEntityManager();
-        $dataConexion = $em->getRepository('AppBundle:Sys_ConexionBD')->getConexionBD_id($id);   
-
-        $driver=$dataConexion['0']['driver'];
-        $user=$dataConexion['0']['user'];
-        $port=$dataConexion['0']['port'];
-        $password=$dataConexion['0']['password'];
-        $host=$dataConexion['0']['host'];
-        $dbname=$dataConexion['0']['nameBD'];
-
-        //Se requiere pasar a sentecia dql para que se puede aplicar a cualquier motor de bd
-       //Trae los nombres de las columnas.
-        $sql="SELECT *  FROM $table LIMIT 1";
-        foreach ($tables as $key => $table) { 
-           $list  = $this->regla->selectDataExterna($sql,$driver,$user,$port,$password,$host,$dbname);             
-           $list_new[$table]=$list[0];
-        }      
-     
-        return new JsonResponse($list_new);
     }
    
 }

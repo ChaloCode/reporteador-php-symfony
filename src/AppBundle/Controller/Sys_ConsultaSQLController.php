@@ -19,12 +19,18 @@ use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 
 
 use Doctrine\DBAL\DriverManager;
+use Symfony\Component\HttpFoundation\JsonResponse;
+use  AppBundle\Regla\ConsultasRegla;
 
 
 
 
 class Sys_ConsultaSQLController extends Controller
 {   
+    function __construct()
+    {       
+       $this->regla = new ConsultasRegla();
+    }  
 
     private function getSys_consulta_sql($id_usuario)
     {
@@ -38,42 +44,17 @@ class Sys_ConsultaSQLController extends Controller
                                                 sys_conexion_bd.Nombre_Conexion AS 'Nombre Conexión',
                                                 CASE sys_consulta_sql.is_active 
                                                     WHEN 1 THEN 'SI'
-                                                WHEN 0 THEN 'NO'
-                                                ELSE 0
-                                                END AS 'Activo'
+                                                    WHEN 0 THEN 'NO'
+                                                    ELSE 0
+                                                    END AS 'Activo'
                                         FROM sys_consulta_sql
                                         INNER JOIN sys_conexion_bd ON sys_conexion_bd.id= sys_consulta_sql.id_conexion
                                         WHERE sys_consulta_sql.id_usuario=:id");  
         $statement->bindValue('id', $id_usuario);
         $statement->execute();
         $filasx = $statement->fetchAll(); 
-        
-
-        $filas=array();
-        $columnas=array();
-        //Renombra las filas y columnas
-        for($i=0;$i<count($filasx);$i++)
-        {
-            $j=0;
-            foreach ($filasx[$i] as $clave => $valor) {                     
-                    $filas[$i][$j]=$valor;                    
-                    //Renombra las columnas
-                    if($i==0)
-                    {
-                        $columnas[$j]=$clave;
-                    }
-                    $j++;
-                
-            } 
-        }      
-
-        //informacion de la data de la tabla
-        $tablaCRUD=array('filas'=>$filas,
-                            'columnas'=>$columnas,
-                            'lengthColumnas'=>count($columnas)-1,   
-                            'lengthFilas'=>count($filas)-1           
-        );  
-        return $tablaCRUD;
+        $tablaCRUD=$this->regla->newTablaNoSQL($filasx);      
+        return $tablaCRUD['infoTabla'];
 
     }
     /**
@@ -93,15 +74,7 @@ class Sys_ConsultaSQLController extends Controller
                                         WHERE sys_conexion_bd.id_Fos_user=:id");  
         $statement->bindValue('id', $id_usuario);
         $statement->execute();
-        $dataConexion = $statement->fetchAll(); 
-
-       
-
-       
-       
-       
-
-       
+        $dataConexion = $statement->fetchAll();
         $lisConexiones=array();
         foreach ($dataConexion as $key => $value) {            
            $lisConexiones[$value['Nombre_Conexion']]=$value['id'];
@@ -279,35 +252,9 @@ class Sys_ConsultaSQLController extends Controller
                 return array(  
                             'control'=>0              
                            );
-        }        
-        $filas=array();
-        $columnas=array();
-        //Renombra las filas y columnas
-        for($i=0;$i<count($filasx);$i++)
-        {
-            $j=0;
-            foreach ($filasx[$i] as $clave => $valor) {                     
-                    $filas[$i][$j]=$valor;                    
-                    //Renombra las columnas
-                    if($i==0)
-                    {
-                        $columnas[$j]=$clave;
-                    }
-                    $j++;
-                
-            } 
         }      
-
-        //informacion de la data de la tabla
-        $infoTabla=array('filas'=>$filas,
-                            'columnas'=>$columnas,
-                            'lengthColumnas'=>count($columnas)-1,   
-                            'lengthFilas'=>count($filas)-1           
-        );   
-        return array(                                                                      
-                    'infoTabla'=>$infoTabla ,      
-                    'control'=>5              
-                    );
+       
+        return $this->regla->newTablaNoSQL($filasx);
     }
 
 
@@ -440,6 +387,64 @@ class Sys_ConsultaSQLController extends Controller
                         );
 
         return $this->redirectToRoute('consultaSQL');   
+    }
+
+    /**
+     *@Route("/consulta/getvaluetable", name="getValueTableAction")
+     */
+    public function getValueTableAction(Request $request)
+    {
+
+        $id=$request->get('id');   
+        $em = $this->getDoctrine()->getManager();
+        $dataConexion = $em->getRepository('AppBundle:Sys_ConexionBD')->getConexionBD_id($id);   
+ 
+        $driver=$dataConexion['0']['driver'];
+        $user=$dataConexion['0']['user'];
+        $port=$dataConexion['0']['port'];
+        $password=$dataConexion['0']['password'];
+        $host=$dataConexion['0']['host'];
+        $dbname=$dataConexion['0']['nameBD'];
+        
+
+        //SQL es una sentencia que se debe pasar dql, para que aplique todos los motores
+        //Mysql, oracle , sql server
+        //Trae los nombres de las tablas
+        $sql="SELECT TABLE_NAME FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_SCHEMA ='$dbname'";
+        $list  =  $this->regla->selectDataExterna($sql,$driver,$user,$port,$password,$host,$dbname); 
+     
+        return new JsonResponse($list);
+    }
+    
+      /**
+     *@Route("/consulta/getvaluerow", name="getvaluerow")
+     */
+    public function getvaluerowAction(Request $request)
+    {
+        $tables=$request->get('tables'); 
+        $id=$request->get('id'); 
+
+        $list_new=array();
+        $em = $this->getDoctrine()->getEntityManager();
+        $dataConexion = $em->getRepository('AppBundle:Sys_ConexionBD')->getConexionBD_id($id);   
+
+        $driver=$dataConexion['0']['driver'];
+        $user=$dataConexion['0']['user'];
+        $port=$dataConexion['0']['port'];
+        $password=$dataConexion['0']['password'];
+        $host=$dataConexion['0']['host'];
+        $dbname=$dataConexion['0']['nameBD'];
+
+        //Se requiere pasar a sentecia dql para que se puede aplicar a cualquier motor de bd
+       //Trae los nombres de las columnas.
+      
+        foreach ($tables as $key => $table) { 
+           $sql="SELECT *  FROM $table LIMIT 1";
+           $list  = $this->regla->selectDataExterna($sql,$driver,$user,$port,$password,$host,$dbname);             
+           $list_new[$table]=$list[0];
+        }      
+     
+        return new JsonResponse($list_new);
     }
   
 }
