@@ -164,37 +164,20 @@ class Sys_ConsultaSQLController extends Controller
                                                                ));
     }   
  
-   //Este metodo se volverar generico y se llamara cargarInfo
     private function reporte($sql,$idConexion)
     { 
-          
-        //Data de la consulta
-        //Select filas
-        try {  
-            $usuario = $this->get('security.token_storage')->getToken()->getUser();
-            $id_usuario=$usuario->getId();
-            $query = $this->get('service_query');  
-            $dataConexion=$query->getConexionExterna($id_usuario,$idConexion);            
-            $driver=$dataConexion['0']['Driver'];
-            $user=$dataConexion['0']['Usuario'];
-            $port=$dataConexion['0']['Port'];
-            $password=$dataConexion['0']['Password'];
-            $host=$dataConexion['0']['Host'];
-            $dbname=$dataConexion['0']['Nombre_BD'];
-            
-             
-            $filasx = $this->regla->selectDataExterna($sql,$driver,$user,$port,$password,$host,$dbname);
-        } catch (\Exception $e) {
-                $this->addFlash(
-                'error',
-                'Su sentencia SQL,no es correcta. Revísela y vuelva a intentarlo.'  
-                ); 
-                return array(  
-                            'control'=>0              
-                           );
-        }      
-       
-        return $this->regla->newTablaNoSQL($filasx);
+        $usuario = $this->get('security.token_storage')->getToken()->getUser();
+        $id_usuario=$usuario->getId();          
+        $generico = $this->get('service_generico');  
+        $filasx=$generico->newTablaToExterna($sql,$idConexion,$id_usuario); 
+        if ($filasx['control']>0)
+        {
+            $this->addFlash('info','Reporte creado correctamente.');
+        }
+        else{
+            $this->addFlash('error', 'Su sentencia SQL,no es correcta. Revísela y vuelva a intentarlo.');
+        }       
+        return $filasx;
     }
 
 
@@ -351,7 +334,7 @@ class Sys_ConsultaSQLController extends Controller
         //Mysql, oracle , sql server
         //Trae los nombres de las tablas
         $sql="SELECT TABLE_NAME FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_SCHEMA ='$dbname'";
-        $list  =  $this->regla->selectDataExterna($sql,$driver,$user,$port,$password,$host,$dbname); 
+        $list  =  $this->showSelectDataExterna($sql,$driver,$user,$port,$password,$host,$dbname); 
      
         return new JsonResponse($list);
     }
@@ -378,12 +361,20 @@ class Sys_ConsultaSQLController extends Controller
         foreach ($tables as $key => $table) { 
             //Se requiere pasar a sentecia dql para que se puede aplicar a cualquier motor de bd
             //Trae los nombres de las columnas.
-           $sql="SELECT *  FROM $table LIMIT 1";
-           $list  = $this->regla->selectDataExterna($sql,$driver,$user,$port,$password,$host,$dbname);             
+           $sql="SELECT *  FROM $table LIMIT 1";           
+           $list  = $this->showSelectDataExterna($sql,$driver,$user,$port,$password,$host,$dbname);             
            $list_new[$table]=$list[0];
         }      
      
         return new JsonResponse($list_new);
     }
+
+    private function showSelectDataExterna($sql,$driver,$user,$port,$password,$host,$dbname)
+    {
+        $generico = $this->get('service_generico');  
+        $filasx=$generico->selectDataExterna($sql,$driver,$user,$port,$password,$host,$dbname); 
+        return $filasx;
+    }
+
   
 }

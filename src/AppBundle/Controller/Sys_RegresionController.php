@@ -16,19 +16,10 @@ use Symfony\Component\Form\Extension\Core\Type\ResetType;
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 
-use Doctrine\DBAL\DriverManager;
-
-
-use  AppBundle\Regla\ConsultasRegla;
 
 class Sys_RegresionController extends Controller
-{   
-
-    function __construct()
-    {       
-       $this->regla = new ConsultasRegla();
-    }  
-    
+{  
+   
    /**
      * @Route("/regresion/", name="Regresion")
      */
@@ -82,8 +73,8 @@ class Sys_RegresionController extends Controller
 
 
            $idConexion=$consulta->getIdConexion();
-           $sql=$consulta->getStringQuery();             
-           $retorno=$this->newTabla($sql,$idConexion,false);
+           $sql=$consulta->getStringQuery(); 
+           $retorno=$this->reporte($sql,$idConexion ); 
            if(empty($retorno['infoTabla']['filas']))
            {
                   $this->addFlash(
@@ -111,75 +102,21 @@ class Sys_RegresionController extends Controller
     }   
   
   
-   //Este metodo se volvera generico y se llamara cargarInfo
-  private function newTabla($sql,$idConexion,$msm=true)
-    {      
-         //Data de la consulta
-        //Select filas
-        try {  
-            $usuario = $this->get('security.token_storage')->getToken()->getUser();
-            $id_usuario=$usuario->getId();
-            
-            $em = $this->getDoctrine()->getManager();
-            $dataConexion = $em->getRepository('AppBundle:Sys_ConexionBD')->getConexionBD($id_usuario,$idConexion);   
-
-            $driver=$dataConexion['0']['driver'];
-            $user=$dataConexion['0']['user'];
-            $port=$dataConexion['0']['port'];
-            $password=$dataConexion['0']['password'];
-            $host=$dataConexion['0']['host'];
-            $dbname=$dataConexion['0']['nameBD'];
-            
-             
-            $filasx = $this->regla->selectDataExterna($sql,$driver,$user,$port,$password,$host,$dbname);
-        
-        } catch (\Exception $e) {
-                if($msm){
-                        $this->addFlash(
-                        'error',
-                        'Su sentencia SQL,no es correcta. Revísela y vuelva a intentarlo.'  
-                        ); 
-                }
-                return array(  
-                            'control'=>0              
-                           );
-        }        
-        $filas=array();
-        $columnas=array();
-        //Renombra las filas y columnas
-        for($i=0;$i<count($filasx);$i++)
+    private function reporte($sql,$idConexion)
+    { 
+        $usuario = $this->get('security.token_storage')->getToken()->getUser();
+        $id_usuario=$usuario->getId();          
+        $generico = $this->get('service_generico');  
+        $filasx=$generico->newTablaToExterna($sql,$idConexion,$id_usuario); 
+        if ($filasx['control']>0)
         {
-            $j=0;
-            foreach ($filasx[$i] as $clave => $valor) {                     
-                    $filas[$i][$j]=$valor;                    
-                    //Renombra las columnas
-                    if($i==0)
-                    {
-                        $columnas[$j]=$clave;
-                    }
-                    $j++;
-                
-            } 
-        }      
-
-        //informacion de la data de la tabla
-        $infoTabla=array('filas'=>$filas,
-                            'columnas'=>$columnas,
-                            'lengthColumnas'=>count($columnas)-1,   
-                            'lengthFilas'=>count($filas)-1           
-        );      
-
-        if($msm){
-            $this->addFlash(
-                'info',
-                'Reporte creado correctamente.'  
-                );
-        }    
-        return array(                                                                      
-                    'infoTabla'=>$infoTabla ,      
-                    'control'=>5              
-                    );
-    
+            $this->addFlash('info','Reporte creado correctamente.');
+        }
+        else{
+            $this->addFlash('error', 'Su sentencia SQL,no es correcta. Revísela y vuelva a intentarlo.');
+        }       
+        return $filasx;
+        
     }
    
 }

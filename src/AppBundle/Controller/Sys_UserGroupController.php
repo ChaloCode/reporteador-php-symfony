@@ -15,7 +15,6 @@ use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\ResetType;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 
-use Doctrine\DBAL\DriverManager;
 use AppBundle\Entity\User;
 
 
