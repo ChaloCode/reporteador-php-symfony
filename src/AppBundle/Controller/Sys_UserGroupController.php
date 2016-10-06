@@ -22,7 +22,7 @@ class Sys_UserGroupController extends Controller
 { 
      
      /**
-     * @Route("/usergrupo/", name="adminroluser")
+     * @Route("/admin/usergrupo/", name="adminroluser")
      */
       public function indexction(Request $request)
     {          
@@ -153,7 +153,7 @@ class Sys_UserGroupController extends Controller
 
 
     /**
-     * @Route("/usergrupo/delete/{id}/", name="BorrarUserGrupo")
+     * @Route("/admin/usergrupo/delete/{id}/", name="BorrarUserGrupo")
      */
     public function deleteAction($id)
     {
@@ -195,7 +195,7 @@ class Sys_UserGroupController extends Controller
 
 
      /**
-     * @Route("/usergrupo/update/{id}", name="ActualizarUserGrupo")
+     * @Route("/admin/usergrupo/update/{id}", name="ActualizarUserGrupo")
      */
     public function updateAction($id,Request $request)
     {      

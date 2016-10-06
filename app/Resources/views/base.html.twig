@@ -169,7 +169,15 @@
                     <li><a href="{{ asset("/usuario/perfil/")}}">Perfil</a></li>
                     <li><a href="{{ asset("/usuario/perfil/edit")}}">Editar Perfil</a></li>                    
                   </ul>
-                </li>                
+                </li>
+                {% if is_granted('ROLE_SUPER_ADMIN') %}
+                 <li><a><i class="fa fa-unlock"></i> Administrador <span class="fa fa-chevron-down"></span></a>
+                  <ul class="nav child_menu" style="display: none">
+                    <li><a href="{{ asset("/admin/grupo/")}}">Nuevo Rol</a></li>
+                    <li><a href="{{ asset("/admin/usergrupo/")}}">Asignar Rol</a></li>                    
+                  </ul>
+                </li> 
+              {% endif %}     
                 <li><a><i class="fa fa-info"></i> Ayuda <span class="label label-success pull-right">LEARNING</span></a>
                 </li>
               </ul>
@@ -180,9 +188,15 @@
 
           <!-- /menu footer buttons -->
           <div class="sidebar-footer hidden-small">
-            <a data-toggle="tooltip" data-placement="top" title="Settings">
+            {% if is_granted('ROLE_SUPER_ADMIN') %}
+              <a href="{{ asset('/admin/grupo/') }}" data-toggle="tooltip" data-placement="top" title="Administrador">
               <span class="glyphicon glyphicon-cog" aria-hidden="true"></span>
-            </a>
+              </a>
+            {% else %}
+             <a data-toggle="tooltip" data-placement="top" title="No Administrador">
+              <span class="fa fa-lock" aria-hidden="true"></span>
+              </a>
+            {% endif %}            
             <a id="FullScreen" data-toggle="tooltip" data-placement="top" title="Pantalla Completa">
               <span class="glyphicon glyphicon-fullscreen" aria-hidden="true"></span>
             </a>
@@ -215,12 +229,14 @@
                 <ul class="dropdown-menu dropdown-usermenu animated fadeInDown pull-right">                  
                   <li><a href="{{ asset("usuario/perfil/")}}">Perfil</a>
                   </li>
-                  <li>
-                    <a href="javascript:;">
-                      <span class="badge bg-red pull-right">50%</span>
-                      <span>Settings</span>
-                    </a>
-                  </li>
+                  {% if is_granted('ROLE_SUPER_ADMIN') %}
+                    <li>
+                      <a href="{{ asset('/admin/grupo/') }}">
+                        <span class="badge bg-red pull-right"><i class="fa fa-unlock"></i></span>
+                        <span>Administrador</span>
+                      </a>
+                    </li>                
+                  {% endif %}                
                   <li>
                     <a href="javascript:;">Ayuda</a>
                   </li>
@@ -258,7 +274,7 @@
         <!-- footer content -->
         <footer>
           <div class="copyright-info">
-            <p class="pull-right">Proyecto Colibrí <a href="http://www.gonzalojperez.co" target="_blank">Mayor información</a>  
+            <p class="pull-right">Proyecto Colibrí <a href="http://www.gonzalojperez.co" target="_blank">Mayor información</a> 
             </p>
           </div>
           <div class="clearfix"></div>
