@@ -15,6 +15,8 @@ use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\ResetType;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Doctrine\DBAL\DriverManager;
+
+
 class DefaultController extends Controller
 {
     /**
@@ -23,7 +25,19 @@ class DefaultController extends Controller
     public function indexAction(Request $request)
     {
          
-        return $this->redirectToRoute('Reporte');
+     // The second parameter is used to specify on what object the role is tested.
+    //$this->denyAccessUnlessGranted('ROLE_REPORT', null, 'Unable to access this page!');
+
+    // Old way :
+     if (false === $this->get('security.authorization_checker')->isGranted('ROLE_REPORT')) {
+         //throw $this->createAccessDeniedException('Unable to access this page!');
+         return $this->redirectToRoute('Info_Contactar');
+     }
+     else{
+          return $this->redirectToRoute('Reporte');
+
+     }
+        
     }
     
      private function regresionCuadratica()
