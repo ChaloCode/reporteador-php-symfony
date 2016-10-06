@@ -20,7 +20,7 @@ class Sys_ReporteController extends Controller
 {
 
     /**
-     * @Route("/reporte/", name="Reporte")
+     * @Route("/reporte/", name="Reporte") 
      */
     public function indexAction(Request $request)
     {   

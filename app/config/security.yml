@@ -3,8 +3,12 @@ security:
         FOS\UserBundle\Model\UserInterface: bcrypt
 
     role_hierarchy:
-        ROLE_ADMIN:       ROLE_USER
-        ROLE_SUPER_ADMIN: ROLE_ADMIN
+        ROLE_ADMIN:       ROLE_USER        
+        ROLE_CONFIG_NAME: ROLE_CONFIG
+        ROLE_REPORT_NAME: ROLE_REPORT
+        ROLE_PREDICT_NAME: ROLE_PREDICT
+        ROLE_SUPER_ADMIN: [ROLE_ADMIN,ROLE_CONFIG_NAME,ROLE_REPORT_NAME,ROLE_PREDICT_NAME]
+       
        
               
 
@@ -30,4 +34,8 @@ security:
         - { path: ^/register, role: IS_AUTHENTICATED_ANONYMOUSLY }      
         - { path: ^/resetting, role: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/admin/, role: ROLE_ADMIN }
+        - { path: ^/conexion/, role: ROLE_CONFIG_NAME}
+        - { path: ^/consulta/, role: ROLE_CONFIG_NAME}
+        - { path: ^/reporte/, role: ROLE_REPORT_NAME}
+        - { path: ^/regresion/, role: ROLE_PREDICT_NAME}
         - { path: ^/, role: ROLE_USER}

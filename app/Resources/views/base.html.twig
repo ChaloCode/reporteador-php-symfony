@@ -141,24 +141,30 @@
                   </ul>
                 </li>
 
+                {% if is_granted('ROLE_CONFIG') or is_granted('ROLE_SUPER_ADMIN') %}
                 <li><a><i class="fa fa-database"></i>Gestión BD Externa<span class="fa fa-chevron-down"></span></a>
                   <ul class="nav child_menu" style="display: none">                                   
                     <li><a href="{{ asset("conexion/")}}">Conexión</a></li>   
                     <li><a href="{{ asset("consulta/")}}">Nueva Consulta</a></li>                 
                   </ul>
-                </li>      
-                         
+                </li>   
+                {% endif %}     
+
+                {% if is_granted('ROLE_REPORT') or is_granted('ROLE_SUPER_ADMIN') %}         
                 <li><a><i class="fa fa-bar-chart-o"></i> Reportes <span class="fa fa-chevron-down"></span></a>
                   <ul class="nav child_menu" style="display: none">
                     <li><a href="{{ asset("reporte/")}}">Nuevo Reporte</a></li>
                   </ul>
                 </li>
+               {% endif %}
 
+               {% if is_granted('ROLE_PREDICT') or is_granted('ROLE_SUPER_ADMIN') %}  
                 <li><a><i class="fa fa-line-chart"></i> Predicciones <span class="fa fa-chevron-down"></span></a>
                   <ul class="nav child_menu" style="display: none">
                     <li><a href="{{ asset("regresion/")}}">Nueva Predición</a></li>
                   </ul>
                 </li>
+                {% endif %}
 
             </div>
             <div class="menu_section">
@@ -194,7 +200,7 @@
               </a>
             {% else %}
              <a data-toggle="tooltip" data-placement="top" title="No Administrador">
-              <span class="fa fa-lock" aria-hidden="true"></span>
+              <span class="fa fa-lock fa-lg" aria-hidden="true"></span>
               </a>
             {% endif %}            
             <a id="FullScreen" data-toggle="tooltip" data-placement="top" title="Pantalla Completa">
