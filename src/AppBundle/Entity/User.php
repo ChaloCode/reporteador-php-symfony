@@ -33,4 +33,14 @@ class User extends BaseUser
         parent::__construct();
         // your own logic
     }
+
+     /**
+     * Gets the last login time.
+     *
+     * @return \DateTime
+     */
+    public function getExpiresAt()
+    {
+        return $this->expiresAt;
+    }
 }

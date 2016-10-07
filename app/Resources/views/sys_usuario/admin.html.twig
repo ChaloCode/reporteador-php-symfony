@@ -1,0 +1,179 @@
+{% extends "base.html.twig" %}
+
+{% use "generico/formulario.html.twig" %}
+
+{% block stylesheets %}  
+    {{ parent() }}    
+    {% block stylesheetsFormulario %}  
+        {{ parent() }} 
+    {% endblock %}     
+    <style>
+    .lastLogin{
+        padding: 6px 12px;
+        display: block;
+        color: #868686;
+    }
+    </style>
+{% endblock %}
+
+
+{% block title %}{{info['pagina'].titulo}}{% endblock %}
+
+
+{% block body %} 
+    {% block bodyFormulario %}      
+        {{ parent() }} 
+    {% endblock %}
+{% endblock %}
+
+
+{% block body2 %} 
+{% if control %}   
+{% embed "generico/ventana.html.twig" %}
+    {% block tituloVentana %}Actualizar{% endblock %} 
+    {% block subTituloVentana %}{{info['formulario'].subtitulo}}{% endblock %}
+    {% block bodyVentana %}                 
+        <form class="form-horizontal">
+           <input type="hidden" id="idUsuario"  value="{{usuario.id}}">
+           <div class="form-group">
+            <label class="col-sm-3 control-label">Ultima sesión</label>
+            <div class="col-sm-9">           
+            {% if usuario.lastLogin is empty %}
+                 <b class="lastLogin">Nunca ha iniciado sesión</b>
+            {% else %}   
+                 <b class="lastLogin">{{usuario.lastLogin.date|date("F jS \\a\\t g:ia")}}</b>
+            {% endif %}              
+            </div> 
+        </div>
+        <div class="form-group">
+            <label class="col-sm-3 control-label">Nombre</label>
+            <div class="col-sm-9">
+            <input type="text" id="nombreUsuario" class="form-control" placeholder="Nombre" value="{{usuario.username}}">
+            </div> 
+        </div>
+            <div class="form-group">
+            <label class="col-sm-3 control-label">Email</label>
+            <div class="col-sm-9">
+                <input type="email" id="emailUsuario" class="form-control"  placeholder="Email" value="{{usuario.email}}">
+            </div> 
+        </div>
+        
+        <div class="form-group">
+            <label class="col-sm-3 control-label">Contraseña</label>
+            <div class="col-sm-9">
+            <input type="password" id="idPassword" class="form-control"  placeholder="Cambiar Contraseña">
+            </div> 
+        </div>  
+        <div class="form-group">
+            <label class="col-sm-3 control-label">Bloqueado</label>
+            <div class="col-sm-9">
+                <select class="lastLogin" id="idBloqueado">
+                 {% if usuario.locked>0 %}
+                    <option value="1" selected="selected">SI</option>
+                    <option value="0">NO</option> 
+                {% else %}   
+                    <option value="1">SI</option>
+                    <option value="0" selected="selected">NO</option> 
+                {% endif %}                         
+            </select> 
+            </div> 
+        </div> 
+        <div class="form-group">
+            <label class="col-sm-3 control-label">Expirado</label>
+            <div class="col-sm-9">
+                <select class="lastLogin" id="idExpirado">                
+                 {% if usuario.expired>0 %}
+                    <option value="1" selected="selected">SI</option>
+                    <option value="0">NO</option> 
+                {% else %}   
+                    <option value="1">SI</option>
+                    <option value="0" selected="selected">NO</option> 
+                {% endif %}             
+               </select> 
+            </div> 
+        </div> 
+        <div class="form-group">
+            <label class="col-sm-3 control-label">Fecha expiración </label>
+            <div class="col-sm-9">
+            {% if usuario.expiresAt is empty %}
+                <input type="date" id="idFechaUsuario" class="form-control date-picker-control">
+            {% else %}   
+                <input type="date" id="idFechaUsuario" value="{{usuario.expiresAt.date|date("m/d/Y")}}" class="form-control date-picker-control">
+            {% endif %}          
+            </div> 
+        </div> 
+        <div class="form-group">
+            <div class="col-sm-offset-3 col-sm-9">
+            <button onclick='updateUser()' class="btn btn-success">Actualizar</button>
+            </div>
+        </div>
+        </form>  
+    {% endblock %}
+{% endembed %} 
+{% endif %} 
+{% endblock %}
+
+{% block body3 %}   
+    
+{% endblock %}
+
+   
+
+
+{% block javascripts %}  
+    {{ parent() }} 
+    {% block javascriptsFormulario %}   
+        {{ parent() }} 
+    {% endblock %}
+    <script>    
+    function updateUser()
+	{
+       	
+        var idUsuario=$('#idUsuario').val();
+        var nombreUsuario=$('#nombreUsuario').val();
+        var emailUsuario=$('#emailUsuario').val();
+        var idPassword=$('#idPassword').val();
+        if (idPassword=='')
+        {
+            idPassword='vacio';
+        }
+        var idBloqueado=$('#idBloqueado option:selected').val();        
+        var idExpirado=$('#idExpirado option:selected').val();
+        var idFechaUsuario=$('#idFechaUsuario').val();
+        if (idFechaUsuario=='')
+        {
+            idFechaUsuario='vacio';
+        }
+       
+        $.ajax({            
+				data: {idUsuario_post:idUsuario,nombreUsuario_post:nombreUsuario,emailUsuario_post:emailUsuario,idPassword_post:idPassword,idBloqueado_post:idBloqueado,idExpirado_post:idExpirado,idFechaUsuario_post:idFechaUsuario},
+				url: '{{ asset("app_dev.php/admin/usuario/update/")}}',
+                // url: '{{ asset("admin/usuario/update/")}}', 
+				dataType: 'json',
+				type:  'post',
+				beforeSend: function () {	  
+                NProgress.set(0.4);           
+                NProgress.start();	          
+				},
+				success:  function (response) {                    
+				  Alerta('Información','Usuario actualizado con éxito.','info')                    
+				},
+				error: function (request, status, error) {                                      
+                   Alerta('Error','No fue posible actualizar el usuario.','error')                    
+                   NProgress.done();
+				}, 
+				async: false
+		}); 
+        NProgress.done();	    
+    }
+     
+    </script>
+{% endblock %}
+
+
+
+
+
+
+
+

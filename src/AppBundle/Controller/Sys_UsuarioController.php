@@ -17,7 +17,8 @@ use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 
 
 use AppBundle\Entity\User;
-
+use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\Validator\Constraints\DateTime;
 
 class Sys_UsuarioController extends Controller
 {
@@ -129,5 +130,93 @@ class Sys_UsuarioController extends Controller
                                                                 'form' => $form->createView(),
                                                                 'info'=>$info                                                                                                                      
                                                                ));
+    }
+
+     /**
+     * @Route("/admin/usuario/", name="GestionarUsuario")
+     */
+    public function adminAction(Request $request)
+    {           
+        //Se crea el formulario
+        $form = $this->createFormBuilder()   
+                       ->add('idUsuario', EntityType::class, array( 
+                              'label'=>'Usuarios *',                  
+                              'class' => 'AppBundle:User',
+                              'choice_label' => 'username',  
+                              'label_attr' => array('class' => 'control-label col-md-4 col-sm-4 col-xs-12'),
+                              'attr' => array('class' => 'height25px col-md-8 col-xs-12') 
+                              )) 
+                      ->getForm();       
+
+        //Informacion de las paginas            
+        $fecha=strftime("El día, %d del mes %m del %Y %H:%M");		
+        $info = array('pagina'=>array(
+                      'titulo' => 'Gestionar Usuario',
+                    ),                    
+                      'formulario'=>array(
+                      'titulo' => 'Gestionar', 
+                      'subtitulo' =>'Usuario'
+                    ),
+                      'tabla'=>array(
+                      'titulo' => '', 
+                      'subtitulo' =>'',
+                      'descripcion'=>'Generado: '.$fecha
+                    ),
+                      'grafica'=>array(
+                      'titulo' => 'Gráfica', 
+                      'subtitulo' =>'Genereda: '.$fecha
+                    )
+        ); 
+
+        $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) 
+        { 
+          $idUsuario=$request->get('form')['idUsuario'];
+          $em = $this->getDoctrine()->getManager();
+          $usuario = $em->getRepository('AppBundle:User')->find($idUsuario); 
+          return $this->render('sys_usuario/admin.html.twig', array(
+                                                                'form' => $form->createView(),
+                                                                'info'=>$info,  
+                                                                'control'=>true ,
+                                                                'usuario'=>$usuario                                                                                                                                                                                
+                                                               ));
+        }      
+
+        return $this->render('sys_usuario/admin.html.twig', array(
+                                                                'form' => $form->createView(),
+                                                                'info'=>$info,  
+                                                                'control'=>false                                                                                                                    
+                                                               ));
+    }
+
+      /**
+     *@Route("/admin/usuario/update/", name="updateUsuarioAdmin")
+     */
+    public function adminUpdateAction(Request $request)
+    {             
+      
+         $idUsuario=$request->get('idUsuario_post');
+         $nombreUsuario_post=$request->get('nombreUsuario_post');
+         $emailUsuario_post=$request->get('emailUsuario_post');
+         $idPassword_post=$request->get('idPassword_post');
+         $idBloqueado_post=$request->get('idBloqueado_post');
+         $idExpirado_post=$request->get('idExpirado_post');
+         $idFechaUsuario_post=$request->get('idFechaUsuario_post');
+
+         $em = $this->getDoctrine()->getManager();
+         $usuario = $em->getRepository('AppBundle:User')->find($idUsuario);
+         $usuario->setUsername($nombreUsuario_post);
+         $usuario->setEmail($emailUsuario_post);
+         if($idPassword_post!='vacio')
+         {
+            $usuario->setPlainPassword($idPassword_post);
+         }
+         $usuario->setLocked($idBloqueado_post);
+         $usuario->setExpired($idExpirado_post);
+         $usuario->setExpiresAt(new \DateTime($idFechaUsuario_post));
+         $em=$this->getDoctrine()->getManager();             
+         $em->flush(); 
+         
+         return new JsonResponse('ok');
     }
 }
