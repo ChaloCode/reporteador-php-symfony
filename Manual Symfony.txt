@@ -6,3 +6,6 @@ php bin/console server:start
 
 # generates all entities in the AppBundle
 php bin/console doctrine:generate:entities AppBundl
+
+#Nuevo usuario
+php bin/console fos:user:create testuser test@example.com p@ssword

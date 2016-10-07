@@ -213,7 +213,10 @@ class Sys_UsuarioController extends Controller
          }
          $usuario->setLocked($idBloqueado_post);
          $usuario->setExpired($idExpirado_post);
-         $usuario->setExpiresAt(new \DateTime($idFechaUsuario_post));
+         if($idFechaUsuario_post!='vacio')
+         {
+            $usuario->setExpiresAt(new \DateTime($idFechaUsuario_post));
+         }         
          $em=$this->getDoctrine()->getManager();             
          $em->flush(); 
          
