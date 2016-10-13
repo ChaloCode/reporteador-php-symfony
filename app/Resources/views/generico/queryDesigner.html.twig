@@ -665,8 +665,8 @@ var select_old;
 		var cont=0;
 		$.ajax({
 				data: {id:$('#form_idConexion option:selected').val()},
-				url: '{{ asset("app_dev.php/consulta/getvaluetable")}}'  ,
-       // url: '{{ asset("/consulta/getvaluetable")}}', 
+				//url: '{{ asset("app_dev.php/consulta/getvaluetable")}}'  ,
+        url: '{{ asset("/consulta/getvaluetable")}}', 
 				dataType: 'json',
 				type:  'post',
 				beforeSend: function () {	  
@@ -715,8 +715,8 @@ var select_old;
 		var cont=0;
 		$.ajax({
 				data: {id:$('#form_idConexion option:selected').val(),tables:array},
-				url: '{{ asset("app_dev.php/consulta/getvaluerow")}}'  ,
-       	//url: '{{ asset("/consulta/getvaluerow")}}'  ,
+				//url: '{{ asset("app_dev.php/consulta/getvaluerow")}}'  ,
+       	url: '{{ asset("/consulta/getvaluerow")}}'  ,
 				dataType: 'json',
 				type:  'post',
 				beforeSend: function () {		

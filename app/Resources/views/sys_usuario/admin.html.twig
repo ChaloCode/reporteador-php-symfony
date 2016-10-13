@@ -150,8 +150,8 @@
        
         $.ajax({            
 				data: {idUsuario_post:idUsuario,nombreUsuario_post:nombreUsuario,emailUsuario_post:emailUsuario,idPassword_post:idPassword,idBloqueado_post:idBloqueado,idExpirado_post:idExpirado,idFechaUsuario_post:idFechaUsuario},
-				url: '{{ asset("app_dev.php/admin/usuario/update/")}}',
-                // url: '{{ asset("admin/usuario/update/")}}', 
+				//url: '{{ asset("app_dev.php/admin/usuario/update/")}}',
+                url: '{{ asset("admin/usuario/update/")}}', 
 				dataType: 'json',
 				type:  'post',
 				beforeSend: function () {	  
