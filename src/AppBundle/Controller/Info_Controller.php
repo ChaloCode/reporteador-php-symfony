@@ -161,7 +161,7 @@ class Info_Controller extends Controller
     {
         $message = \Swift_Message::newInstance()
         ->setSubject($asunto)
-        ->setFrom('gjskateb@gmail.com')
+        ->setFrom($usuario_email)
         ->setTo('gonzaloperezbarrios@hotmail.com')        
         ->setBody(
             $this->renderView(                

@@ -5,10 +5,10 @@ parameters:
     database_name: colibri
     database_user: root
     database_password: null
-    mailer_transport: gmail
-    mailer_host: smtp.gmail.com
-    mailer_user: gjskateb@gmail.com
-    mailer_password: Elefante056.*
+    mailer_transport: smtp
+    mailer_host: box1002.bluehost.com
+    mailer_user: reporte@gonzalojperez.co
+    mailer_password: x#V0@v>3_2<57C"
     secret: d0edfd718340ad7a3293353d622230e53d89279f
     
  
