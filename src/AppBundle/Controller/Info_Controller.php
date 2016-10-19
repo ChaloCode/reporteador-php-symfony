@@ -130,7 +130,8 @@ class Info_Controller extends Controller
            $usuario_email=$usuario->getEmail();   
            $usuario_name=$usuario->getUsername();  
            $asunto='Mensaje, Colibrí Report: '.$usuario_name;
-           $msm=$request->get('form')['msm'].' Fecha: '.$fecha;
+           $msm=array('asunto'=>$request->get('form')['asunto'],'mensaje'=>$request->get('form')['msm'],'fecha'=>$fecha,'email'=>$usuario_email);
+          
            $send_email=$this->sendEmail($usuario_email,$asunto,$msm);
            if($send_email){
              $this->addFlash(
@@ -158,11 +159,17 @@ class Info_Controller extends Controller
     }
     private function sendEmail($usuario_email,$asunto,$msm)
     {
-         $message = \Swift_Message::newInstance()
+        $message = \Swift_Message::newInstance()
         ->setSubject($asunto)
-        ->setFrom($usuario_email)
-        ->setTo('gonzaloperezbarrios@hotmail.com')
-        ->setBody($msm)
+        ->setFrom('gjskateb@gmail.com')
+        ->setTo('gonzaloperezbarrios@hotmail.com')        
+        ->setBody(
+            $this->renderView(                
+                'info_/sendEmail.html.twig',
+                array('msm' => $msm)
+            ),
+            'text/html'
+        )
         /*
          * If you also want to include a plaintext version of the message
         ->addPart(
@@ -173,13 +180,8 @@ class Info_Controller extends Controller
             'text/plain'
         )
         */
-        ;
-        try {  
-          $this->get('mailer')->send($message);
-        } 
-        catch (\Exception $e) {
-          return false;
-        }    
-        return true;
+    ;
+    return $this->get('mailer')->send($message);
     }
+    
 }
