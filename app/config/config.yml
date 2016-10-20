@@ -71,8 +71,8 @@ swiftmailer:
     host:      "%mailer_host%"
     username:  "%mailer_user%"
     password:  "%mailer_password%"
-    port:       465 
-    encryption: ssl 
+    port:      "%mailer_port%" 
+    encryption: "%mailer_encryption%"  
     spool:     { type: memory }
 
 fos_user:
@@ -87,5 +87,3 @@ fos_user:
             enabled: true
     group:
         group_class: AppBundle\Entity\Group
-            
-  

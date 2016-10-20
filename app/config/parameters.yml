@@ -9,6 +9,6 @@ parameters:
     mailer_host: box1002.bluehost.com
     mailer_user: reporte@gonzalojperez.co
     mailer_password: x#V0@v>3_2<57C"
+    mailer_port: 465
+    mailer_encryption: ssl
     secret: d0edfd718340ad7a3293353d622230e53d89279f
-    
- 
